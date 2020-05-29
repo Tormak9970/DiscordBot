@@ -28,6 +28,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
         String theChannel;
         Message theMessage;
         String messageID;
+        String emojiName;
 
         if (event.getAuthor().isBot()) return;
         // We don't want to respond to other bot accounts, including ourself
@@ -53,8 +54,11 @@ public class ReactionRolesCommand extends ListenerAdapter {
             channel.sendMessage("please react to the desired message with desired emoji").queue();
             // Important to call .queue() on the RestAction returned by sendMessage(...)
             //get message id from their message
-        }else if(){
+        }else if(content.indexOf("$emojiname") == 0){
+            MessageChannel channel = event.getChannel();
+            emojiName = content.substring(12);
             //ask for person to react to
+
         }
 
     }
