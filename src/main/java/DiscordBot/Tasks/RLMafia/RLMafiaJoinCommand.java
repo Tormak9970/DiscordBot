@@ -1,6 +1,6 @@
 package DiscordBot.Tasks.RLMafia;
 
-import DiscordBot.Utils.Player;
+import DiscordBot.Tasks.RLMafia.RLMafiaUtils.Player;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;

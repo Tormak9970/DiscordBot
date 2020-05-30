@@ -1,4 +1,4 @@
-package DiscordBot.Utils;
+package DiscordBot.Tasks.RLMafia.RLMafiaUtils;
 
 import net.dv8tion.jda.api.entities.User;
 

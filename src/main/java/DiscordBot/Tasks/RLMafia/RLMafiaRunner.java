@@ -17,8 +17,16 @@ public class RLMafiaRunner extends ListenerAdapter{
             }else if(event.getMessage().getContentRaw().equals("$join")){
                 RLMafiaJoinCommand.getCommand(event);
             }else if(event.getMessage().getContentRaw().equals("$vote")){
+                RLMafiaJoinCommand.getCommand(event);
+            }else{
+                return;
+            }
+        }
 
-            }else if(event.getMessage().getContentRaw().equals("$rlmafiasettings")){
+        if(RLMafia.getHost().equals(event.getMember())){
+            if(event.getMessage().getContentRaw().equals("$mvp")){
+
+            }else if(event.getMessage().getContentRaw().equals("$winner")){
 
             }else if(event.getMessage().getContentRaw().equals("$quitrlmafia")){
                 RLMafiaQuitCommand.getCommand(event);

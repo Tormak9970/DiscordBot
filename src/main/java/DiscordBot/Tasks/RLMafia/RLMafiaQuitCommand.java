@@ -1,6 +1,7 @@
 package DiscordBot.Tasks.RLMafia;
 
 import DiscordBot.DiscordBotMain;
+import DiscordBot.Tasks.RLMafia.RLMafiaUtils.RLMafiaUtils;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -18,9 +19,15 @@ public class RLMafiaQuitCommand {
         if (content.equals("$quitrlmafia"))
         {
             RLMafia.clearHost();
+            RLMafia.resetPlayers();
+            RLMafia.resetVotes();
+            RLMafia.setRound(0);
+            RLMafia.resetMVP();
+            RLMafia.resetMafia();
+            DiscordBotMain.setDefaultStatus();
+
             MessageChannel channel = event.getChannel();
             channel.sendMessage("The game has ended. Thanks for playing!").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
-            DiscordBotMain.setDefaultStatus();
         }
     }
 }

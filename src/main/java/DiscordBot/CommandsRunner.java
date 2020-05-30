@@ -33,6 +33,8 @@ public class CommandsRunner extends ListenerAdapter {
             RLMafiaHelpCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals("$hostmafia")) {
             RlMafiaHostCommand.getCommand(event);
+        }else if(event.getMessage().getContentRaw().equals("$rlmafiasettings")){
+
         }else{
             return;
         }
