@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class QuitRLMafiaCommand {
+public class RLMafiaQuitCommand {
 
     public static void getCommand(MessageReceivedEvent event)
     {

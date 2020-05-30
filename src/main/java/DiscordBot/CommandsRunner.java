@@ -4,7 +4,7 @@ import DiscordBot.Tasks.GetInviteLinkCommand;
 import DiscordBot.Tasks.GeneralHelpCommand;
 import DiscordBot.Tasks.NickNameChangerCommand;
 import DiscordBot.Tasks.PingPongCommand;
-import DiscordBot.Tasks.RLMafia.HostRlMafiaCommand;
+import DiscordBot.Tasks.RLMafia.RlMafiaHostCommand;
 import DiscordBot.Tasks.RLMafia.RLMafiaHelpCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -32,7 +32,7 @@ public class CommandsRunner extends ListenerAdapter {
         }else if(event.getMessage().getContentRaw().equals("$rlmafiahelp")){
             RLMafiaHelpCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals("$hostmafia")) {
-            HostRlMafiaCommand.getCommand(event);
+            RlMafiaHostCommand.getCommand(event);
         }else{
             return;
         }

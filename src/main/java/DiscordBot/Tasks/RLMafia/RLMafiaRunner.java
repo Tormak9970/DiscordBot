@@ -15,13 +15,13 @@ public class RLMafiaRunner extends ListenerAdapter{
             if(event.getAuthor().isBot()){
                 return;
             }else if(event.getMessage().getContentRaw().equals("$join")){
-                JoinCommand.getCommand(event);
+                RLMafiaJoinCommand.getCommand(event);
             }else if(event.getMessage().getContentRaw().equals("$vote")){
 
             }else if(event.getMessage().getContentRaw().equals("$rlmafiasettings")){
 
             }else if(event.getMessage().getContentRaw().equals("$quitrlmafia")){
-                QuitRLMafiaCommand.getCommand(event);
+                RLMafiaQuitCommand.getCommand(event);
             }else{
                 return;
             }

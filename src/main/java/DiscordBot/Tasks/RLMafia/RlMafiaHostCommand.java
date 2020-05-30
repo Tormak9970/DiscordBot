@@ -1,12 +1,11 @@
 package DiscordBot.Tasks.RLMafia;
 
-import DiscordBot.Utils.Player;
+import DiscordBot.DiscordBotMain;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class JoinCommand extends RLMafia{
+public class RlMafiaHostCommand {
 
     public static void getCommand(MessageReceivedEvent event)
     {
@@ -16,14 +15,12 @@ public class JoinCommand extends RLMafia{
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-         // Important to call .queue() on the RestAction returned by sendMessage(...)
-        if(content.indexOf("$join") == 0) {
-            User sender = event.getAuthor();
-            String nickname = content.substring(6);
-            Player p1 = new Player("none", "none", nickname, 0, sender);
-            RLMafia.addPlayer(p1);
+        if (content.equals("$hostrlmafia"))
+        {
+            RLMafia.setHost(event.getMember());
             MessageChannel channel = event.getChannel();
-            channel.sendMessage("joined successfully!").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
+            channel.sendMessage(event.getAuthor().getAsMention() + " has started a Rocket League Mafia game,").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
+            DiscordBotMain.setStatus("RLMafia");
         }
     }
 }

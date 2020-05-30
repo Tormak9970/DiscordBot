@@ -47,13 +47,13 @@ public class ReactionRolesCommand extends ListenerAdapter {
             //tag channel you want the reaction role to be in.
         }else if(content.indexOf("$messageID") == 0){
             MessageChannel channel = event.getChannel();
-            messageID = content.substring(12);
+            messageID = content.substring(11);
             channel.sendMessage("please send message formatted like the following: $emojiname emojiname(thing between the ::)").queue();
             // Important to call .queue() on the RestAction returned by sendMessage(...)
             //get message id from their message
         }else if(content.indexOf("$emojiname") == 0){
             MessageChannel channel = event.getChannel();
-            emojiName = content.substring(12);
+            emojiName = content.substring(11);
             channel.sendMessage("please send message formatted like the following: $role @role").queue();
             // Important to call .queue() on the RestAction returned by sendMessage(...)
             //ask for person to react to
