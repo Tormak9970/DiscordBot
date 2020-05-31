@@ -3,6 +3,7 @@ package DiscordBot.Tasks.RLMafia;
 import DiscordBot.Tasks.RLMafia.RLMafiaUtils.Player;
 import DiscordBot.Tasks.RLMafia.RLMafiaUtils.Vote;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.ArrayList;
 
@@ -10,10 +11,24 @@ public class RLMafia {
 
     static ArrayList<Player> currentPlayers = new ArrayList<>();
     static ArrayList<Vote> playerVotes = new ArrayList<>();
-    static Member host;
+    static User host;
     static int round = 0;
     static Player mvp;
     static Player mafia;
+    static String winner;
+
+    public static String getWinner(){
+        return winner;
+    }
+
+    public static void setWinner(String newWinner){
+        winner = newWinner;
+    }
+
+    public static void resetWinner(){
+        winner = "";
+    }
+
 
     public static ArrayList<Player> getCurrentPlayers(){
         return currentPlayers;
@@ -71,11 +86,11 @@ public class RLMafia {
 
 
 
-    public static void setHost(Member mem){
+    public static void setHost(User mem){
         host = mem;
     }
 
-    public static Member getHost(){
+    public static User getHost(){
         return host;
     }
 

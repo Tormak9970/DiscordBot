@@ -17,7 +17,7 @@ public class RlMafiaHostCommand {
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
         if (content.equals("$hostrlmafia"))
         {
-            RLMafia.setHost(event.getMember());
+            RLMafia.setHost(event.getAuthor());
             MessageChannel channel = event.getChannel();
             channel.sendMessage(event.getAuthor().getAsMention() + " has started a Rocket League Mafia game,").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
             DiscordBotMain.setStatus("RLMafia");
