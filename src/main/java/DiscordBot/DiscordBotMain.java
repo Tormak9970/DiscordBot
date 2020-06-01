@@ -1,5 +1,6 @@
 package DiscordBot;
 
+import DiscordBot.Tasks.Music.MusicRunner;
 import DiscordBot.Tasks.RLMafia.RLMafiaRunner;
 import DiscordBot.Tasks.ReactionRolesCommand;
 import net.dv8tion.jda.api.AccountType;
@@ -28,6 +29,7 @@ public class DiscordBotMain extends ListenerAdapter {
         build.addEventListeners(new ReactionRolesCommand());
         build.addEventListeners(new CommandsRunner());
         build.addEventListeners(new RLMafiaRunner());
+        build.addEventListeners(new MusicRunner());
         build.setActivity(Activity.playing("$generalhelp for help"));
         build.build();
 
@@ -35,6 +37,7 @@ public class DiscordBotMain extends ListenerAdapter {
     }
 
     public static void setStatus(String string){
+
         build.setActivity(Activity.playing(string));
     }
 

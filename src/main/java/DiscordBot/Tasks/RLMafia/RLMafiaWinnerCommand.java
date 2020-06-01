@@ -18,7 +18,7 @@ public class RLMafiaWinnerCommand {
             // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
             //if (content.indexOf("$winner") == 0)
         }else{
-            RLMafia.setWinner(event.getMessage().getContentRaw().substring(8));
+            RLMafia.setWinner(content.substring(8));
 
             MessageChannel channel = event.getChannel();
             channel.sendMessage("The round has ended").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
