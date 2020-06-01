@@ -14,16 +14,17 @@ public class RLMafiaVoteCommand {
 
     public static void getCommand(MessageReceivedEvent event)
     {
+
+
+        if (event.getAuthor().isBot()) return;
+        // We don't want to respond to other bot accounts, including ourself
         Message message = event.getMessage();
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
         ArrayList<Vote> votes = RLMafia.getCurrentVotes();
 
-        if (event.getAuthor().isBot()){
-            return;
-            // We don't want to respond to other bot accounts, including ourself
-        }else if (content.indexOf("$vote") == 0){
+        if (content.indexOf("$vote") == 0){
             ArrayList<Player> players = RLMafia.getCurrentPlayers();
             String playerVotedFor = event.getMessage().getContentRaw().substring(6);
             MessageChannel channel = event.getChannel();
@@ -37,8 +38,6 @@ public class RLMafiaVoteCommand {
                 channel.sendMessage("invalid vote, your victim isn't playing").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
 
             }
-        }else{
-            return;
         }
     }
 }

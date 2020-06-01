@@ -15,7 +15,9 @@ public class RLMafia {
     static int round = 0;
     static Player mvp;
     static Player mafia;
+    static Player jester;
     static String winner;
+
 
     public static String getWinner(){
         return winner;
@@ -36,6 +38,10 @@ public class RLMafia {
 
     public static void addPlayer(Player newPlayer){
         currentPlayers.add(newPlayer);
+    }
+
+    public static void updatePlayers(ArrayList<Player> updatedPlayers){
+        currentPlayers = updatedPlayers;
     }
 
     public static void resetPlayers(){
@@ -68,6 +74,20 @@ public class RLMafia {
 
     public static void resetMafia(){
         mafia = null;
+    }
+
+
+
+    public static Player getJester(){
+        return jester;
+    }
+
+    public static void setJester(Player roundJester){
+        jester = roundJester;
+    }
+
+    public static void resetJester(){
+        jester = null;
     }
 
 

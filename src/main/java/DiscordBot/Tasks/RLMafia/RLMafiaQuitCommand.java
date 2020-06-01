@@ -25,6 +25,7 @@ public class RLMafiaQuitCommand {
             RLMafia.setRound(0);
             RLMafia.resetMVP();
             RLMafia.resetMafia();
+            RLMafia.resetJester();
             DiscordBotMain.setDefaultStatus();
 
             MessageChannel channel = event.getChannel();

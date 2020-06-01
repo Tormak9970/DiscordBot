@@ -17,13 +17,7 @@ public class RLMafiaRunner extends ListenerAdapter{
             }else if(event.getMessage().getContentRaw().indexOf("$join") == 0){
                 RLMafiaJoinCommand.getCommand(event);
             }else if(event.getMessage().getContentRaw().indexOf("$vote") == 0){
-                RLMafiaJoinCommand.getCommand(event);
-            }else if(event.getMessage().getContentRaw().indexOf("$mvp") == 0){
-
-            }else if(event.getMessage().getContentRaw().indexOf("$winner") == 0){
-                RLMafiaWinnerCommand.getCommand(event);
-            }else if(event.getMessage().getContentRaw().indexOf("$quitrlmafia") == 0){
-                RLMafiaQuitCommand.getCommand(event);
+                RLMafiaVoteCommand.getCommand(event);
             }else{
                 return;
             }
@@ -31,7 +25,13 @@ public class RLMafiaRunner extends ListenerAdapter{
 
         if(RLMafia.getHost() != null){
             if(RLMafia.getHost().equals(event.getAuthor())){
+                if(event.getMessage().getContentRaw().indexOf("$mvp") == 0){
 
+                }else if(event.getMessage().getContentRaw().indexOf("$winner") == 0){
+                    RLMafiaWinnerCommand.getCommand(event);
+                }else if(event.getMessage().getContentRaw().indexOf("$quitrlmafia") == 0){
+                    RLMafiaQuitCommand.getCommand(event);
+                }
             }
 
         }
