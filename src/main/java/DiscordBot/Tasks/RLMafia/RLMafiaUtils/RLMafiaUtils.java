@@ -20,11 +20,12 @@ public abstract class RLMafiaUtils {
 
     public static String getSummary(){
         String summary;
-        String mafiaScore;
+        String mafiaScore = "";
         String mvpScore;
-        String winnerScore;
+        StringBuilder winnerScore = new StringBuilder("+2 Points for Town winning the round in-game: ");
 
         ArrayList<Player> players = RLMafia.getCurrentPlayers();
+        ArrayList<Vote> votes = RLMafia.getCurrentVotes();
         ArrayList<Player> guessedCorrect1 = getCorrectGuesses();
         Player mvpPlayer = RLMafia.getMVP();
         Player mafiaPlayer = RLMafia.getMafia();
@@ -44,7 +45,7 @@ public abstract class RLMafiaUtils {
         for(int i = 0; i < players.size(); i++){
             Player playerIndex = players.get(i);
             if(playerIndex.getTeam().equals(winningTeam) && playerIndex.getRole().equals("Town")){
-                winnerScore = "+2 Points for Town winning the round in-game: snok, alex, hytak";
+                winnerScore.append(playerIndex.getName()).append(" ");
                 playerIndex.setScore(playerIndex.getScore() + 2);
 
             }else if(playerIndex.getRole().equals("Mafia")){
@@ -61,6 +62,9 @@ public abstract class RLMafiaUtils {
             }
         }
 
+        for(int i = 0; i < votes.size(); i++){
+
+        }
 
 
         summary = "!! Summary Round " + round + " !!\n" +
