@@ -8,7 +8,11 @@ import java.util.ArrayList;
 public abstract class RLMafiaUtils {
 
     public static void generateTeams(ArrayList<Player> players, MessageReceivedEvent event){
+        Math.random() * 10;
+        String blueTeam = "";
+        String orangeTeam = "";
 
+        event.getMessage().getChannel().sendMessage("Blue Team: " + blueTeam + " || Orange Team: " + orangeTeam).queue();
     }
 
 

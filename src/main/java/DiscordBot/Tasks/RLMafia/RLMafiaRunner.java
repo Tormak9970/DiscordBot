@@ -23,8 +23,6 @@ public class RLMafiaRunner extends ListenerAdapter{
             if(RLMafia.getHost().equals(event.getAuthor())){
                 if(event.getMessage().getContentRaw().indexOf("$mvp") == 0){
 
-                }else if(event.getMessage().getContentRaw().indexOf("$winner") == 0){
-                    RLMafiaWinnerCommand.getCommand(event);
                 }else if(event.getMessage().getContentRaw().indexOf("$quitrlmafia") == 0){
                     RLMafiaQuitCommand.getCommand(event);
                 }else if(event.getMessage().getContentRaw().equals("$startrlmafia")){
