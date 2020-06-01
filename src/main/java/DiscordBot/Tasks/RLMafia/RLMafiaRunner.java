@@ -18,12 +18,8 @@ public class RLMafiaRunner extends ListenerAdapter{
                 RLMafiaJoinCommand.getCommand(event);
             }else if(event.getMessage().getContentRaw().indexOf("$vote") == 0){
                 RLMafiaVoteCommand.getCommand(event);
-            }else{
-                return;
             }
-        }
 
-        if(RLMafia.getHost() != null){
             if(RLMafia.getHost().equals(event.getAuthor())){
                 if(event.getMessage().getContentRaw().indexOf("$mvp") == 0){
 
@@ -33,7 +29,6 @@ public class RLMafiaRunner extends ListenerAdapter{
                     RLMafiaQuitCommand.getCommand(event);
                 }
             }
-
         }
 
 
