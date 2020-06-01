@@ -27,10 +27,11 @@ public class RLMafiaRunner extends ListenerAdapter{
                     RLMafiaWinnerCommand.getCommand(event);
                 }else if(event.getMessage().getContentRaw().indexOf("$quitrlmafia") == 0){
                     RLMafiaQuitCommand.getCommand(event);
+                }else if(event.getMessage().getContentRaw().equals("$startrlmafia")){
+                    RLMafiaStartCommand.getCommand(event);
                 }
             }
         }
-
 
     }
 }

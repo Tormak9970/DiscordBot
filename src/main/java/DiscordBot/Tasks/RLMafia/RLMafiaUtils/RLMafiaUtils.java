@@ -1,12 +1,13 @@
 package DiscordBot.Tasks.RLMafia.RLMafiaUtils;
 
 import DiscordBot.Tasks.RLMafia.RLMafia;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
 
 public abstract class RLMafiaUtils {
 
-    public static void generateTeams(ArrayList<Player> players){
+    public static void generateTeams(ArrayList<Player> players, MessageReceivedEvent event){
 
     }
 
@@ -31,8 +32,6 @@ public abstract class RLMafiaUtils {
         int jesterScore = 0;
         String winningTeam = RLMafia.getWinner();
 
-        //guessedCorrect1.stream().map(Player::getName);
-
 
 
         if(mvpPlayer.getRole().equals("Town")){
@@ -47,8 +46,6 @@ public abstract class RLMafiaUtils {
                 caughtPoints++;
             } else if(voteIndex.getChoice().equals(jesterPlayer.getName())){
                 jesterScore++;
-            }else{
-
             }
         }
 

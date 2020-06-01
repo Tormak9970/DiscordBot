@@ -16,12 +16,16 @@ public class RLMafiaHelpCommand {
         if (content.equals("$rlmafiahelp"))
         {
             MessageChannel channel = event.getChannel();
-            channel.sendMessage("$generalhelp - lists all general commands" +
-                    "\n$hostmafia - starts game, no other mafia commands will work unless you have started a game, sets sender as host" +
+            channel.sendMessage(
+                    "$hostmafia - starts game, no other mafia commands will work unless you have started a game, sets sender as host" +
                     "\n$join (nickname) - adds you to current mafia game with name (nickname)" +
                     "\n$rlmafiasettings - allows you to customize the experience" +
                     "\n$quitrlmafia - ends game, and resets everything" +
-                    "\n$rename - allows host to change participents nicknames").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
+                    "\n$vote - cast your vote on who u think the mafia is" +
+                    "\n$mvp - set the round's mvp" +
+                    "\n$startrlmafia - starts the first round" +
+                    "\n$winner - sets the winning team" +
+                    "\n$rename (player's current name) (new nickname) - allows host to change participents nicknames").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
 
         }
     }
