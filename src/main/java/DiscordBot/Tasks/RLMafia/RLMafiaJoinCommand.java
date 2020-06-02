@@ -17,7 +17,7 @@ public class RLMafiaJoinCommand extends RLMafia{
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
          // Important to call .queue() on the RestAction returned by sendMessage(...)
-        if(content.indexOf("$join") == 0) {
+        if(content.indexOf("$mafiajoin") == 0) {
             User sender = event.getAuthor();
             String nickname = content.substring(6);
             Player p1 = new Player("none", "none", nickname, 0, sender);

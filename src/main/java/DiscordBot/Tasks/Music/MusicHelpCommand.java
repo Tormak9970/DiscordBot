@@ -1,4 +1,4 @@
 package DiscordBot.Tasks.Music;
 
-public class getChannel {
+public class MusicHelpCommand {
 }

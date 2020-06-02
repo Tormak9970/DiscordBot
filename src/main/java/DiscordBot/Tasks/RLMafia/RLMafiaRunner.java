@@ -14,7 +14,7 @@ public class RLMafiaRunner extends ListenerAdapter{
         if(RLMafia.getHost() != null){
             if(event.getAuthor().isBot()){
                 return;
-            }else if(event.getMessage().getContentRaw().indexOf("$join") == 0){
+            }else if(event.getMessage().getContentRaw().indexOf("$mafiajoin") == 0){
                 RLMafiaJoinCommand.getCommand(event);
             }else if(event.getMessage().getContentRaw().indexOf("$vote") == 0){
                 RLMafiaVoteCommand.getCommand(event);
