@@ -4,15 +4,31 @@ import DiscordBot.Tasks.RLMafia.RLMafia;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public abstract class RLMafiaUtils {
 
     public static void generateTeams(ArrayList<Player> players, MessageReceivedEvent event){
-        Math.random() * 10;
-        String blueTeam = "";
-        String orangeTeam = "";
+        StringBuilder blueTeam = new StringBuilder("");
+        StringBuilder orangeTeam = new StringBuilder("");
+        Collections.shuffle(players);
 
+        for (int i = 0; i < players.size(); i++) {
+            if(i < players.size()/2){
+                players.get(i).setTeam("blue");
+                blueTeam.append(players.get(i).getName()).append(" ");
+            }else{
+                players.get(i).setTeam("orange");
+                orangeTeam.append(players.get(i).getName()).append(" ");
+            }
+        }
+
+        RLMafia.updatePlayers(players);
         event.getMessage().getChannel().sendMessage("Blue Team: " + blueTeam + " || Orange Team: " + orangeTeam).queue();
+    }
+
+    public static void generateRoles(ArrayList<Player> players, MessageReceivedEvent event){
+
     }
 
 

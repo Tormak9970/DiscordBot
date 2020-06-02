@@ -1,5 +1,6 @@
 package DiscordBot.Tasks.RLMafia;
 
+import DiscordBot.Tasks.RLMafia.RLMafiaUtils.RLMafiaUtils;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -17,7 +18,10 @@ public class RLMafiaStartCommand {
         if (content.equals("$startrlmafia") && RLMafia.getCurrentPlayers().size()%2 == 0)
         {
             MessageChannel channel = event.getChannel();
+            channel.sendMessage("Round " + RLMafia.getRound() + " has started").queue();
 
+            RLMafiaUtils.generateRoles(RLMafia.getCurrentPlayers(), event);
+            RLMafiaUtils.generateTeams(RLMafia.getCurrentPlayers(), event);
 
         }
     }
