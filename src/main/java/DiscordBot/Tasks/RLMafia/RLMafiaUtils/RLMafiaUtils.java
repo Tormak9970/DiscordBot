@@ -4,8 +4,10 @@ import DiscordBot.Tasks.RLMafia.RLMafia;
 import DiscordBot.Utils.Utils;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public abstract class RLMafiaUtils {
 
@@ -66,6 +68,7 @@ public abstract class RLMafiaUtils {
         String mvpStandings = "";
         String jesterStandings = "";
 
+        StringBuilder getStandings = new StringBuilder("");
         StringBuilder winnerScore = new StringBuilder("+2 Points for Town winning the round in-game: ");
         StringBuilder correctVoters = new StringBuilder("");
 
@@ -120,6 +123,32 @@ public abstract class RLMafiaUtils {
             }
         }
 
+        Comparator<Player> byScore = Comparator.comparingInt(Player::getScore);
+
+        players.sort(byScore);
+
+        for(int i = 0; i < players.size(); i++){
+            String score = "";
+            String name = "";
+            StringBuilder spacesOffset = new StringBuilder("");
+
+            for(int j = 0; j < (7 - players.get(i).getName().length()); j++){
+                spacesOffset.append(" ");
+            }
+            if(players.get(i).getName().length() < 7){
+                name = spacesOffset + players.get(i).getName();
+            }else{
+                name = players.get(i).getName();
+            }
+
+            if(players.get(i).getScore() < 10){
+                score = " " + players.get(i).getScore();
+            }else{
+                score = "" + players.get(i).getScore();
+            }
+
+            getStandings.append(i).append(" | ").append(name).append(" | ").append(score).append("\n");
+        }
 
         summary = "!! Summary Round " + round + " !!\n" +
                 "\n" +
@@ -139,12 +168,7 @@ public abstract class RLMafiaUtils {
                 "// Standings\n" +
                 "# | Player  | Points \n" +
                 "--+---------+--------\n" +
-                "1 |    east | 20 (+5)\n" +
-                "2 | twoback | 19 (+3)\n" +
-                "3 |    blue | 15 (+5)\n" +
-                "4 |   hytak | 10 (+3)\n" +
-                "5 |    snok | 10 (+2)\n" +
-                "6 |    alex |  5 (+2)";
+                getStandings;
         RLMafia.updatePlayers(players);
         RLMafia.resetVotes();
         return summary;
