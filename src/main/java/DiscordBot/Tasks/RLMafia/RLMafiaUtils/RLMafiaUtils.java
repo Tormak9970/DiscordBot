@@ -1,6 +1,7 @@
 package DiscordBot.Tasks.RLMafia.RLMafiaUtils;
 
 import DiscordBot.Tasks.RLMafia.RLMafia;
+import DiscordBot.Utils.Utils;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
@@ -28,7 +29,33 @@ public abstract class RLMafiaUtils {
     }
 
     public static void generateRoles(ArrayList<Player> players, MessageReceivedEvent event){
+        int mafiaIndex = players.size() - 2;
+        int jesterIndex = 1;
+        double randNum = Math.random() * 10;
+        boolean isJester = true;
 
+        if(randNum > 5){
+            isJester = false;
+        }
+
+        if(isJester){
+            players.get(jesterIndex);
+        }
+        for(int i = 0; i < players.size(); i++){
+            if(i == mafiaIndex){
+                players.get(i).setRole("Mafia");
+                Utils.sendPrivateMessage(players.get(i).getUser(), "You are the Mafia!");
+            }else if(isJester && i == jesterIndex){
+                players.get(i).setRole("Jester");
+                Utils.sendPrivateMessage(players.get(i).getUser(), "You are the Jester!");
+            }else{
+                players.get(i).setRole("Town");
+                Utils.sendPrivateMessage(players.get(i).getUser(), "You are a towns person");
+            }
+        }
+
+        RLMafia.updatePlayers(players);
+        event.getMessage().getChannel().sendMessage("Roles have been selected.").queue();
     }
 
 

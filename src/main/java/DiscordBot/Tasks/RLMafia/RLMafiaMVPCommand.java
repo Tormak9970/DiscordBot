@@ -1,6 +1,7 @@
 package DiscordBot.Tasks.RLMafia;
 
 import DiscordBot.Tasks.RLMafia.RLMafiaUtils.Player;
+import DiscordBot.Tasks.RLMafia.RLMafiaUtils.RLMafiaUtils;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -27,8 +28,11 @@ public class RLMafiaMVPCommand {
                 }
             }
 
-            MessageChannel channel = event.getChannel();
+            RLMafiaUtils.generateTeams(RLMafia.getCurrentPlayers(), event);
+            RLMafiaUtils.generateRoles(RLMafia.getCurrentPlayers(), event);
 
+            MessageChannel channel = event.getChannel();
+            channel.sendMessage("Round " + RLMafia.getRound() + " has started").queue();
 
         }
     }
