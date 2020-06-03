@@ -1,5 +1,6 @@
 package DiscordBot;
 
+import DiscordBot.Tasks.CommandsRunner;
 import DiscordBot.Tasks.Music.MusicRunner;
 import DiscordBot.Tasks.RLMafia.RLMafiaRunner;
 import DiscordBot.Tasks.ReactionRolesCommand;

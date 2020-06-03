@@ -23,7 +23,7 @@ public class GeneralHelpCommand {
                     "\n$memehelp - help with meme commands" +
                     "\n$reactionroles - lets you set up reaction roles(note that this only works when bot is online)" +
                     "\n$getinvite - allows you to get an invite link to run bot on your servers" +
-                    "\n$nick - use in format like *$nick blank* to add *blank* to beggining of nickname, owns cant use this due to perms" +
+                    "\n$nick - use in format like *$nick blank* to add *blank* to beggining of nickname, owners cant use this due to perms" +
                     "\n$ping - bot responds with pong!").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
 
         }

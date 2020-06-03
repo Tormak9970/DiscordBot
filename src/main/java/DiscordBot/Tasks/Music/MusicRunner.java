@@ -29,13 +29,11 @@ public class MusicRunner extends ListenerAdapter {
         }else if(event.getMessage().getContentRaw().indexOf("$skip") == 0){
             MusicSkipCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().indexOf("$clear") == 0){
-
+            MusicClearCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().indexOf("$nowplaying") == 0){
             MusicNowPlayingCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().indexOf("$pause") == 0){
-
-        }else if(event.getMessage().getContentRaw().indexOf("$unpause") == 0){
-
+            MusicPauseCommand.getCommand(event);
         }
     }
 

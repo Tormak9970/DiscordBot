@@ -2,13 +2,12 @@ package DiscordBot.Tasks.Music;
 
 import DiscordBot.Tasks.Music.MusicUtils.GuildMusicManager;
 import DiscordBot.Tasks.Music.MusicUtils.PlayerManager;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import java.util.concurrent.BlockingQueue;
 
-public class MusicClearCommand {
+public class MusicPauseCommand {
 
     public static void getCommand(MessageReceivedEvent event)
     {
@@ -18,21 +17,24 @@ public class MusicClearCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals("$clear"))
+        if (content.equals("$pause"))
         {
             TextChannel channel = event.getTextChannel();
             PlayerManager playerManager = PlayerManager.getInstance();
             GuildMusicManager musicManager = playerManager.getGuildMusicManager(event.getGuild());
-            BlockingQueue<AudioTrack> queue = musicManager.scheduler.getQueue();
+            AudioPlayer player = musicManager.player;
 
-            if (queue.isEmpty()) {
-                channel.sendMessage("The queue is already empty").queue();
+            if (player.getPlayingTrack() == null) {
+                channel.sendMessage("The player is not playing any song. nothing to pause").queue();
 
                 return;
-            }else{
-                queue.clear();
-                channel.sendMessage("The queue has been cleared").queue();
+            } else if(player.isPaused()){
+                player.setPaused(false);
+            }else if(!player.isPaused()){
+                player.setPaused(true);
             }
+
+
 
         }
     }

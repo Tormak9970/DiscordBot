@@ -1,9 +1,6 @@
-package DiscordBot;
+package DiscordBot.Tasks;
 
-import DiscordBot.Tasks.GetInviteLinkCommand;
-import DiscordBot.Tasks.GeneralHelpCommand;
-import DiscordBot.Tasks.NickNameChangerCommand;
-import DiscordBot.Tasks.PingPongCommand;
+
 import DiscordBot.Tasks.RLMafia.RlMafiaHostCommand;
 import DiscordBot.Tasks.RLMafia.RLMafiaHelpCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -35,8 +32,8 @@ public class CommandsRunner extends ListenerAdapter {
             RlMafiaHostCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals("$rlmafiasettings")){
 
-        }else{
-            return;
+        }else if(event.getMessage().getContentRaw().equals("$serverinfo")){
+            ServerInfoCommand.getCommand(event);
         }
 
     }

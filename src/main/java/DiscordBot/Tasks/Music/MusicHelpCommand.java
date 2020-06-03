@@ -23,8 +23,7 @@ public class MusicHelpCommand {
                     "\n$leave - bot leaves the voice channel" +
                     "\n$stop - stops the music player and clears the queue" +
                     "\n$queue - bot sends an embed with the current song queue" +
-                    "\n$pause - pauses music/audio" +
-                    "\n$unpause - unpauses music/audio" +
+                    "\n$pause - pauses and unpauses music/audio" +
                     "\n$skip - skips current track" +
                     "\n$clear - clears queue" +
                     "\n$nowplaying - gets information on whats currently playing").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
