@@ -18,7 +18,7 @@ public class RLMafiaHelpCommand {
             MessageChannel channel = event.getChannel();
             channel.sendMessage(
                     "$hostmafia - starts game, no other mafia commands will work unless you have started a game, sets sender as host" +
-                    "\n$join (nickname) - adds you to current mafia game with name (nickname)" +
+                    "\n$mafiajoin (nickname) - adds you to current mafia game with name (nickname)" +
                     "\n$rlmafiasettings - allows you to customize the experience" +
                     "\n$quitrlmafia - ends game, and resets everything" +
                     "\n$vote - cast your vote on who u think the mafia is" +

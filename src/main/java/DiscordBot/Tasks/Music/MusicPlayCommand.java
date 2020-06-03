@@ -17,9 +17,14 @@ public class MusicPlayCommand {
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
         if (content.indexOf("$play") == 0)
         {
+            String url = content.substring(6);
             PlayerManager manager = PlayerManager.getInstance();
 
             manager.loadAndPlay(event.getTextChannel(), "https://youtu.be/b6QHGfphoXU");
+
+            if(!Music.isURL(url) && !url.startsWith("ytsearch:")){
+                //later modify to add youtube api if starts with ytsearch:
+            }
 
         }
     }
