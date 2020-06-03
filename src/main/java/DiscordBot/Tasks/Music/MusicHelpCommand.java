@@ -27,7 +27,7 @@ public class MusicHelpCommand {
                     "\n$unpause - unpauses music/audio" +
                     "\n$skip - skips current track" +
                     "\n$clear - clears queue" +
-                    "\n$currentsong - ").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
+                    "\n$nowplaying - gets information on whats currently playing").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
 
         }
     }
