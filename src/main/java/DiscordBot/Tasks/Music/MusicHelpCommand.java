@@ -14,7 +14,7 @@ public class MusicHelpCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals("$generalhelp"))
+        if (content.equals("$musichelp"))
         {
             MessageChannel channel = event.getChannel();
             channel.sendMessage(
@@ -22,7 +22,12 @@ public class MusicHelpCommand {
                     "\n$join - bot joins your voice channel" +
                     "\n$leave - bot leaves the voice channel" +
                     "\n$stop - stops the music player and clears the queue" +
-                    "\n$queue - bot sends an embed with the current song queue").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
+                    "\n$queue - bot sends an embed with the current song queue" +
+                    "\n$pause - pauses music/audio" +
+                    "\n$unpause - unpauses music/audio" +
+                    "\n$skip - skips current track" +
+                    "\n$clear - clears queue" +
+                    "\n$currentsong - ").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
 
         }
     }
