@@ -21,7 +21,8 @@ public class MusicHelpCommand {
                     "$play (url)- Im disappointed" +
                     "\n$join - bot joins your voice channel" +
                     "\n$leave - bot leaves the voice channel" +
-                    "\n$stop - stops the music player and clears the queue").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
+                    "\n$stop - stops the music player and clears the queue" +
+                    "\n$queue - bot sends an embed with the current song queue").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
 
         }
     }

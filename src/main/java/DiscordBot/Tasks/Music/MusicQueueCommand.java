@@ -4,6 +4,7 @@ import DiscordBot.Tasks.Music.MusicUtils.GuildMusicManager;
 import DiscordBot.Tasks.Music.MusicUtils.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import me.duncte123.botcommons.messaging.EmbedUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;

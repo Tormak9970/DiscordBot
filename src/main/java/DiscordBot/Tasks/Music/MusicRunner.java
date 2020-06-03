@@ -15,7 +15,7 @@ public class MusicRunner extends ListenerAdapter {
         if(event.getAuthor().isBot()){
             return;
         }else if(event.getMessage().getContentRaw().indexOf("$musichelp") == 0){
-            //MusicHelpCommand.getCommand(event);
+            MusicHelpCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().indexOf("$join") == 0){
             MusicJoinCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().indexOf("$leave") == 0){
@@ -24,6 +24,8 @@ public class MusicRunner extends ListenerAdapter {
             MusicPlayCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().indexOf("$stop") == 0){
             MusicStopCommand.getCommand(event);
+        }else if(event.getMessage().getContentRaw().indexOf("$queue") == 0){
+            MusicQueueCommand.getCommand(event);
         }
     }
 
