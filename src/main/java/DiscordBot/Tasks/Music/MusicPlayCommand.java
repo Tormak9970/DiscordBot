@@ -63,7 +63,7 @@ public class MusicPlayCommand {
                 }
 
 
-                ytSearched = input;
+                input = ytSearched;
             }
 
             manager.loadAndPlay(event.getTextChannel(), input);
