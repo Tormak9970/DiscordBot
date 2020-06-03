@@ -1,11 +1,11 @@
 package DiscordBot.Tasks.Music;
 
+import DiscordBot.Tasks.Music.MusicUtils.GuildMusicManager;
 import DiscordBot.Tasks.Music.MusicUtils.PlayerManager;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class MusicPlayCommand {
+public class MusicStopCommand {
 
     public static void getCommand(MessageReceivedEvent event)
     {
@@ -15,21 +15,16 @@ public class MusicPlayCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.indexOf("$play") == 0)
+        if (content.indexOf("$stop") == 0)
         {
-            String url = content.substring(6);
-            PlayerManager manager = PlayerManager.getInstance();
+            PlayerManager playerManager = PlayerManager.getInstance();
+            GuildMusicManager musicManager = playerManager.getGuildMusicManager(event.getGuild());
 
-            if(!Music.isURL(url) && !url.startsWith("ytsearch:")){
-                //later modify to add youtube api if starts with ytsearch:
-                event.getChannel().sendMessage("Please provided a valid url").queue();
-                return;
-            }
+            musicManager.scheduler.getQueue().clear();
+            musicManager.player.stopTrack();
+            musicManager.player.setPaused(false);
 
-            manager.loadAndPlay(event.getTextChannel(), url);
-
-
-
+            event.getChannel().sendMessage("Stopping the player and clearing the queue").queue();
         }
     }
 }

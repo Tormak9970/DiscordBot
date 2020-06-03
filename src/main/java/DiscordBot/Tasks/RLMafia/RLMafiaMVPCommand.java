@@ -28,6 +28,8 @@ public class RLMafiaMVPCommand {
                 }
             }
 
+            event.getChannel().sendMessage(RLMafiaUtils.getSummary()).queue();
+
             RLMafiaUtils.generateTeams(RLMafia.getCurrentPlayers(), event);
             RLMafiaUtils.generateRoles(RLMafia.getCurrentPlayers(), event);
 

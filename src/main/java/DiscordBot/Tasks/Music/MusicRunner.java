@@ -22,6 +22,8 @@ public class MusicRunner extends ListenerAdapter {
             MusicLeaveCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().indexOf("$play") == 0){
             MusicPlayCommand.getCommand(event);
+        }else if(event.getMessage().getContentRaw().indexOf("$stop") == 0){
+            MusicStopCommand.getCommand(event);
         }
     }
 
