@@ -3,6 +3,8 @@ package DiscordBot.Tasks.Music;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import java.io.IOException;
+
 public class MusicRunner extends ListenerAdapter {
 
 
@@ -21,7 +23,12 @@ public class MusicRunner extends ListenerAdapter {
         }else if(event.getMessage().getContentRaw().indexOf("$leave") == 0){
             MusicLeaveCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().indexOf("$play") == 0){
-            MusicPlayCommand.getCommand(event);
+            try {
+                MusicPlayCommand.getCommand(event);
+            } catch (IOException e) {
+                event.getChannel().sendMessage("encountered an IOException while reading apikey").queue();
+                e.printStackTrace();
+            }
         }else if(event.getMessage().getContentRaw().indexOf("$stop") == 0){
             MusicStopCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().indexOf("$queue") == 0){
