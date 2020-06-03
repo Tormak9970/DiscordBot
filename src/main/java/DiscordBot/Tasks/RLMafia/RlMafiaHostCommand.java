@@ -1,6 +1,5 @@
 package DiscordBot.Tasks.RLMafia;
 
-import DiscordBot.DiscordBotMain;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -20,7 +19,6 @@ public class RlMafiaHostCommand {
             RLMafia.setHost(event.getAuthor());
             MessageChannel channel = event.getChannel();
             channel.sendMessage(event.getAuthor().getAsMention() + " has started a Rocket League Mafia game,").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
-            DiscordBotMain.setStatus("RLMafia");
         }
     }
 }

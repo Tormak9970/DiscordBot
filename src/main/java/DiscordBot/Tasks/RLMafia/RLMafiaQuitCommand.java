@@ -26,7 +26,6 @@ public class RLMafiaQuitCommand {
             RLMafia.resetMVP();
             RLMafia.resetMafia();
             RLMafia.resetJester();
-            DiscordBotMain.setDefaultStatus();
 
             MessageChannel channel = event.getChannel();
             channel.sendMessage("The game has ended. Thanks for playing!").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
