@@ -1,6 +1,7 @@
 package DiscordBot;
 
 import DiscordBot.Tasks.CommandsRunner;
+import DiscordBot.Tasks.Moderation.ModerationRunner;
 import DiscordBot.Tasks.Music.MusicRunner;
 import DiscordBot.Tasks.RLMafia.RLMafiaRunner;
 import DiscordBot.Tasks.ReactionRolesCommand;
@@ -44,6 +45,7 @@ public class DiscordBotMain extends ListenerAdapter {
                 .addEventListeners(new CommandsRunner())
                 .addEventListeners(new RLMafiaRunner())
                 .addEventListeners(new MusicRunner())
+                .addEventListeners(new ModerationRunner())
                 .build();
 
 
