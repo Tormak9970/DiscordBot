@@ -30,9 +30,8 @@ public abstract class Utils{
         long numberOfMinutes = (uptimeInSeconds / 60) - (numberOfHours * 60);
         long numberOfSeconds = uptimeInSeconds % 60;
 
-        String strUptime = String.format("My uptime is `%s hours, %s minutes, %s seconds`",
+        return String.format("My uptime is `%s hours, %s minutes, %s seconds`",
                 numberOfHours, numberOfMinutes, numberOfSeconds);
-        return strUptime;
     }
 
     public static void addRole(Member mem, Role role){

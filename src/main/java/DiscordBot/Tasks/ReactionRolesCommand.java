@@ -70,20 +70,20 @@ public class ReactionRolesCommand extends ListenerAdapter {
     }
 
     @Override
-    public void onMessageReactionAdd(MessageReactionAddEvent emote) {
-        if (emote.getUser().isBot()){
+    public void onMessageReactionAdd(MessageReactionAddEvent reaction) {
+        if (reaction.getUser().isBot()){
             return;
-        }else{
-            String channelName = emote.getChannel().getName();
-            for(int i = 0; i < listOfSetupRoles.size(); i++){
-                if ( channelName.equals(listOfSetupRoles.get(i).getChannel())
-                        && emote.getMessageId().equals(listOfSetupRoles.get(i).getMessageID())
-                        && emote.getReactionEmote().getEmote().getName().equals(listOfSetupRoles.get(i).getEmoji())){
-                    try{
-                        DiscordBot.Utils.Utils.addRole(emote.getMember(), listOfSetupRoles.get(i).getRole());
-                    }catch(IllegalStateException e){
+        }
 
-                    }
+        String channelName = reaction.getChannel().getName();
+        for(int i = 0; i < listOfSetupRoles.size(); i++){
+            if ( channelName.equals(listOfSetupRoles.get(i).getChannel())
+                    && reaction.getMessageId().equals(listOfSetupRoles.get(i).getMessageID())
+                    && reaction.getReactionEmote().getEmote().getName().equals(listOfSetupRoles.get(i).getEmoji())){
+                try{
+                    DiscordBot.Utils.Utils.addRole(reaction.getMember(), listOfSetupRoles.get(i).getRole());
+                }catch(IllegalStateException e){
+
                 }
             }
         }

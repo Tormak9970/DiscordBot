@@ -3,16 +3,16 @@ package DiscordBot.Tasks;
 import DiscordBot.Utils.Utils;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.awt.*;
-import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class BotInfoCommand {
@@ -30,6 +30,14 @@ public class BotInfoCommand {
             Guild guild = event.getGuild();
             User user = event.getJDA().getSelfUser();
             String botName = Objects.requireNonNull(guild.getMember(user)).getEffectiveName();
+            StringBuilder roles = new StringBuilder("");
+            List<Role> roleList = guild.getMember(user).getRoles();
+            String update = "";
+
+            for(Role role : roleList){
+                roles.append(role.getName()).append(", ");
+            }
+            roles.delete(roles.length() - 3, roles.length() - 1);
 
             String generalInfo = String.format(
                     "**Name**: %s\n**Region**: %s\n**Creation Date**: January 17, 2020",
@@ -37,14 +45,12 @@ public class BotInfoCommand {
                     guild.getRegion().getName()
             );
 
+            String helpServerUrl = "https://discord.gg/dKAQDCe";
             String memberInfo = String.format(
-                    "**Uptime**: %s\n**Code Type**: Open Source(GitHub)\n**Developers**: Tormak9970\n**Offline Members**: %s\n**needed**: %s\n**needed**: %s\n**needed**: %s\n**needed**: %s\n**needed**: %s",
+                    "**Uptime**: %s\n**Code Type**: Open Source(GitHub)\n**Developers**: Tormak9970\n**Member since**: %s\n**Roles**: " + roles + "\n**Goal in Life**: overthrow the humans\n**Next Update**: " + update + "\n**Need help? Join**: %s",
                     Utils.getUptime(),
-                    guild.getMemberCache().stream().filter((m) -> m.getOnlineStatus() == OnlineStatus.OFFLINE).count(),
-                    ,
-                    ,
-                    ,
-                    ,
+                    guild.getMember(user).getTimeJoined().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + guild.getMember(user).getTimeJoined().getDayOfMonth() + ", " + guild.getMember(user).getTimeJoined().getYear(),
+                    helpServerUrl
             );
 
             String desc = "Quarantine Bot is a discord bot that I started " +
@@ -55,8 +61,9 @@ public class BotInfoCommand {
                         "and of course, send memes from r/dankmemes.";
             String gitHubUrl = "https://github.com/Tormak9970/DiscordBot";
 
+
             EmbedBuilder embed = EmbedUtils.defaultEmbed()
-                    .setTitle("Bot info for " + botName)
+                    .setTitle("Info for " + botName)
                     .setThumbnail(user.getAvatarUrl())
                     .addField("**General Info**", generalInfo, false)
                     .addField("**Other info**", memberInfo, true)
