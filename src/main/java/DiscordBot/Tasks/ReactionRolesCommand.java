@@ -1,10 +1,12 @@
 package DiscordBot.Tasks;
 
 import DiscordBot.Utils.ReactionRoles;
+import DiscordBot.Utils.Utils;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import sun.nio.ch.Util;
 
 import java.util.ArrayList;
 
@@ -27,6 +29,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
     {
 
 
+        Guild guild = event.getGuild();
         if (event.getAuthor().isBot()) return;
         // We don't want to respond to other bot accounts, including ourself
         Message message = event.getMessage();
@@ -82,6 +85,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                     && reaction.getReactionEmote().getEmote().getName().equals(listOfSetupRoles.get(i).getEmoji())){
                 try{
                     DiscordBot.Utils.Utils.addRole(reaction.getMember(), listOfSetupRoles.get(i).getRole());
+                    Utils.sendPrivateMessage(reaction.getUser(), "you have been given the role " + listOfSetupRoles.get(i).getRole().getName() + " in the server " + reaction.getGuild().getName());
                 }catch(IllegalStateException e){
 
                 }

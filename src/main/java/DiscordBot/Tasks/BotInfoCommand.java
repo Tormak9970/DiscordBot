@@ -69,7 +69,7 @@ public class BotInfoCommand {
                     .addField("**Other info**", memberInfo, true)
                     .addField("**Description**", desc, true)
                     .addField("**GitHub**", gitHubUrl, false)
-                    .addField("**Need help? Join**: %s", helpServerUrl, false)
+                    .addField("**Need help? Join**: ", helpServerUrl, false)
                     .setColor(Color.RED)
                     .setFooter("Tormak9970, 2020")
                     ;
