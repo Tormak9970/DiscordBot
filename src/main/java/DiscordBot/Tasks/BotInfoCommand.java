@@ -38,11 +38,13 @@ public class BotInfoCommand {
             );
 
             String memberInfo = String.format(
-                    "**Uptime**: %s\n**Total Members**: %s\n**Online Members**: %s\n**Offline Members**: %s",
+                    "**Uptime**: %s\n**Code Type**: Open Source(GitHub)\n**Developers**: Tormak9970\n**Offline Members**: %s\n**needed**: %s\n**needed**: %s\n**needed**: %s\n**needed**: %s\n**needed**: %s",
                     Utils.getUptime(),
-                    guild.getMemberCache().size(),
-                    guild.getMemberCache().stream().filter((m) -> m.getOnlineStatus() == OnlineStatus.ONLINE).count(),
-                    guild.getMemberCache().stream().filter((m) -> m.getOnlineStatus() == OnlineStatus.OFFLINE).count()
+                    guild.getMemberCache().stream().filter((m) -> m.getOnlineStatus() == OnlineStatus.OFFLINE).count(),
+                    ,
+                    ,
+                    ,
+                    ,
             );
 
             String desc = "Quarantine Bot is a discord bot that I started " +
