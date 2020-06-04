@@ -47,9 +47,9 @@ public class BotInfoCommand {
 
             String helpServerUrl = "https://discord.gg/dKAQDCe";
             String memberInfo = String.format(
-                    "**Uptime**: %s\n**Code Type**: Open Source(GitHub)\n**Developers**: Tormak9970\n**Member since**: %s\n**Roles**: " + roles + "\n**Goal in Life**: overthrow the humans\n**Next Update**: " + update + "\n**Need help? Join**: %s",
+                    "**Uptime**: %s\n**Code Type**: Open Source(GitHub)\n**Developers**: Tormak9970\n**Member since**: %s\n**Roles**: " + roles + "\n**Goal in Life**: overthrow the humans\n**Next Update**: " + update ,
                     Utils.getUptime(),
-                    guild.getMember(user).getTimeJoined().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + guild.getMember(user).getTimeJoined().getDayOfMonth() + ", " + guild.getMember(user).getTimeJoined().getYear(),
+                    guild.getMember(user).getTimeJoined().getMonth() + " " + guild.getMember(user).getTimeJoined().getDayOfMonth() + ", " + guild.getMember(user).getTimeJoined().getYear(),
                     helpServerUrl
             );
 
@@ -69,6 +69,7 @@ public class BotInfoCommand {
                     .addField("**Other info**", memberInfo, true)
                     .addField("**Description**", desc, true)
                     .addField("**GitHub**", gitHubUrl, false)
+                    .addField("**Need help? Join**: %s", helpServerUrl, false)
                     .setColor(Color.RED)
                     .setFooter("Tormak9970, 2020")
                     ;
