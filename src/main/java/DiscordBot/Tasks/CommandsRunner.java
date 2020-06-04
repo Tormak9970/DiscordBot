@@ -36,6 +36,8 @@ public class CommandsRunner extends ListenerAdapter {
             ServerInfoCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals("$uptime")){
             UptimeCommand.getCommand(event);
+        }else if(event.getMessage().getContentRaw().equals("$botinfo")){
+            BotInfoCommand.getCommand(event);
         }
 
     }

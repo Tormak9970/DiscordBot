@@ -26,6 +26,7 @@ public class GeneralHelpCommand {
                     "\n$getinvite - allows you to get an invite link to run bot on your servers" +
                     "\n$nick - use in format like *$nick blank* to add *blank* to beggining of nickname, owners cant use this due to perms" +
                     "\n$serverinfo - gets server info" +
+                    "\n$botinfo - gets bot info" +
                     "\n$uptime - gets how long bot has been online" +
                     "\n$ping - bot responds with pong!").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
 

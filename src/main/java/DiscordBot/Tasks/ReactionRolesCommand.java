@@ -64,6 +64,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
             channel.sendMessage("congrats, you set up a reaction role!").queue();
             ReactionRoles reactRole = new ReactionRoles(messageID, theChannel, emojiName, role);
             listOfSetupRoles.add(reactRole);
+
         }
 
     }
