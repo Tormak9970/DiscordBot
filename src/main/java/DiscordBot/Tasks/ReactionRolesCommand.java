@@ -6,11 +6,8 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import sun.nio.ch.Util;
 
-import java.nio.channels.Channel;
 import java.util.ArrayList;
-import java.util.function.Consumer;
 
 public class ReactionRolesCommand extends ListenerAdapter {
     /*check if command sent
@@ -24,9 +21,8 @@ public class ReactionRolesCommand extends ListenerAdapter {
     ArrayList<ReactionRoles> listOfSetupRoles = new ArrayList<>();
     String theChannel = "";
     MessageChannel msgChannel;
-    Message msg;
     String messageID = "";
-    String emojiName = "";
+    Emote emote;
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event)
@@ -56,12 +52,12 @@ public class ReactionRolesCommand extends ListenerAdapter {
         }else if(content.indexOf("$messageID") == 0){
             MessageChannel channel = event.getChannel();
             messageID = content.substring(11);
-            channel.sendMessage("please send message formatted like the following: $emojiname emojiname(thing between the ::)").queue();
+            channel.sendMessage("please send message formatted like the following: $emote emojiname(thing between the ::)").queue();
             // Important to call .queue() on the RestAction returned by sendMessage(...)
             //get message id from their message
-        }else if(content.indexOf("$emojiname") == 0){
+        }else if(content.indexOf("$emote") == 0){
             MessageChannel channel = event.getChannel();
-            emojiName = content.substring(11);
+            emote = guild.getEmotesByName(content.substring(11), true).get(0);
             channel.sendMessage("please send message formatted like the following: $role @role").queue();
             // Important to call .queue() on the RestAction returned by sendMessage(...)
             //ask for person to react to
@@ -69,9 +65,9 @@ public class ReactionRolesCommand extends ListenerAdapter {
         }else if(content.indexOf("$role") == 0 && event.getMessage().getMentionedRoles().size() > 0){
             MessageChannel channel = event.getChannel();
             Role role = event.getMessage().getMentionedRoles().get(0);
-            msg = msgChannel.retrieveMessageById(messageID).complete();
+            msgChannel.addReactionById(messageID, emote).queue();
             channel.sendMessage("congrats, you set up a reaction role!").queue();
-            ReactionRoles reactRole = new ReactionRoles(messageID, theChannel, emojiName, role);
+            ReactionRoles reactRole = new ReactionRoles(messageID, theChannel, emote, role);
             listOfSetupRoles.add(reactRole);
 
         }
@@ -85,14 +81,14 @@ public class ReactionRolesCommand extends ListenerAdapter {
         }
 
         String channelName = reaction.getChannel().getName();
-        for(int i = 0; i < listOfSetupRoles.size(); i++){
-            if ( channelName.equals(listOfSetupRoles.get(i).getChannel())
-                    && reaction.getMessageId().equals(listOfSetupRoles.get(i).getMessageID())
-                    && (reaction.getReactionEmote().getEmote().getName().equals(listOfSetupRoles.get(i).getEmoji()) || reaction.getReactionEmote().getEmoji().equals(listOfSetupRoles.get(i).getEmoji()))){
-                try{
-                    DiscordBot.Utils.Utils.addRole(reaction.getMember(), listOfSetupRoles.get(i).getRole());
-                    Utils.sendPrivateMessage(reaction.getUser(), "you have been given the role " + listOfSetupRoles.get(i).getRole().getName() + " in the server " + reaction.getGuild().getName());
-                }catch(IllegalStateException e){
+        for (ReactionRoles listOfSetupRole : listOfSetupRoles) {
+            if (channelName.equals(listOfSetupRole.getChannel())
+                    && reaction.getMessageId().equals(listOfSetupRole.getMessageID())
+                    && (reaction.getReactionEmote().getEmote().getName().equals(listOfSetupRole.getEmote().getName()) || reaction.getReactionEmote().getEmoji().equals(listOfSetupRole.getEmote().getName()))) {
+                try {
+                    Utils.addRole(reaction.getMember(), listOfSetupRole.getRole());
+                    Utils.sendPrivateMessage(reaction.getUser(), "you have been given the role " + listOfSetupRole.getRole().getName() + " in the server " + reaction.getGuild().getName());
+                } catch (IllegalStateException e) {
 
                 }
             }
