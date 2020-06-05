@@ -5,6 +5,7 @@ import DiscordBot.Tasks.Moderation.ModerationRunner;
 import DiscordBot.Tasks.Music.MusicRunner;
 import DiscordBot.Tasks.RLMafia.RLMafiaRunner;
 import DiscordBot.Tasks.ReactionRolesCommand;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -27,16 +28,7 @@ public class DiscordBotMain extends ListenerAdapter {
         InputStream in = DiscordBotMain.class.getClassLoader().getResourceAsStream("token.txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         token = reader.readLine();
-        /*
-        build = new JDABuilder(AccountType.BOT);
-        build.setToken(token);
-        build.addEventListeners(new ReactionRolesCommand());
-        build.addEventListeners(new CommandsRunner());
-        build.addEventListeners(new RLMafiaRunner());
-        build.addEventListeners(new MusicRunner());
-        build.setActivity(Activity.playing("$generalhelp for help"));
-        build.build();
-         */
+        EventWaiter waiter = new EventWaiter();
 
         new DefaultShardManagerBuilder()
                 .setToken(token)

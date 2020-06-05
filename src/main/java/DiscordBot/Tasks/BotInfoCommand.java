@@ -28,7 +28,7 @@ public class BotInfoCommand {
         if (content.equals("$botinfo"))
         {
             Guild guild = event.getGuild();
-            User user = event.getJDA().getSelfUser();
+            User user = guild.getJDA().getSelfUser();
             String botName = Objects.requireNonNull(guild.getMember(user)).getEffectiveName();
             StringBuilder roles = new StringBuilder("");
             List<Role> roleList = guild.getMember(user).getRoles();
