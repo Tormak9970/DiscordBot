@@ -8,7 +8,9 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import sun.nio.ch.Util;
 
+import java.nio.channels.Channel;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class ReactionRolesCommand extends ListenerAdapter {
     /*check if command sent
@@ -21,6 +23,8 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
     ArrayList<ReactionRoles> listOfSetupRoles = new ArrayList<>();
     String theChannel = "";
+    MessageChannel msgChannel;
+    Message msg;
     String messageID = "";
     String emojiName = "";
 
@@ -44,6 +48,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
         }else if(content.indexOf("$channel") == 0 && event.getMessage().getMentionedChannels().size() > 0){
             MessageChannel channel = event.getChannel();
+            msgChannel = event.getChannel();
             theChannel = event.getMessage().getMentionedChannels().get(0).getName();
             channel.sendMessage("please send message id in response to this message.format like this $messageID 999999999").queue();
             // Important to call .queue() on the RestAction returned by sendMessage(...)
@@ -64,6 +69,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
         }else if(content.indexOf("$role") == 0 && event.getMessage().getMentionedRoles().size() > 0){
             MessageChannel channel = event.getChannel();
             Role role = event.getMessage().getMentionedRoles().get(0);
+            msg = msgChannel.retrieveMessageById(messageID).complete();
             channel.sendMessage("congrats, you set up a reaction role!").queue();
             ReactionRoles reactRole = new ReactionRoles(messageID, theChannel, emojiName, role);
             listOfSetupRoles.add(reactRole);
@@ -82,7 +88,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
         for(int i = 0; i < listOfSetupRoles.size(); i++){
             if ( channelName.equals(listOfSetupRoles.get(i).getChannel())
                     && reaction.getMessageId().equals(listOfSetupRoles.get(i).getMessageID())
-                    && reaction.getReactionEmote().getEmote().getName().equals(listOfSetupRoles.get(i).getEmoji())){
+                    && (reaction.getReactionEmote().getEmote().getName().equals(listOfSetupRoles.get(i).getEmoji()) || reaction.getReactionEmote().getEmoji().equals(listOfSetupRoles.get(i).getEmoji()))){
                 try{
                     DiscordBot.Utils.Utils.addRole(reaction.getMember(), listOfSetupRoles.get(i).getRole());
                     Utils.sendPrivateMessage(reaction.getUser(), "you have been given the role " + listOfSetupRoles.get(i).getRole().getName() + " in the server " + reaction.getGuild().getName());
