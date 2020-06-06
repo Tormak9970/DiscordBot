@@ -22,7 +22,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
     DM user that they have role if they react
     say in channel "success!"
      */
-    ReactionRolesCommand(EventWaiter waiter){
+    public ReactionRolesCommand(EventWaiter waiter){
         eventWaiter = waiter;
     }
 
