@@ -2,6 +2,7 @@ package DiscordBot.Tasks;
 
 import DiscordBot.Utils.ReactionRoles;
 import DiscordBot.Utils.Utils;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -13,6 +14,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class ReactionRolesCommand extends ListenerAdapter {
+    private EventWaiter eventWaiter;
     /*check if command sent
     prompt user for message the want to put role on
     prompt user for emoji, telling them to react to current message with it
@@ -20,6 +22,9 @@ public class ReactionRolesCommand extends ListenerAdapter {
     DM user that they have role if they react
     say in channel "success!"
      */
+    ReactionRolesCommand(EventWaiter waiter){
+        eventWaiter = waiter;
+    }
 
     ArrayList<ReactionRoles> listOfSetupRoles = new ArrayList<>();
     String theChannel = "";
