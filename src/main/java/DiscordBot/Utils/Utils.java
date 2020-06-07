@@ -1,6 +1,8 @@
 package DiscordBot.Utils;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;

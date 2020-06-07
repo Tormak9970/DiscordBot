@@ -9,33 +9,42 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class ReactionRolesCommand extends ListenerAdapter {
     private EventWaiter eventWaiter;
+    private TextChannel setup;
+    private ArrayList<ReactionRoles> listOfSetupRoles = new ArrayList<>();
+    private TextChannel msgChannel;
+    private String messageID = "";
+    private MessageReaction.ReactionEmote emote;
+    Collection<Message> toRemove;
     /*check if command sent
-    prompt user for message the want to put role on
-    prompt user for emoji, telling them to react to current message with it
+    prompt user for a channel mention of the message's channel
+    prompt user for messageID the want to put role on
     prompt user for role via @mention
-    DM user that they have role if they react
+    prompt user for emoji, telling them to react to current message with it
+    ask if they want it to only add, only remove, or both via 1 2 3
     say in channel "success!"
+    DM user that they have role if they react
+    (delete user's response and previous embed when next embed sent)
      */
     public ReactionRolesCommand(EventWaiter waiter){
         eventWaiter = waiter;
     }
 
-    ArrayList<ReactionRoles> listOfSetupRoles = new ArrayList<>();
-    String theChannel = "";
-    MessageChannel msgChannel;
-    String messageID = "";
-    Emote emote;
+
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event)
     {
 
+        TextChannel textChannel = event.getTextChannel();
         Guild guild = event.getGuild();
         User user = guild.getJDA().getSelfUser();
         if (event.getAuthor().isBot()) return;
@@ -46,7 +55,11 @@ public class ReactionRolesCommand extends ListenerAdapter {
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
         if (content.equals("$reactionroles"))
         {
-            MessageChannel channel = event.getChannel();
+            TextChannel setupChannel = event.getTextChannel();
+            setup = setupChannel;
+
+
+
             EmbedBuilder embed = EmbedUtils.defaultEmbed()
                     .setTitle("Reaction Roles")
                     .setColor(Color.RED)
@@ -55,12 +68,23 @@ public class ReactionRolesCommand extends ListenerAdapter {
                             "\nthat the reaction role will be in.", false)
                     .setFooter("Quarantine Bot Reaction Roles")
                     ;
-            channel.sendMessage(embed.build()).queue();
+            textChannel.sendMessage(embed.build()).queue();
             // Important to call .queue() on the RestAction returned by sendMessage(...)
+
+
+        }else if(event.getTextChannel().equals(setup) && event.getMessage().getMentionedChannels().size() != 0){
+            msgChannel = event.getMessage().getMentionedChannels().get(0);
+            setup.getHistory().retrievePast(2).queue();
+            toRemove.add();
+            toRemove.add();
+            setup.deleteMessages(toRemove).queue();
+            toRemove.clear();
 
         }
 
     }
+
+
 
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent reaction) {
@@ -81,6 +105,10 @@ public class ReactionRolesCommand extends ListenerAdapter {
                 }
             }
         }
+    }
+
+    private void initWaiter(long messageID, long channelID, ShardManager shardManager){
+        //eventWaiter.waitForEvent();
     }
 
     @Override
