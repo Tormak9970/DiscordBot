@@ -8,10 +8,10 @@ public class ReactionRoles {
 
     private String messageID;
     private String channel;
-    private MessageReaction.ReactionEmote emoji;
+    private Emote emoji;
     private Role role;
 
-    public ReactionRoles(String mID, String channel, MessageReaction.ReactionEmote emoji, Role role){
+    public ReactionRoles(String mID, String channel, Emote emoji, Role role){
         messageID = mID;
         this.channel = channel;
         this.emoji = emoji;
@@ -26,7 +26,7 @@ public class ReactionRoles {
         return channel;
     }
 
-    public MessageReaction.ReactionEmote getEmote(){
+    public Emote getEmote(){
         return emoji;
     }
 

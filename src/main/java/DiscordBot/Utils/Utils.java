@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
+import java.util.List;
 import java.util.function.Consumer;
 
 public abstract class Utils{
@@ -14,6 +15,11 @@ public abstract class Utils{
     {
         // notice that we are not placing a semicolon (;) in the callback this time!
         user.openPrivateChannel().queue( (channel) -> channel.sendMessage(content).queue() );
+    }
+
+    public static void deleteHistory(int numMsg, TextChannel channel){
+        Consumer<List<Message>> callback = channel::purgeMessages;
+        channel.getHistory().retrievePast(numMsg).queue(callback);
     }
 
     public static void sendAndLog(MessageChannel channel, String message)
