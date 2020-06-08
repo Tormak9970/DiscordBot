@@ -100,7 +100,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
 
 
-
+    //working
     private void initWaiter(long channelID, ShardManager shardManager){
         eventWaiter.waitForEvent(
                 MessageReceivedEvent.class,
@@ -123,7 +123,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
 
 
-
+    //possibly bugged
     private void getRRChannelID(MessageReceivedEvent event, ShardManager shardManager, long channelID){
         TextChannel textChannel = shardManager.getTextChannelById(channelID);
         Guild guild = event.getGuild();
@@ -137,7 +137,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                 .setTitle("Reaction Roles")
                 .setColor(Color.RED)
                 .setThumbnail(botUser.getAvatarUrl())
-                .addField("**Step 2**: ", "please send message id " +
+                .addField("**Step 2**: ", "please send the message id " +
                         "\nthat the reaction role will be on.", false)
                 .setFooter("Quarantine Bot Reaction Roles")
                 ;
@@ -165,7 +165,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
 
 
-
+    //may be bugged
     private void getRRMessageID(MessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
         event.getChannel().retrieveMessageById(event.getMessage().getContentRaw()).queue(
                 message -> {
@@ -209,6 +209,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
         );
     }
 
+    //has yet to work properly
     private void getRRRoleID(MessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
         roleID = event.getMessage().getMentionedRoles().get(0).getIdLong();
 

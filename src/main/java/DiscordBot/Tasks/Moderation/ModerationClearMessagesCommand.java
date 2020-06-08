@@ -41,7 +41,7 @@ public class ModerationClearMessagesCommand {
             }
 
             int amount;
-            String arg = content.substring(16);
+            String arg = content.substring(15);
 
             try {
                 amount = Integer.parseInt(arg);
