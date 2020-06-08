@@ -5,7 +5,6 @@ import DiscordBot.Utils.Utils;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Activity.Emoji;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
@@ -22,7 +21,7 @@ import static DiscordBot.Utils.Utils.deleteHistory;
 public class ReactionRolesCommand extends ListenerAdapter {
     private EventWaiter eventWaiter;
     private TextChannel setup;
-    private Map<Long, ReactionRoles> listOfSetupRoles;
+    private Map<Long, ReactionRoles> listOfSetupRoles = new HashMap<>();
     private int choice;
     private String emojiID = "";
     private long guildID;
@@ -89,12 +88,12 @@ public class ReactionRolesCommand extends ListenerAdapter {
         }
 
         Guild guild = reaction.getGuild();
-        boolean match = false
+        boolean match;
         if(listOfSetupRoles != null){
             for (int i = 0; i < listOfSetupRoles.size(); i++) {
 
                 if(listOfSetupRoles.get(guild.getIdLong()).isEmote()){
-                    match = listOfSetupRoles.get(guild.getIdLong()).getEmoteID() == reaction.getReactionEmote().getEmote().getIdLong());
+                    match = listOfSetupRoles.get(guild.getIdLong()).getEmoteID() == reaction.getReactionEmote().getEmote().getIdLong();
                 }else{
                     match = listOfSetupRoles.get(guild.getIdLong()).getEmoji().equals(reaction.getReactionEmote().getEmoji());
                 }
@@ -112,7 +111,6 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
 
 
-    //working
     private void initWaiter(long channelID, ShardManager shardManager){
         eventWaiter.waitForEvent(
                 MessageReceivedEvent.class,
@@ -222,7 +220,6 @@ public class ReactionRolesCommand extends ListenerAdapter {
         );
     }
 
-    //has yet to work properly
     private void getRRRoleID(MessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
         roleID = event.getMessage().getMentionedRoles().get(0).getIdLong();
 
@@ -251,8 +248,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                             if (1 <= testChoice && testChoice <= 3){
                                 isChoice = true;
                             }
-                        }catch (NumberFormatException e){
-                            e.printStackTrace();
+                        }catch (NumberFormatException ignored){
 
                         }
 
@@ -265,6 +261,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                 30, TimeUnit.SECONDS,
                 () -> {
                     TextChannel textChannel1 = shardManager.getTextChannelById(channelID);
+                    assert textChannel1 != null;
                     textChannel1.sendMessage("Your reaction role has timed out due to un responsiveness. please restart.").queue();
                 }
         );
@@ -293,25 +290,22 @@ public class ReactionRolesCommand extends ListenerAdapter {
                                         return !user.isBot() && event1.getChannel().getIdLong() == channelID && event1.getGuild().getIdLong() == guildID && isEmbed;
                                     },
                                     (event1) -> {
-                                        getRREmoteID(event1, shardManager, botUser, channelID);
+                                        getRREmoteID(event1, channelID);
 
                                     },
                                     30, TimeUnit.SECONDS,
                                     () -> {
                                         TextChannel textChannel1 = shardManager.getTextChannelById(channelID);
+                                        assert textChannel1 != null;
                                         textChannel1.sendMessage("Your reaction role has timed out due to un responsiveness. please restart.").queue();
                                     }
 
                             );
                 }
         );
-        // Important to call .queue() on the RestAction returned by sendMessage(...)
-
-
-
     }
 
-    private void getRREmoteID(GuildMessageReactionAddEvent event, ShardManager shardManager, User botUser, long channelID){
+    private void getRREmoteID(GuildMessageReactionAddEvent event, long channelID){
         Guild guild = event.getGuild();
         boolean isEmoji = event.getReactionEmote().isEmoji();
         if(isEmoji){
@@ -319,6 +313,18 @@ public class ReactionRolesCommand extends ListenerAdapter {
             guild.getTextChannelById(channelID).retrieveMessageById(messageID).queue(
                     (message) -> {
                         message.addReaction(emojiID).queue();
+                        EmbedBuilder embed = EmbedUtils.defaultEmbed()
+                                .setTitle("Reaction Roles - Summary")
+                                .setColor(Color.RED)
+                                .addField("**Reaction ID**: ", "" + emojiID, true)
+                                .addField("**Emoji**: ", "" + emojiID, true)
+                                .addField("**Type**: ", "" + choice, true)
+                                .addField("**Message ID**: ", "" + messageID, false)
+                                .addField("**Channel**: ", "" + event.getGuild().getTextChannelById(channelID).getAsMention(), true)
+                                .addField("**Role**: ", "" + event.getGuild().getRoleById(roleID).getAsMention(), true)
+                                .setFooter("Quarantine Bot Reaction Roles")
+                                ;
+                        event.getChannel().sendMessage(embed.build()).queue();
                     }
             );
 
@@ -326,23 +332,27 @@ public class ReactionRolesCommand extends ListenerAdapter {
             listOfSetupRoles.put(guildID, reactRole);
         } else {
             emoteID = event.getReactionEmote().getEmote().getIdLong();
-            Emote emote = guild.getEmoteById(emoteID);
 
             guild.getTextChannelById(channelID).retrieveMessageById(messageID).queue(
                     (message) -> {
-                        message.addReaction(emote).queue();
+                        message.addReaction(guild.getEmoteById(emoteID)).queue();
+                        EmbedBuilder embed = EmbedUtils.defaultEmbed()
+                                .setTitle("Reaction Roles - Summary")
+                                .setColor(Color.RED)
+                                .addField("**Reaction ID**: ", "" + emoteID, true)
+                                .addField("**Emoji**: ", "" + event.getGuild().getEmoteById(emoteID), true)
+                                .addField("**Type**: ", "" + choice, true)
+                                .addField("**Message ID**: ", "" + messageID, false)
+                                .addField("**Channel**: ", "" + event.getGuild().getTextChannelById(channelID).getAsMention(), true)
+                                .addField("**Role**: ", "" + event.getGuild().getRoleById(roleID).getAsMention(), true)
+                                .setFooter("Quarantine Bot Reaction Roles")
+                                ;
+                        event.getChannel().sendMessage(embed.build()).queue();
                     }
             );
 
             ReactionRoles reactRole = new ReactionRoles(messageID, msgChannelID, emoteID, roleID);
             listOfSetupRoles.put(guildID, reactRole);
         }
-
-
-
-
-
-
-
     }
 }
