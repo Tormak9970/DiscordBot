@@ -86,17 +86,14 @@ public class ReactionRolesCommand extends ListenerAdapter {
             return;
         }
 
-        String channelName = reaction.getChannel().getName();
-        for (ReactionRoles listOfSetupRole : listOfSetupRoles) {
-            if (channelName.equals(listOfSetupRole.getChannelID())
-                    && reaction.getMessageId().equals(listOfSetupRole.getMessageID())
-                    && (reaction.getReactionEmote().getEmote().getName().equals(listOfSetupRole.getEmoteID().getName()) || reaction.getReactionEmote().getEmoji().equals(listOfSetupRole.getEmoteID().getName()))) {
-                try {
-                    Utils.addRole(reaction.getMember(), listOfSetupRole.getRoleID());
-                    Utils.sendPrivateMessage(reaction.getUser(), "you have been given the role " + listOfSetupRole.getRoleID().getName() + " in the server " + reaction.getGuild().getName());
-                } catch (IllegalStateException ignored) {
+        Guild guild = reaction.getGuild();
+        for (int i = 0; i < listOfSetupRoles.size(); i++) {
+            if (listOfSetupRoles.get(guild.getIdLong()).getChannelID() == reaction.getChannel().getIdLong()
+                    && listOfSetupRoles.get(guild.getIdLong()).getMessageID() == reaction.getMessageIdLong()
+                    && listOfSetupRoles.get(guild.getIdLong()).getEmoteID() == reaction.getReactionEmote().getEmote().getIdLong()){
 
-                }
+                reaction.getMember().getRoles().add(guild.getRoleById(listOfSetupRoles.get(guild.getIdLong()).getRoleID()));
+                Utils.sendPrivateMessage(reaction.getUser(), "You have been given the role " + guild.getRoleById(listOfSetupRoles.get(guild.getIdLong()).getRoleID()).getName() + " in the server " + guild.getName());
             }
         }
     }

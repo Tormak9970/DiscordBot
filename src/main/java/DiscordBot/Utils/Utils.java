@@ -42,7 +42,4 @@ public abstract class Utils{
                 numberOfHours, numberOfMinutes, numberOfSeconds);
     }
 
-    public static void addRole(Member mem, Role role){
-        mem.getRoles().add(role);
-    }
 }
