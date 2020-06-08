@@ -12,7 +12,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static DiscordBot.Utils.Utils.deleteHistory;
@@ -20,7 +21,7 @@ import static DiscordBot.Utils.Utils.deleteHistory;
 public class ReactionRolesCommand extends ListenerAdapter {
     private EventWaiter eventWaiter;
     private TextChannel setup;
-    private ArrayList<ReactionRoles> listOfSetupRoles = new ArrayList<>();
+    private Map<Long, ReactionRoles> listOfSetupRoles;
     private int choice;
     private long guildID;
     private long roleID;
@@ -262,7 +263,6 @@ public class ReactionRolesCommand extends ListenerAdapter {
         choice = Integer.parseInt(event.getMessage().getContentRaw());
 
         deleteHistory(2, setup);
-
         EmbedBuilder embed = EmbedUtils.defaultEmbed()
                 .setTitle("Reaction Roles")
                 .setColor(Color.RED)
@@ -271,37 +271,48 @@ public class ReactionRolesCommand extends ListenerAdapter {
                         "\nthis message with your desired emote.", false)
                 .setFooter("Quarantine Bot Reaction Roles")
                 ;
-        event.getChannel().sendMessage(embed.build()).queue();
+        event.getChannel().sendMessage(embed.build()).queue(
+                (message) -> {
+                    long embedID = message.getIdLong();
+                            eventWaiter.waitForEvent(
+                                    GuildMessageReactionAddEvent.class,
+                                    (event1) -> {
+                                        User user = event1.getUser();
+                                        boolean isEmbed = embedID == event1.getMessageIdLong();
+                                        return !user.isBot() && event1.getChannel().getIdLong() == channelID && event1.getGuild().getIdLong() == guildID && isEmbed;
+                                    },
+                                    (event1) -> {
+                                        getRREmoteID(event1, shardManager, botUser, channelID);
+
+                                    },
+                                    30, TimeUnit.SECONDS,
+                                    () -> {
+                                        TextChannel textChannel1 = shardManager.getTextChannelById(channelID);
+                                        textChannel1.sendMessage("Your reaction role has timed out due to un responsiveness. please restart.").queue();
+                                    }
+
+                            );
+                }
+        );
         // Important to call .queue() on the RestAction returned by sendMessage(...)
 
-        eventWaiter.waitForEvent(
-                GuildMessageReactionAddEvent.class,
-                (event1) -> {
-                    User user = event1.getUser();
-                    return !user.isBot() && event1.getChannel().getIdLong() == channelID && event1.getGuild().getIdLong() == guildID;
-                },
-                (event1) -> {
-                    getRREmoteID(event1, shardManager, botUser, channelID);
 
-                },
-                30, TimeUnit.SECONDS,
-                () -> {
-                    TextChannel textChannel1 = shardManager.getTextChannelById(channelID);
-                    textChannel1.sendMessage("Your reaction role has timed out due to un responsiveness. please restart.").queue();
-                }
-
-        );
 
     }
 
     private void getRREmoteID(GuildMessageReactionAddEvent event, ShardManager shardManager, User botUser, long channelID){
         emoteID = event.getReactionEmote().getIdLong();
-        /*
-        event.getGuild().getTextChannelById(msgChannelID).retrieveMessageById(messageID).queue((message1 -> {
-            message1.addReaction().queue();
-        }));
+        Guild guild = event.getGuild();
+        Emote emote = guild.getEmoteById(emoteID);
+        ReactionRoles reactRole = new ReactionRoles(messageID, msgChannelID, emoteID, roleID);
 
-         */
+        listOfSetupRoles.put(guildID, reactRole);
+
+        guild.getTextChannelById(channelID).retrieveMessageById(messageID).queue(
+                (message) -> {
+                    message.addReaction(emote).queue();
+                }
+        );
 
     }
 }
