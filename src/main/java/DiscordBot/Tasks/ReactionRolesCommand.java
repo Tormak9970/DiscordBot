@@ -87,12 +87,12 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
         String channelName = reaction.getChannel().getName();
         for (ReactionRoles listOfSetupRole : listOfSetupRoles) {
-            if (channelName.equals(listOfSetupRole.getChannel())
+            if (channelName.equals(listOfSetupRole.getChannelID())
                     && reaction.getMessageId().equals(listOfSetupRole.getMessageID())
-                    && (reaction.getReactionEmote().getEmote().getName().equals(listOfSetupRole.getEmote().getName()) || reaction.getReactionEmote().getEmoji().equals(listOfSetupRole.getEmote().getName()))) {
+                    && (reaction.getReactionEmote().getEmote().getName().equals(listOfSetupRole.getEmoteID().getName()) || reaction.getReactionEmote().getEmoji().equals(listOfSetupRole.getEmoteID().getName()))) {
                 try {
-                    Utils.addRole(reaction.getMember(), listOfSetupRole.getRole());
-                    Utils.sendPrivateMessage(reaction.getUser(), "you have been given the role " + listOfSetupRole.getRole().getName() + " in the server " + reaction.getGuild().getName());
+                    Utils.addRole(reaction.getMember(), listOfSetupRole.getRoleID());
+                    Utils.sendPrivateMessage(reaction.getUser(), "you have been given the role " + listOfSetupRole.getRoleID().getName() + " in the server " + reaction.getGuild().getName());
                 } catch (IllegalStateException ignored) {
 
                 }

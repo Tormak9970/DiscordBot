@@ -6,29 +6,29 @@ import net.dv8tion.jda.api.entities.Role;
 
 public class ReactionRoles {
 
-    private String messageID;
-    private String channel;
-    private Emote emoji;
-    private Role role;
+    private long messageID;
+    private long channel;
+    private long emoji;
+    private long role;
 
-    public ReactionRoles(String mID, String channel, Emote emoji, Role role){
+    public ReactionRoles(long mID, long channel, long emoji, long role){
         messageID = mID;
         this.channel = channel;
         this.emoji = emoji;
         this.role = role;
     }
 
-    public String getMessageID(){
+    public long getMessageID(){
         return messageID;
     }
 
-    public String getChannel(){
+    public long getChannelID(){
         return channel;
     }
 
-    public Emote getEmote(){
+    public long getEmoteID(){
         return emoji;
     }
 
-    public Role getRole(){ return role;}
+    public long getRoleID(){ return role;}
 }
