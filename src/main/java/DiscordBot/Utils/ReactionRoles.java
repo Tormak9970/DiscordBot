@@ -1,17 +1,21 @@
 package DiscordBot.Utils;
 
-import net.dv8tion.jda.api.entities.Emote;
-import net.dv8tion.jda.api.entities.MessageReaction;
-import net.dv8tion.jda.api.entities.Role;
-
 public class ReactionRoles {
 
     private long messageID;
     private long channel;
-    private long emoji;
+    private Long emote;
     private long role;
+    private String emoji;
 
-    public ReactionRoles(long mID, long channel, long emoji, long role){
+    public ReactionRoles(long mID, long channel, long emote, long role){
+        messageID = mID;
+        this.channel = channel;
+        this.emote = emote;
+        this.role = role;
+    }
+
+    public ReactionRoles(long mID, long channel, String emoji, long role){
         messageID = mID;
         this.channel = channel;
         this.emoji = emoji;
@@ -27,8 +31,16 @@ public class ReactionRoles {
     }
 
     public long getEmoteID(){
-        return emoji;
+        return emote;
     }
 
     public long getRoleID(){ return role;}
+
+    public String getEmoji(){
+        return emoji;
+    }
+
+    public boolean isEmote(){
+        return emote != null;
+    }
 }

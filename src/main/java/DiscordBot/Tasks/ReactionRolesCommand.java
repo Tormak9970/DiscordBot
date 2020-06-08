@@ -5,6 +5,7 @@ import DiscordBot.Utils.Utils;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Activity.Emoji;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
@@ -23,6 +24,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
     private TextChannel setup;
     private Map<Long, ReactionRoles> listOfSetupRoles;
     private int choice;
+    private String emojiID = "";
     private long guildID;
     private long roleID;
     private long msgChannelID;
@@ -87,15 +89,25 @@ public class ReactionRolesCommand extends ListenerAdapter {
         }
 
         Guild guild = reaction.getGuild();
-        for (int i = 0; i < listOfSetupRoles.size(); i++) {
-            if (listOfSetupRoles.get(guild.getIdLong()).getChannelID() == reaction.getChannel().getIdLong()
-                    && listOfSetupRoles.get(guild.getIdLong()).getMessageID() == reaction.getMessageIdLong()
-                    && listOfSetupRoles.get(guild.getIdLong()).getEmoteID() == reaction.getReactionEmote().getEmote().getIdLong()){
+        boolean match = false
+        if(listOfSetupRoles != null){
+            for (int i = 0; i < listOfSetupRoles.size(); i++) {
 
-                reaction.getMember().getRoles().add(guild.getRoleById(listOfSetupRoles.get(guild.getIdLong()).getRoleID()));
-                Utils.sendPrivateMessage(reaction.getUser(), "You have been given the role " + guild.getRoleById(listOfSetupRoles.get(guild.getIdLong()).getRoleID()).getName() + " in the server " + guild.getName());
+                if(listOfSetupRoles.get(guild.getIdLong()).isEmote()){
+                    match = listOfSetupRoles.get(guild.getIdLong()).getEmoteID() == reaction.getReactionEmote().getEmote().getIdLong());
+                }else{
+                    match = listOfSetupRoles.get(guild.getIdLong()).getEmoji().equals(reaction.getReactionEmote().getEmoji());
+                }
+                if (listOfSetupRoles.get(guild.getIdLong()).getChannelID() == reaction.getChannel().getIdLong()
+                        && listOfSetupRoles.get(guild.getIdLong()).getMessageID() == reaction.getMessageIdLong()
+                        && match) {
+
+                    reaction.getMember().getRoles().add(guild.getRoleById(listOfSetupRoles.get(guild.getIdLong()).getRoleID()));
+                    Utils.sendPrivateMessage(reaction.getUser(), "You have been given the role " + guild.getRoleById(listOfSetupRoles.get(guild.getIdLong()).getRoleID()).getName() + " in the server " + guild.getName());
+                }
             }
         }
+
     }
 
 
@@ -189,7 +201,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                             MessageReceivedEvent.class,
                             (event1) -> {
                                 User user = event1.getAuthor();
-                                boolean hasRole = event1.getMessage().getMentionedChannels().size() != 0;
+                                boolean hasRole = event1.getMessage().getMentionedRoles().size() != 0;
                                 return !user.isBot() && event1.getChannel().getIdLong() == channelID && event1.getGuild().getIdLong() == guildID && hasRole;
                             },
                             (event1) -> {
@@ -205,6 +217,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
                 },
                 error -> {
+                    event.getChannel().sendMessage("not a message ID").queue();
                 }
         );
     }
@@ -299,18 +312,37 @@ public class ReactionRolesCommand extends ListenerAdapter {
     }
 
     private void getRREmoteID(GuildMessageReactionAddEvent event, ShardManager shardManager, User botUser, long channelID){
-        emoteID = event.getReactionEmote().getIdLong();
         Guild guild = event.getGuild();
-        Emote emote = guild.getEmoteById(emoteID);
-        ReactionRoles reactRole = new ReactionRoles(messageID, msgChannelID, emoteID, roleID);
+        boolean isEmoji = event.getReactionEmote().isEmoji();
+        if(isEmoji){
+            emojiID = event.getReactionEmote().getEmoji();
+            guild.getTextChannelById(channelID).retrieveMessageById(messageID).queue(
+                    (message) -> {
+                        message.addReaction(emojiID).queue();
+                    }
+            );
 
-        listOfSetupRoles.put(guildID, reactRole);
+            ReactionRoles reactRole = new ReactionRoles(messageID, msgChannelID, emojiID, roleID);
+            listOfSetupRoles.put(guildID, reactRole);
+        } else {
+            emoteID = event.getReactionEmote().getEmote().getIdLong();
+            Emote emote = guild.getEmoteById(emoteID);
 
-        guild.getTextChannelById(channelID).retrieveMessageById(messageID).queue(
-                (message) -> {
-                    message.addReaction(emote).queue();
-                }
-        );
+            guild.getTextChannelById(channelID).retrieveMessageById(messageID).queue(
+                    (message) -> {
+                        message.addReaction(emote).queue();
+                    }
+            );
+
+            ReactionRoles reactRole = new ReactionRoles(messageID, msgChannelID, emoteID, roleID);
+            listOfSetupRoles.put(guildID, reactRole);
+        }
+
+
+
+
+
+
 
     }
 }
