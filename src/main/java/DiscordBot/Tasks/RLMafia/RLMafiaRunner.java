@@ -1,6 +1,7 @@
 package DiscordBot.Tasks.RLMafia;
 
 import DiscordBot.Tasks.Listener;
+import DiscordBot.Tasks.SetPrefixCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -10,24 +11,25 @@ public class RLMafiaRunner extends Listener {
         if(RLMafia.getHost() != null){
             if(event.getAuthor().isBot()){
                 return;
-            }else if(event.getMessage().getContentRaw().indexOf("$mafiajoin") == 0){
+            }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix() + "mafiajoin") == 0){
                 RLMafiaJoinCommand.getCommand(event);
-            }else if(event.getMessage().getContentRaw().indexOf("$vote") == 0){
+            }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix() + "vote") == 0){
                 RLMafiaVoteCommand.getCommand(event);
             }
 
             if(RLMafia.getHost().equals(event.getAuthor())){
-                if(event.getMessage().getContentRaw().indexOf("$mvp") == 0){
+                if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix() + "mvp") == 0){
 
-                }else if(event.getMessage().getContentRaw().indexOf("$quitrlmafia") == 0){
+                }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix() + "quitrlmafia") == 0){
                     RLMafiaQuitCommand.getCommand(event);
-                }else if(event.getMessage().getContentRaw().equals("$startrlmafia")){
+                }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "startrlmafia")){
                     RLMafiaStartCommand.getCommand(event);
                 }
             }
         }
     }
 
+    /*
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         System.out.println("We received a message from " +
@@ -37,4 +39,6 @@ public class RLMafiaRunner extends Listener {
 
 
     }
+
+     */
 }

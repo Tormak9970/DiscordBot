@@ -1,5 +1,6 @@
 package DiscordBot.Tasks.Roles;
 
+import DiscordBot.Tasks.SetPrefixCommand;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -14,7 +15,7 @@ public class NickNameByRoleCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals("$addroleonjoin"))
+        if (content.equals(SetPrefixCommand.getPrefix() + "changenickwithrole"))
         {
             MessageChannel channel = event.getChannel();
             channel.sendMessage("").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)

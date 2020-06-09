@@ -2,6 +2,7 @@ package DiscordBot.Tasks.RLMafia;
 
 import DiscordBot.DiscordBotMain;
 import DiscordBot.Tasks.RLMafia.RLMafiaUtils.RLMafiaUtils;
+import DiscordBot.Tasks.SetPrefixCommand;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -16,7 +17,7 @@ public class RLMafiaQuitCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.indexOf("$quitrlmafia") == 0)
+        if (content.indexOf(SetPrefixCommand.getPrefix() + "quitrlmafia") == 0)
         {
             RLMafia.resetWinner();
             RLMafia.clearHost();

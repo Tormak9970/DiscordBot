@@ -1,5 +1,6 @@
 package DiscordBot.Tasks.Moderation;
 
+import DiscordBot.Tasks.SetPrefixCommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -21,7 +22,7 @@ public class ModerationClearMessagesCommand {
         String content = event.getMessage().getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.indexOf("$clearmessages") == 0)
+        if (content.indexOf(SetPrefixCommand.getPrefix() + "clearmessages") == 0)
         {
             TextChannel channel = event.getTextChannel();
             Member member = event.getMember();
@@ -41,7 +42,7 @@ public class ModerationClearMessagesCommand {
             }
 
             int amount;
-            String arg = content.substring(15);
+            String arg = content.substring(SetPrefixCommand.getPrefix().length() - 1 + 14);
 
             try {
                 amount = Integer.parseInt(arg);

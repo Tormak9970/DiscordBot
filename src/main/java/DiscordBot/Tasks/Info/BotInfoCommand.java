@@ -1,5 +1,6 @@
 package DiscordBot.Tasks.Info;
 
+import DiscordBot.Tasks.SetPrefixCommand;
 import DiscordBot.Utils.Utils;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -23,7 +24,7 @@ public class BotInfoCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals("$botinfo"))
+        if (content.equals(SetPrefixCommand.getPrefix() + "botinfo"))
         {
             Guild guild = event.getGuild();
             User user = guild.getJDA().getSelfUser();

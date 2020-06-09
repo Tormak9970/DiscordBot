@@ -1,5 +1,6 @@
 package DiscordBot.Tasks.RLMafia;
 
+import DiscordBot.Tasks.SetPrefixCommand;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -14,7 +15,7 @@ public class RlMafiaHostCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals("$hostrlmafia"))
+        if (content.equals(SetPrefixCommand.getPrefix() + "hostrlmafia"))
         {
             RLMafia.setHost(event.getAuthor());
             MessageChannel channel = event.getChannel();

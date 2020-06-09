@@ -1,5 +1,6 @@
 package DiscordBot.Tasks.Moderation;
 
+import DiscordBot.Tasks.SetPrefixCommand;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -14,11 +15,11 @@ public class ModerationHelpCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals("$moderationhelp"))
+        if (content.equals(SetPrefixCommand.getPrefix() + "moderationhelp"))
         {
             MessageChannel channel = event.getChannel();
             channel.sendMessage(
-                    "$clearmessages (specify amount) - deletes specified amount of messages from channel command is sent in").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
+                    SetPrefixCommand.getPrefix() + "clearmessages (specify amount) - deletes specified amount of messages from channel command is sent in").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
 
         }
     }

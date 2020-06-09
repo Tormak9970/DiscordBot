@@ -17,27 +17,27 @@ public class CommandsRunner extends Listener {
     public static void passEvent(MessageReceivedEvent event){
         if(event.getAuthor().isBot()){
             return;
-        }else if(event.getMessage().getContentRaw().equals("$ping")){
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "ping")){
             PingPongCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().indexOf("$nick") == 0 && !event.getMessage().getContentRaw().contains("$help")){
+        }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix() + "nick") == 0 && !event.getMessage().getContentRaw().contains(SetPrefixCommand.getPrefix() + "help")){
             NickNameChangerCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals("$generalhelp")){
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "generalhelp")){
             GeneralHelpCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals("$rlmafiahelp")){
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "rlmafiahelp")){
             RLMafiaHelpCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals("$hostrlmafia")) {
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "hostrlmafia")) {
             RlMafiaHostCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals("$rlmafiasettings")){
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "rlmafiasettings")){
 
-        }else if(event.getMessage().getContentRaw().equals("$addroleonjoin")){
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "addroleonjoin")){
             JoiningAddsRoleCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals("$changenickwithrole")){
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "changenickwithrole")){
             NickNameByRoleCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals("$serverinfo")){
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "serverinfo")){
             ServerInfoCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals("$uptime")){
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "uptime")){
             UptimeCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals("$botinfo")){
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "botinfo")){
             BotInfoCommand.getCommand(event);
         }else if(event.getMessage().getMentionedUsers().size() != 0 && event.getMessage().getMentionedUsers().get(0).equals(event.getJDA().getSelfUser())){
             event.getChannel().sendMessage("https://tenor.com/view/ping-who-pinged-me-disturbed-gif-14162073").queue();

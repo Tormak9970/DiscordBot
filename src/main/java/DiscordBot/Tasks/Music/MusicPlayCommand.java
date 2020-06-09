@@ -2,6 +2,7 @@ package DiscordBot.Tasks.Music;
 
 import DiscordBot.DiscordBotMain;
 import DiscordBot.Tasks.Music.MusicUtils.PlayerManager;
+import DiscordBot.Tasks.SetPrefixCommand;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
@@ -30,7 +31,7 @@ public class MusicPlayCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.indexOf("$play") == 0)
+        if (content.indexOf(SetPrefixCommand.getPrefix() + "play") == 0)
         {
             YouTube temp = null;
 
@@ -50,7 +51,7 @@ public class MusicPlayCommand {
             youTube = temp;
 
             TextChannel channel = event.getTextChannel();
-            String input = content.substring(6);
+            String input = content.substring(SetPrefixCommand.getPrefix().length() - 1 + 5);
             PlayerManager manager = PlayerManager.getInstance();
 
             if(!isUrl(input)){

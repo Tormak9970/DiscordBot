@@ -16,7 +16,7 @@ public class PingPongCommand extends Commands{
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals("$ping"))
+        if (content.equals(SetPrefixCommand.getPrefix() + "ping"))
         {
             MessageChannel channel = event.getChannel();
             channel.sendMessage("Pong!").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
