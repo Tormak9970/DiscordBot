@@ -20,7 +20,7 @@ public class RLMafiaJoinCommand extends RLMafia{
          // Important to call .queue() on the RestAction returned by sendMessage(...)
         if(content.indexOf(SetPrefixCommand.getPrefix() + "mafiajoin") == 0) {
             User sender = event.getAuthor();
-            String nickname = content.substring(SetPrefixCommand.getPrefix().length() - 1 + 5);
+            String nickname = content.substring(SetPrefixCommand.getPrefix().length() + 5);
             Player p1 = new Player("none", "none", nickname, 0, sender);
             RLMafia.addPlayer(p1);
             MessageChannel channel = event.getChannel();

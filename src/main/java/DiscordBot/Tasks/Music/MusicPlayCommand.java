@@ -51,7 +51,7 @@ public class MusicPlayCommand {
             youTube = temp;
 
             TextChannel channel = event.getTextChannel();
-            String input = content.substring(SetPrefixCommand.getPrefix().length() - 1 + 5);
+            String input = content.substring(SetPrefixCommand.getPrefix().length() + 5);
             PlayerManager manager = PlayerManager.getInstance();
 
             if(!isUrl(input)){

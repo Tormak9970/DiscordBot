@@ -15,11 +15,11 @@ public class SetPrefixCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals(prefix + "setprefix"))
+        if (content.indexOf(prefix + "setprefix") == 0)
         {
             MessageChannel channel = event.getChannel();
 
-            prefix = event.getMessage().getContentRaw().substring((prefix.length() - 1) + 10);
+            prefix = event.getMessage().getContentRaw().substring(prefix.length() + 10);
             channel.sendMessage("prefix has been set to `" + prefix + "`").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
 
         }

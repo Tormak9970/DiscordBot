@@ -33,12 +33,14 @@ public class CommandsRunner extends Listener {
             JoiningAddsRoleCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "changenickwithrole")){
             NickNameByRoleCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "serverinfo")){
+        }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix() + "serverinfo") == 0){
             ServerInfoCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "uptime")){
             UptimeCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "botinfo")){
             BotInfoCommand.getCommand(event);
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "setprefix")){
+            SetPrefixCommand.getCommand(event);
         }else if(event.getMessage().getMentionedUsers().size() != 0 && event.getMessage().getMentionedUsers().get(0).equals(event.getJDA().getSelfUser())){
             event.getChannel().sendMessage("https://tenor.com/view/ping-who-pinged-me-disturbed-gif-14162073").queue();
         }

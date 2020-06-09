@@ -27,7 +27,7 @@ public class RLMafiaVoteCommand {
 
         if (content.indexOf(SetPrefixCommand.getPrefix() + "vote") == 0){
             ArrayList<Player> players = RLMafia.getCurrentPlayers();
-            String playerVotedFor = event.getMessage().getContentRaw().substring(SetPrefixCommand.getPrefix().length() - 1 + 5);
+            String playerVotedFor = event.getMessage().getContentRaw().substring(SetPrefixCommand.getPrefix().length() + 5);
             MessageChannel channel = event.getChannel();
             if(players.stream().map(Player::getName).anyMatch(isEqual(playerVotedFor))){
                 channel.sendMessage("Your vote has been registered").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)

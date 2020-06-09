@@ -42,7 +42,7 @@ public class ModerationClearMessagesCommand {
             }
 
             int amount;
-            String arg = content.substring(SetPrefixCommand.getPrefix().length() - 1 + 14);
+            String arg = content.substring(SetPrefixCommand.getPrefix().length() + 14);
 
             try {
                 amount = Integer.parseInt(arg);

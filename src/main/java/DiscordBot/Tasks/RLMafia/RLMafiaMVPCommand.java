@@ -23,7 +23,7 @@ public class RLMafiaMVPCommand {
         {
             ArrayList<Player> players = RLMafia.getCurrentPlayers();
             for(Player playerIndex : players){
-                if(playerIndex.getName().equals(content.substring(SetPrefixCommand.getPrefix().length() - 1 + 4))){
+                if(playerIndex.getName().equals(content.substring(SetPrefixCommand.getPrefix().length() + 4))){
                     RLMafia.setMVP(playerIndex);
                     RLMafia.setWinner(playerIndex.getTeam());
                 }
