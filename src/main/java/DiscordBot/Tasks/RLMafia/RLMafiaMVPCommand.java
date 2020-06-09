@@ -2,6 +2,7 @@ package DiscordBot.Tasks.RLMafia;
 
 import DiscordBot.Tasks.RLMafia.RLMafiaUtils.Player;
 import DiscordBot.Tasks.RLMafia.RLMafiaUtils.RLMafiaUtils;
+import DiscordBot.Tasks.SetPrefixCommand;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -18,11 +19,11 @@ public class RLMafiaMVPCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.indexOf("$mvp") == 0)
+        if (content.indexOf(SetPrefixCommand.getPrefix() + "mvp") == 0)
         {
             ArrayList<Player> players = RLMafia.getCurrentPlayers();
             for(Player playerIndex : players){
-                if(playerIndex.getName().equals(content.substring(5))){
+                if(playerIndex.getName().equals(content.substring(SetPrefixCommand.getPrefix().length() - 1 + 4))){
                     RLMafia.setMVP(playerIndex);
                     RLMafia.setWinner(playerIndex.getTeam());
                 }

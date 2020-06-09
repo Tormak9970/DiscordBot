@@ -1,5 +1,6 @@
 package DiscordBot.Tasks.Info;
 
+import DiscordBot.Tasks.SetPrefixCommand;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -20,7 +21,7 @@ public class ServerInfoCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals("$serverinfo"))
+        if (content.equals(SetPrefixCommand.getPrefix() + "serverinfo"))
         {
             Guild guild = event.getGuild();
 

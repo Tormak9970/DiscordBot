@@ -1,5 +1,6 @@
 package DiscordBot.Tasks.Music;
 
+import DiscordBot.Tasks.SetPrefixCommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -17,7 +18,7 @@ public class MusicJoinCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.indexOf("$join") == 0)
+        if (content.indexOf(SetPrefixCommand.getPrefix() + "join") == 0)
         {
             TextChannel channel = event.getTextChannel();
             AudioManager audioManager = event.getGuild().getAudioManager();

@@ -1,6 +1,7 @@
 package DiscordBot.Tasks.RLMafia;
 
 import DiscordBot.Tasks.RLMafia.RLMafiaUtils.Player;
+import DiscordBot.Tasks.SetPrefixCommand;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -17,9 +18,9 @@ public class RLMafiaJoinCommand extends RLMafia{
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
          // Important to call .queue() on the RestAction returned by sendMessage(...)
-        if(content.indexOf("$mafiajoin") == 0) {
+        if(content.indexOf(SetPrefixCommand.getPrefix() + "mafiajoin") == 0) {
             User sender = event.getAuthor();
-            String nickname = content.substring(6);
+            String nickname = content.substring(SetPrefixCommand.getPrefix().length() - 1 + 5);
             Player p1 = new Player("none", "none", nickname, 0, sender);
             RLMafia.addPlayer(p1);
             MessageChannel channel = event.getChannel();

@@ -1,6 +1,7 @@
 package DiscordBot.Tasks.Music;
 
 import DiscordBot.Tasks.Music.MusicUtils.PlayerManager;
+import DiscordBot.Tasks.SetPrefixCommand;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -17,7 +18,7 @@ public class MusicLeaveCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.indexOf("$leave") == 0)
+        if (content.indexOf(SetPrefixCommand.getPrefix() + "leave") == 0)
         {
             TextChannel channel = event.getTextChannel();
             AudioManager audioManager = event.getGuild().getAudioManager();
