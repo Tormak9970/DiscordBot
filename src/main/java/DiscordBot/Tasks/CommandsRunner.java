@@ -38,7 +38,7 @@ public class CommandsRunner extends ListenerAdapter {
             UptimeCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals("$botinfo")){
             BotInfoCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().contains(event.getJDA().getSelfUser().getAsMention())){
+        }else if(event.getMessage().getMentionedUsers().size() != 0 && event.getMessage().getMentionedUsers().get(0).equals(event.getJDA().getSelfUser())){
             event.getChannel().sendMessage("https://tenor.com/view/ping-who-pinged-me-disturbed-gif-14162073").queue();
         }
 

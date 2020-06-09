@@ -12,7 +12,9 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -21,7 +23,7 @@ import static DiscordBot.Utils.Utils.deleteHistory;
 public class ReactionRolesCommand extends ListenerAdapter {
     private EventWaiter eventWaiter;
     private TextChannel setup;
-    private Map<Long, ReactionRoles> listOfSetupRoles = new HashMap<>();
+    private Map<Long, List<ReactionRoles>> listOfSetupRoles = new HashMap<>();
     private int choice;
     private String emojiID = "";
     private long guildID;
@@ -90,19 +92,19 @@ public class ReactionRolesCommand extends ListenerAdapter {
         Guild guild = reaction.getGuild();
         boolean match;
         if(listOfSetupRoles != null){
-            for (int i = 0; i < listOfSetupRoles.size(); i++) {
+            for (ReactionRoles reactRole : listOfSetupRoles.get(guild.getIdLong())) {
 
-                if(listOfSetupRoles.get(guild.getIdLong()).isEmote()){
-                    match = listOfSetupRoles.get(guild.getIdLong()).getEmoteID() == reaction.getReactionEmote().getEmote().getIdLong();
+                if(reactRole.isEmote()){
+                    match = reactRole.getEmoteID() == reaction.getReactionEmote().getEmote().getIdLong();
                 }else{
-                    match = listOfSetupRoles.get(guild.getIdLong()).getEmoji().equals(reaction.getReactionEmote().getEmoji());
+                    match = reactRole.getEmoji().equals(reaction.getReactionEmote().getEmoji());
                 }
-                if (listOfSetupRoles.get(guild.getIdLong()).getChannelID() == reaction.getChannel().getIdLong()
-                        && listOfSetupRoles.get(guild.getIdLong()).getMessageID() == reaction.getMessageIdLong()
+                if (reactRole.getChannelID() == reaction.getChannel().getIdLong()
+                        && reactRole.getMessageID() == reaction.getMessageIdLong()
                         && match) {
 
-                    reaction.getMember().getRoles().add(guild.getRoleById(listOfSetupRoles.get(guild.getIdLong()).getRoleID()));
-                    Utils.sendPrivateMessage(reaction.getUser(), "You have been given the role " + guild.getRoleById(listOfSetupRoles.get(guild.getIdLong()).getRoleID()).getName() + " in the server " + guild.getName());
+                    reaction.getMember().getRoles().add(guild.getRoleById(reactRole.getRoleID()));
+                    Utils.sendPrivateMessage(reaction.getUser(), "You have been given the role " + guild.getRoleById(reactRole.getRoleID()).getName() + " in the server " + guild.getName());
                 }
             }
         }
@@ -120,9 +122,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
                     return !user.isBot() && channelMentioned && event.getChannel().getIdLong() == channelID && event.getGuild().getIdLong() == guildID;
                 },
-                (event) -> {
-                    getRRChannelID(event, shardManager, channelID);
-                },
+                (event) -> getRRChannelID(event, shardManager, channelID),
                 30, TimeUnit.SECONDS,
                 () -> {
                     TextChannel textChannel = shardManager.getTextChannelById(channelID);
@@ -161,10 +161,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                     User user = event1.getAuthor();
                     return !user.isBot() && event1.getChannel().getIdLong() == channelID && event1.getGuild().getIdLong() == guildID;
                 },
-                (event1) -> {
-                    getRRMessageID(event1, shardManager, botUser, channelID);
-
-                },
+                (event1) -> getRRMessageID(event1, shardManager, botUser, channelID),
                 30, TimeUnit.SECONDS,
                 () -> {
                     TextChannel textChannel1 = shardManager.getTextChannelById(channelID);
@@ -202,10 +199,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                                 boolean hasRole = event1.getMessage().getMentionedRoles().size() != 0;
                                 return !user.isBot() && event1.getChannel().getIdLong() == channelID && event1.getGuild().getIdLong() == guildID && hasRole;
                             },
-                            (event1) -> {
-                                getRRRoleID(event1, shardManager, botUser, channelID);
-
-                            },
+                            (event1) -> getRRRoleID(event1, shardManager, botUser, channelID),
                             30, TimeUnit.SECONDS,
                             () -> {
                                 TextChannel textChannel1 = shardManager.getTextChannelById(channelID);
@@ -214,9 +208,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                     );
 
                 },
-                error -> {
-                    event.getChannel().sendMessage("not a message ID").queue();
-                }
+                error -> event.getChannel().sendMessage("not a message ID").queue()
         );
     }
 
@@ -254,10 +246,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
                     return !user.isBot() && event1.getChannel().getIdLong() == channelID && event1.getGuild().getIdLong() == guildID && isChoice;
                 },
-                (event1) -> {
-                    getRRType(event1, shardManager, botUser, channelID);
-
-                },
+                (event1) -> getRRType(event1, shardManager, botUser, channelID),
                 30, TimeUnit.SECONDS,
                 () -> {
                     TextChannel textChannel1 = shardManager.getTextChannelById(channelID);
@@ -289,10 +278,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                                         boolean isEmbed = embedID == event1.getMessageIdLong();
                                         return !user.isBot() && event1.getChannel().getIdLong() == channelID && event1.getGuild().getIdLong() == guildID && isEmbed;
                                     },
-                                    (event1) -> {
-                                        getRREmoteID(event1, channelID);
-
-                                    },
+                                    (event1) -> getRREmoteID(event1, channelID),
                                     30, TimeUnit.SECONDS,
                                     () -> {
                                         TextChannel textChannel1 = shardManager.getTextChannelById(channelID);
@@ -329,7 +315,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
             );
 
             ReactionRoles reactRole = new ReactionRoles(messageID, msgChannelID, emojiID, roleID);
-            listOfSetupRoles.put(guildID, reactRole);
+            listOfSetupRoles.computeIfAbsent(guildID, s -> new ArrayList<>()).add(reactRole);
         } else {
             emoteID = event.getReactionEmote().getEmote().getIdLong();
 
@@ -352,7 +338,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
             );
 
             ReactionRoles reactRole = new ReactionRoles(messageID, msgChannelID, emoteID, roleID);
-            listOfSetupRoles.put(guildID, reactRole);
+            listOfSetupRoles.computeIfAbsent(guildID, s -> new ArrayList<>()).add(reactRole);
         }
     }
 }
