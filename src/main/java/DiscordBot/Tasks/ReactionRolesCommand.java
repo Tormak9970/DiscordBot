@@ -103,7 +103,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                         && reactRole.getMessageID() == reaction.getMessageIdLong()
                         && match) {
 
-                    reaction.getMember().getRoles().add(guild.getRoleById(reactRole.getRoleID()));
+                    guild.addRoleToMember(reaction.getMember(), guild.getRoleById(reactRole.getRoleID())).queue();
                     Utils.sendPrivateMessage(reaction.getUser(), "You have been given the role " + guild.getRoleById(reactRole.getRoleID()).getName() + " in the server " + guild.getName());
                 }
             }
