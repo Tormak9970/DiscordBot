@@ -1,4 +1,4 @@
-package DiscordBot.Tasks;
+package DiscordBot.Tasks.Roles;
 
 import DiscordBot.Utils.ReactionRoles;
 import DiscordBot.Utils.Utils;

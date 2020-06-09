@@ -1,4 +1,4 @@
-package DiscordBot.Tasks;
+package DiscordBot.Tasks.Info;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;

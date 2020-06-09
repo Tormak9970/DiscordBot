@@ -1,4 +1,4 @@
-package DiscordBot.Tasks;
+package DiscordBot.Tasks.Info;
 
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import net.dv8tion.jda.api.EmbedBuilder;

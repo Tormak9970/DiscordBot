@@ -1,4 +1,4 @@
-package DiscordBot.Tasks;
+package DiscordBot.Tasks.Info;
 
 import DiscordBot.Utils.Utils;
 import me.duncte123.botcommons.messaging.EmbedUtils;
@@ -10,9 +10,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.awt.*;
-import java.time.format.TextStyle;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 public class BotInfoCommand {
@@ -32,7 +30,7 @@ public class BotInfoCommand {
             String botName = Objects.requireNonNull(guild.getMember(user)).getEffectiveName();
             StringBuilder roles = new StringBuilder("");
             List<Role> roleList = guild.getMember(user).getRoles();
-            String update = "";
+            String update = "Debug reactionroles, add onUserJoin add role";
 
             for(Role role : roleList){
                 roles.append(role.getName()).append(", ");
@@ -60,6 +58,7 @@ public class BotInfoCommand {
                         "username, play music, play rocket league mafia, " +
                         "and of course, send memes from r/dankmemes.";
             String gitHubUrl = "https://github.com/Tormak9970/DiscordBot";
+            String inviteUrl = "https://discordapp.com/api/oauth2/authorize?client_id=643451410855362569&permissions=8&scope=bot";
 
 
             EmbedBuilder embed = EmbedUtils.defaultEmbed()
@@ -70,6 +69,7 @@ public class BotInfoCommand {
                     .addField("**Description**", desc, true)
                     .addField("**GitHub**", gitHubUrl, false)
                     .addField("**Need help? Join**: ", helpServerUrl, false)
+                    .addField("**Want to invite this bot?**", inviteUrl, false)
                     .setColor(Color.RED)
                     .setFooter("Tormak9970, 2020")
                     ;

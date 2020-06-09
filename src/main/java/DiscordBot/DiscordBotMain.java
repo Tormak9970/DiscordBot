@@ -1,13 +1,12 @@
 package DiscordBot;
 
 import DiscordBot.Tasks.CommandsRunner;
+import DiscordBot.Tasks.Listener;
 import DiscordBot.Tasks.Moderation.ModerationRunner;
 import DiscordBot.Tasks.Music.MusicRunner;
 import DiscordBot.Tasks.RLMafia.RLMafiaRunner;
-import DiscordBot.Tasks.ReactionRolesCommand;
+import DiscordBot.Tasks.Roles.ReactionRolesCommand;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import net.dv8tion.jda.api.AccountType;
-import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
@@ -35,7 +34,7 @@ public class DiscordBotMain extends ListenerAdapter {
                 .setActivity(Activity.playing("$generalhelp for help"))
                 .addEventListeners(waiter)
                 .addEventListeners(new ReactionRolesCommand(waiter))
-                .addEventListeners(new CommandsRunner())
+                .addEventListeners(new Listener())
                 .addEventListeners(new RLMafiaRunner())
                 .addEventListeners(new MusicRunner())
                 .addEventListeners(new ModerationRunner())
