@@ -17,6 +17,7 @@ public class MuteCommand {
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
         if (content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "mute"))
         {
+            int muteLength = 0;
             int numSpaces = 0;
             for(int i = 0; i < content.length(); i++){
                 if(content.charAt(i) == ' '){
@@ -25,9 +26,9 @@ public class MuteCommand {
             }
 
             if(numSpaces == 1){
-
+                muteLength = 5;
             }else if(numSpaces == 2){
-
+                String stringTime = content.substring(content.indexOf(" "))
             }
             MessageChannel channel = event.getChannel();
             channel.sendMessage("").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
