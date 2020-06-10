@@ -6,6 +6,7 @@ import DiscordBot.Tasks.Moderation.ModerationRunner;
 import DiscordBot.Tasks.Music.MusicRunner;
 import DiscordBot.Tasks.RLMafia.RLMafiaRunner;
 import DiscordBot.Tasks.Roles.ReactionRolesCommand;
+import DiscordBot.Tasks.SetPrefixCommand;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -31,7 +32,7 @@ public class DiscordBotMain extends ListenerAdapter {
 
         new DefaultShardManagerBuilder()
                 .setToken(token)
-                .setActivity(Activity.playing("$generalhelp for help"))
+                .setActivity(Activity.playing("In Dev"))
                 .addEventListeners(waiter)
                 .addEventListeners(new ReactionRolesCommand(waiter))
                 .addEventListeners(new Listener())

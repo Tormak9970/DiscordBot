@@ -19,7 +19,7 @@ public class MusicClearCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals(SetPrefixCommand.getPrefix() + "clear"))
+        if (content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "clear"))
         {
             TextChannel channel = event.getTextChannel();
             PlayerManager playerManager = PlayerManager.getInstance();

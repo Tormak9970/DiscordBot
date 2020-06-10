@@ -24,7 +24,7 @@ public class BotInfoCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals(SetPrefixCommand.getPrefix() + "botinfo"))
+        if (content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "botinfo"))
         {
             Guild guild = event.getGuild();
             User user = guild.getJDA().getSelfUser();

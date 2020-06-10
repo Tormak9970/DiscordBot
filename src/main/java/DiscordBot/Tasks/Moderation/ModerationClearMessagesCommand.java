@@ -22,7 +22,7 @@ public class ModerationClearMessagesCommand {
         String content = event.getMessage().getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.indexOf(SetPrefixCommand.getPrefix() + "clearmessages") == 0)
+        if (content.indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "clearmessages") == 0)
         {
             TextChannel channel = event.getTextChannel();
             Member member = event.getMember();
@@ -42,7 +42,7 @@ public class ModerationClearMessagesCommand {
             }
 
             int amount;
-            String arg = content.substring(SetPrefixCommand.getPrefix().length() + 14);
+            String arg = content.substring(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()).length() + 14);
 
             try {
                 amount = Integer.parseInt(arg);

@@ -15,7 +15,7 @@ public class RlMafiaHostCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals(SetPrefixCommand.getPrefix() + "hostrlmafia"))
+        if (content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "hostrlmafia"))
         {
             RLMafia.setHost(event.getAuthor());
             MessageChannel channel = event.getChannel();

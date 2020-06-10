@@ -21,7 +21,7 @@ public class ServerInfoCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals(SetPrefixCommand.getPrefix() + "serverinfo"))
+        if (content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "serverinfo"))
         {
             Guild guild = event.getGuild();
 

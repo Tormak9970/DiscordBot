@@ -25,9 +25,9 @@ public class RLMafiaVoteCommand {
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
         ArrayList<Vote> votes = RLMafia.getCurrentVotes();
 
-        if (content.indexOf(SetPrefixCommand.getPrefix() + "vote") == 0){
+        if (content.indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "vote") == 0){
             ArrayList<Player> players = RLMafia.getCurrentPlayers();
-            String playerVotedFor = event.getMessage().getContentRaw().substring(SetPrefixCommand.getPrefix().length() + 5);
+            String playerVotedFor = event.getMessage().getContentRaw().substring(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()).length() + 5);
             MessageChannel channel = event.getChannel();
             if(players.stream().map(Player::getName).anyMatch(isEqual(playerVotedFor))){
                 channel.sendMessage("Your vote has been registered").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)

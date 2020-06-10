@@ -31,7 +31,7 @@ public class MusicPlayCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.indexOf(SetPrefixCommand.getPrefix() + "play") == 0)
+        if (content.indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "play") == 0)
         {
             YouTube temp = null;
 
@@ -51,7 +51,7 @@ public class MusicPlayCommand {
             youTube = temp;
 
             TextChannel channel = event.getTextChannel();
-            String input = content.substring(SetPrefixCommand.getPrefix().length() + 5);
+            String input = content.substring(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()).length() + 5);
             PlayerManager manager = PlayerManager.getInstance();
 
             if(!isUrl(input)){

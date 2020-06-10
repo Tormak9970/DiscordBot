@@ -17,7 +17,7 @@ public class RLMafiaQuitCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.indexOf(SetPrefixCommand.getPrefix() + "quitrlmafia") == 0)
+        if (content.indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "quitrlmafia") == 0)
         {
             RLMafia.resetWinner();
             RLMafia.clearHost();

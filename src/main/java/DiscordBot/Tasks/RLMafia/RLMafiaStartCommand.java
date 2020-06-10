@@ -16,7 +16,7 @@ public class RLMafiaStartCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals(SetPrefixCommand.getPrefix() + "startrlmafia") && RLMafia.getCurrentPlayers().size()%2 == 0)
+        if (content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "startrlmafia") && RLMafia.getCurrentPlayers().size()%2 == 0)
         {
 
             RLMafiaUtils.generateTeams(RLMafia.getCurrentPlayers(), event);

@@ -3,6 +3,7 @@ package DiscordBot.Tasks.Music;
 import DiscordBot.Tasks.Music.MusicUtils.GuildMusicManager;
 import DiscordBot.Tasks.Music.MusicUtils.PlayerManager;
 import DiscordBot.Tasks.Music.MusicUtils.TrackScheduler;
+import DiscordBot.Tasks.SetPrefixCommand;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -19,7 +20,7 @@ public class MusicSkipCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals("$skip"))
+        if (content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "skip"))
         {
             TextChannel channel = event.getTextChannel();
             PlayerManager playerManager = PlayerManager.getInstance();

@@ -1,5 +1,6 @@
 package DiscordBot.Tasks;
 
+import DiscordBot.Tasks.Memes.MemeRunner;
 import DiscordBot.Tasks.Moderation.Moderation;
 import DiscordBot.Tasks.Moderation.ModerationRunner;
 import DiscordBot.Tasks.Music.MusicRunner;
@@ -22,6 +23,7 @@ public class Listener extends ListenerAdapter {
         RLMafiaRunner.passEvent(event);
         MusicRunner.passEvent(event);
         ModerationRunner.passEvent(event);
+        MemeRunner.passEvent(event);
 
     }
 }

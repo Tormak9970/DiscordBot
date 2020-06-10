@@ -7,16 +7,17 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class MusicHelpCommand {
 
-    private static String prefix = SetPrefixCommand.getPrefix();
+
     public static void getCommand(MessageReceivedEvent event)
     {
+        String prefix = SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
         if (event.getAuthor().isBot()) return;
         // We don't want to respond to other bot accounts, including ourself
         Message message = event.getMessage();
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals(SetPrefixCommand.getPrefix() + "musichelp"))
+        if (content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "musichelp"))
         {
             MessageChannel channel = event.getChannel();
             channel.sendMessage(

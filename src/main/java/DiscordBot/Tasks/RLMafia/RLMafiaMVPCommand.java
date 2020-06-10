@@ -19,11 +19,11 @@ public class RLMafiaMVPCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.indexOf(SetPrefixCommand.getPrefix() + "mvp") == 0)
+        if (content.indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "mvp") == 0)
         {
             ArrayList<Player> players = RLMafia.getCurrentPlayers();
             for(Player playerIndex : players){
-                if(playerIndex.getName().equals(content.substring(SetPrefixCommand.getPrefix().length() + 4))){
+                if(playerIndex.getName().equals(content.substring(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()).length() + 4))){
                     RLMafia.setMVP(playerIndex);
                     RLMafia.setWinner(playerIndex.getTeam());
                 }

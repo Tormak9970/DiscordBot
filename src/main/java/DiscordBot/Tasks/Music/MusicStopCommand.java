@@ -16,7 +16,7 @@ public class MusicStopCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.indexOf(SetPrefixCommand.getPrefix() + "stop") == 0)
+        if (content.indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "stop") == 0)
         {
             PlayerManager playerManager = PlayerManager.getInstance();
             GuildMusicManager musicManager = playerManager.getGuildMusicManager(event.getGuild());

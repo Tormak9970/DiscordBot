@@ -11,18 +11,18 @@ public class RLMafiaRunner extends Listener {
         if(RLMafia.getHost() != null){
             if(event.getAuthor().isBot()){
                 return;
-            }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix() + "mafiajoin") == 0){
+            }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "mafiajoin") == 0){
                 RLMafiaJoinCommand.getCommand(event);
-            }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix() + "vote") == 0){
+            }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "vote") == 0){
                 RLMafiaVoteCommand.getCommand(event);
             }
 
             if(RLMafia.getHost().equals(event.getAuthor())){
-                if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix() + "mvp") == 0){
+                if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "mvp") == 0){
 
-                }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix() + "quitrlmafia") == 0){
+                }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "quitrlmafia") == 0){
                     RLMafiaQuitCommand.getCommand(event);
-                }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "startrlmafia")){
+                }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "startrlmafia")){
                     RLMafiaStartCommand.getCommand(event);
                 }
             }

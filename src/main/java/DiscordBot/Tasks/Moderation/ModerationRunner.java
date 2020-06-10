@@ -10,20 +10,10 @@ public class ModerationRunner extends Listener {
     public static void passEvent(MessageReceivedEvent event){
         if(event.getAuthor().isBot()){
             return;
-        }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix() + "clearmessages") == 0){
+        }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "clearmessages") == 0){
             ModerationClearMessagesCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix() + "moderationhelp") == 0){
+        }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "moderationhelp") == 0){
             ModerationHelpCommand.getCommand(event);
         }
     }
-    /*
-    @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
-        System.out.println("We received a message from " +
-                event.getAuthor().getName() + ": " +
-                event.getMessage().getContentDisplay()
-        );
-    }
-
-     */
 }

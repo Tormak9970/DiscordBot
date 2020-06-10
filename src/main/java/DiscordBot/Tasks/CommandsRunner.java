@@ -4,10 +4,12 @@ package DiscordBot.Tasks;
 import DiscordBot.Tasks.Info.BotInfoCommand;
 import DiscordBot.Tasks.Info.ServerInfoCommand;
 import DiscordBot.Tasks.Info.UptimeCommand;
+import DiscordBot.Tasks.Info.UserInfoCommand;
 import DiscordBot.Tasks.RLMafia.RlMafiaHostCommand;
 import DiscordBot.Tasks.RLMafia.RLMafiaHelpCommand;
 import DiscordBot.Tasks.Roles.JoiningAddsRoleCommand;
 import DiscordBot.Tasks.Roles.NickNameByRoleCommand;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandsRunner extends Listener {
@@ -17,30 +19,32 @@ public class CommandsRunner extends Listener {
     public static void passEvent(MessageReceivedEvent event){
         if(event.getAuthor().isBot()){
             return;
-        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "ping")){
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "ping")){
             PingPongCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix() + "nick") == 0 && !event.getMessage().getContentRaw().contains(SetPrefixCommand.getPrefix() + "help")){
+        }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "nick") == 0 && !event.getMessage().getContentRaw().contains(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "help")){
             NickNameChangerCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "generalhelp")){
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "help")){
             GeneralHelpCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "rlmafiahelp")){
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "rlmafiahelp")){
             RLMafiaHelpCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "hostrlmafia")) {
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "hostrlmafia")) {
             RlMafiaHostCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "rlmafiasettings")){
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "rlmafiasettings")){
 
-        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "addroleonjoin")){
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "addroleonjoin")){
             JoiningAddsRoleCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "changenickwithrole")){
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "changenickwithrole")){
             NickNameByRoleCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix() + "serverinfo") == 0){
+        }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "serverinfo") == 0){
             ServerInfoCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "uptime")){
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "uptime")){
             UptimeCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "botinfo")){
+        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "botinfo")){
             BotInfoCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix() + "setprefix")){
+        }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "setprefix") == 0){
             SetPrefixCommand.getCommand(event);
+        }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "userinfo") == 0){
+            UserInfoCommand.getCommand(event);
         }else if(event.getMessage().getMentionedUsers().size() != 0 && event.getMessage().getMentionedUsers().get(0).equals(event.getJDA().getSelfUser())){
             event.getChannel().sendMessage("https://tenor.com/view/ping-who-pinged-me-disturbed-gif-14162073").queue();
         }

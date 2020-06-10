@@ -7,9 +7,10 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class RLMafiaHelpCommand {
 
-    private static String prefix = SetPrefixCommand.getPrefix();
+
     public static void getCommand(MessageReceivedEvent event)
     {
+        String prefix = SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
         if (event.getAuthor().isBot()) return;
         // We don't want to respond to other bot accounts, including ourself
         Message message = event.getMessage();

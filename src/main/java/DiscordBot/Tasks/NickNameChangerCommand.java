@@ -18,9 +18,9 @@ public class NickNameChangerCommand {
         if (event.getMember().isOwner()) {
             MessageChannel channel = event.getChannel();
             channel.sendMessage("Unfortunately I cant change your name because you are the owner").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
-        }else if(content.indexOf(SetPrefixCommand.getPrefix() + "nick") == 0) {
+        }else if(content.indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "nick") == 0) {
             Member toChange = event.getMember();
-            toChange.modifyNickname(content.substring(SetPrefixCommand.getPrefix().length() + 5)+ " " + toChange).queue();
+            toChange.modifyNickname(content.substring(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()).length() + 5)+ " " + toChange).queue();
             MessageChannel channel = event.getChannel();
             channel.sendMessage(event.getAuthor().getAsMention() + ", your nickname has been changed to " + event.getAuthor().getName()).queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
         }
