@@ -1,5 +1,6 @@
 package DiscordBot.Tasks.Music;
 
+import DiscordBot.Database.DatabaseManager;
 import DiscordBot.DiscordBotMain;
 import DiscordBot.Tasks.Music.MusicUtils.PlayerManager;
 import DiscordBot.Tasks.SetPrefixCommand;
@@ -25,53 +26,45 @@ public class MusicPlayCommand {
     private static YouTube youTube;
 
     public static void getCommand(MessageReceivedEvent event) throws IOException {
-        if (event.getAuthor().isBot()) return;
-        // We don't want to respond to other bot accounts, including ourself
+
         Message message = event.getMessage();
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "play") == 0)
-        {
-            YouTube temp = null;
+        YouTube temp = null;
 
-
-            try {
-                temp = new YouTube.Builder(
-                        GoogleNetHttpTransport.newTrustedTransport(),
-                        JacksonFactory.getDefaultInstance(),
-                        null
-                )
-                        .setApplicationName("Quarantine Bot")
-                        .build();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            youTube = temp;
-
-            TextChannel channel = event.getTextChannel();
-            String input = content.substring(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()).length() + 5);
-            PlayerManager manager = PlayerManager.getInstance();
-
-            if(!isUrl(input)){
-                String ytSearched = searchYoutube(input);
-
-                if (ytSearched == null) {
-                    channel.sendMessage("Youtube returned no results").queue();
-
-                    return;
-                }
-
-
-                input = ytSearched;
-            }
-
-            manager.loadAndPlay(event.getTextChannel(), input);
-
-
-
+        try {
+            temp = new YouTube.Builder(
+                    GoogleNetHttpTransport.newTrustedTransport(),
+                    JacksonFactory.getDefaultInstance(),
+                    null
+            )
+                    .setApplicationName("Quarantine Bot")
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        youTube = temp;
+
+        TextChannel channel = event.getTextChannel();
+        String input = content.substring(DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong()).length() + 5);
+        PlayerManager manager = PlayerManager.getInstance();
+
+        if(!isUrl(input)){
+            String ytSearched = searchYoutube(input);
+
+            if (ytSearched == null) {
+                channel.sendMessage("Youtube returned no results").queue();
+
+                return;
+            }
+
+
+            input = ytSearched;
+        }
+
+        manager.loadAndPlay(event.getTextChannel(), input);
     }
 
     @Nullable

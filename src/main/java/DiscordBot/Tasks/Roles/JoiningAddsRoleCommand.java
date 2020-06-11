@@ -1,5 +1,6 @@
 package DiscordBot.Tasks.Roles;
 
+import DiscordBot.Database.DatabaseManager;
 import DiscordBot.Tasks.SetPrefixCommand;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -15,7 +16,7 @@ public class JoiningAddsRoleCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "addroleonjoin"))
+        if (content.equals(DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong()) + "addroleonjoin"))
         {
             MessageChannel channel = event.getChannel();
             channel.sendMessage("").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)

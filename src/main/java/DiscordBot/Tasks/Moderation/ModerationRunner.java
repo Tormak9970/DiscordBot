@@ -1,5 +1,6 @@
 package DiscordBot.Tasks.Moderation;
 
+import DiscordBot.Database.DatabaseManager;
 import DiscordBot.Tasks.Listener;
 import DiscordBot.Tasks.SetPrefixCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -7,6 +8,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class ModerationRunner extends Listener {
 
     public static void passEvent(MessageReceivedEvent event){
+        String prefix = "mod" + DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong());
         if(event.getAuthor().isBot()){
             return;
         }else if(SetAdminCommand.getIDs().get(event.getGuild().getIdLong()) != null){
@@ -19,30 +21,22 @@ public class ModerationRunner extends Listener {
             }
 
             if(hasAdmin){
-                if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "clearmessages") == 0){
+                if(event.getMessage().getContentRaw().indexOf(prefix + "clear") == 0){
                     ModerationClearMessagesCommand.getCommand(event);
-                }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "moderationhelp") == 0){
+                }else if(event.getMessage().getContentRaw().equals(prefix + "help")){
                     ModerationHelpCommand.getCommand(event);
-                }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "mute") == 0){
+                }else if(event.getMessage().getContentRaw().indexOf(prefix + "mute") == 0){
                     MuteCommand.getCommand(event);
-                }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "setadmin") == 0){
+                }else if(event.getMessage().getContentRaw().indexOf(prefix + "setadmin") == 0){
                     SetAdminCommand.getCommand(event);
                 }
-            }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "clearmessages") == 0
-                    || event.getMessage().getContentRaw().equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "moderationhelp")
-                    || event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "mute") == 0
-                    || event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "setadmin") == 0){
-                event.getChannel().sendMessage("You are not allowed to use that command").queue();
             }
 
         }else if (SetAdminCommand.getIDs().get(event.getGuild().getIdLong()) == null){
-            if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "setadmin") == 0){
+            if(event.getMessage().getContentRaw().indexOf(prefix + "setadmin") == 0){
                 SetAdminCommand.getCommand(event);
-            }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "moderationhelp") == 0){
+            }else if(event.getMessage().getContentRaw().equals(prefix + "help")){
                 ModerationHelpCommand.getCommand(event);
-            }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "clearmessages") == 0
-                    || event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "mute") == 0){
-                event.getChannel().sendMessage("You are not allowed to use that command, please see moderationhelp for explination").queue();
             }
         }
     }

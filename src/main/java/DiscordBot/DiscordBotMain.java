@@ -18,7 +18,6 @@ import java.sql.SQLException;
 public class DiscordBotMain extends ListenerAdapter {
 
     public static void main(String[] args) throws LoginException, IOException, SQLException {
-        SQLiteDataSource.getConnection();
         String token;
 
         InputStream in = DiscordBotMain.class.getClassLoader().getResourceAsStream("token.txt");

@@ -1,5 +1,6 @@
 package DiscordBot.Tasks;
 
+import DiscordBot.Database.DatabaseManager;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -9,8 +10,6 @@ public class NickNameChangerCommand {
 
     public static void getCommand(MessageReceivedEvent event)
     {
-        if (event.getAuthor().isBot()) return;
-        // We don't want to respond to other bot accounts, including ourself
         Message message = event.getMessage();
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
@@ -18,9 +17,9 @@ public class NickNameChangerCommand {
         if (event.getMember().isOwner()) {
             MessageChannel channel = event.getChannel();
             channel.sendMessage("Unfortunately I cant change your name because you are the owner").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
-        }else if(content.indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "nick") == 0) {
+        }else{
             Member toChange = event.getMember();
-            toChange.modifyNickname(content.substring(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()).length() + 5)+ " " + toChange).queue();
+            toChange.modifyNickname(content.substring(DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong()).length() + 5)+ " " + toChange).queue();
             MessageChannel channel = event.getChannel();
             channel.sendMessage(event.getAuthor().getAsMention() + ", your nickname has been changed to " + event.getAuthor().getName()).queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
         }

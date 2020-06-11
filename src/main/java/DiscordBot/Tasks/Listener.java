@@ -1,7 +1,5 @@
 package DiscordBot.Tasks;
 
-import DiscordBot.Tasks.Memes.MemeRunner;
-import DiscordBot.Tasks.Moderation.Moderation;
 import DiscordBot.Tasks.Moderation.ModerationRunner;
 import DiscordBot.Tasks.Music.MusicRunner;
 import DiscordBot.Tasks.RLMafia.RLMafiaRunner;
@@ -19,11 +17,15 @@ public class Listener extends ListenerAdapter {
         if(event.getAuthor().isBot()){
             return;
         }
-        CommandsRunner.passEvent(event);
-        RLMafiaRunner.passEvent(event);
-        MusicRunner.passEvent(event);
-        ModerationRunner.passEvent(event);
-        MemeRunner.passEvent(event);
+        if(event.getMessage().getContentRaw().indexOf("m") == 0){
+            MusicRunner.passEvent(event);
+        }else if (event.getMessage().getContentRaw().indexOf("mod") == 0){
+            ModerationRunner.passEvent(event);
+        }else if (event.getMessage().getContentRaw().indexOf("rlmafia") == 0){
+            RLMafiaRunner.passEvent(event);
+        }else{
+            CommandsRunner.passEvent(event);
+        }
 
     }
 }

@@ -1,5 +1,6 @@
 package DiscordBot.Tasks.Music;
 
+import DiscordBot.Database.DatabaseManager;
 import DiscordBot.Tasks.Music.MusicUtils.GuildMusicManager;
 import DiscordBot.Tasks.Music.MusicUtils.PlayerManager;
 import DiscordBot.Tasks.SetPrefixCommand;
@@ -16,37 +17,31 @@ public class MusicNowPlayingCommand {
 
     public static void getCommand(MessageReceivedEvent event)
     {
-        if (event.getAuthor().isBot()) return;
-        // We don't want to respond to other bot accounts, including ourself
         Message message = event.getMessage();
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "nowplaying"))
-        {
-            TextChannel channel = event.getTextChannel();
-            PlayerManager playerManager = PlayerManager.getInstance();
-            GuildMusicManager musicManager = playerManager.getGuildMusicManager(event.getGuild());
-            AudioPlayer player = musicManager.player;
+        TextChannel channel = event.getTextChannel();
+        PlayerManager playerManager = PlayerManager.getInstance();
+        GuildMusicManager musicManager = playerManager.getGuildMusicManager(event.getGuild());
+        AudioPlayer player = musicManager.player;
 
-            if (player.getPlayingTrack() == null) {
-                channel.sendMessage("The player is not playing any song.").queue();
+        if (player.getPlayingTrack() == null) {
+            channel.sendMessage("The player is not playing any song.").queue();
 
-                return;
-            }
-
-            AudioTrackInfo info = player.getPlayingTrack().getInfo();
-
-            channel.sendMessage(EmbedUtils.embedMessage(String.format(
-                    "**Playing** [%s](%s)\n%s %s - %s",
-                    info.title,
-                    info.uri,
-                    player.isPaused() ? "\u23F8" : "▶",
-                    formatTime(player.getPlayingTrack().getPosition()),
-                    formatTime(player.getPlayingTrack().getDuration())
-            )).build()).queue();
-
+            return;
         }
+
+        AudioTrackInfo info = player.getPlayingTrack().getInfo();
+
+        channel.sendMessage(EmbedUtils.embedMessage(String.format(
+                "**Playing** [%s](%s)\n%s %s - %s",
+                info.title,
+                info.uri,
+                player.isPaused() ? "\u23F8" : "▶",
+                formatTime(player.getPlayingTrack().getPosition()),
+                formatTime(player.getPlayingTrack().getDuration())
+        )).build()).queue();
     }
 
     private static String formatTime(long timeInMillis) {

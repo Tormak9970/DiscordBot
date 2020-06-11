@@ -1,5 +1,6 @@
 package DiscordBot.Tasks.RLMafia;
 
+import DiscordBot.Database.DatabaseManager;
 import DiscordBot.Tasks.SetPrefixCommand;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -10,27 +11,21 @@ public class RLMafiaHelpCommand {
 
     public static void getCommand(MessageReceivedEvent event)
     {
-        String prefix = SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
-        if (event.getAuthor().isBot()) return;
-        // We don't want to respond to other bot accounts, including ourself
+        String prefix = "rlmafia" + DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong());
         Message message = event.getMessage();
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals(prefix + "rlmafiahelp"))
-        {
-            MessageChannel channel = event.getChannel();
-            channel.sendMessage(
-                    prefix + "hostmafia - starts game, no other mafia commands will work unless you have started a game, sets sender as host" +
-                    "\n" + prefix + "mafiajoin (nickname) - adds you to current mafia game with name (nickname)" +
-                    "\n" + prefix + "rlmafiasettings - allows you to customize the experience" +
-                    "\n" + prefix + "quitrlmafia - ends game, and resets everything" +
-                    "\n" + prefix + "vote - cast your vote on who u think the mafia is" +
-                    "\n" + prefix + "mvp - set the round's mvp" +
-                    "\n" + prefix + "startrlmafia - starts the first round" +
-                    "\n" + prefix + "winner - sets the winning team" +
-                    "\n" + prefix + "rename (player's current name) (new nickname) - allows host to change participents nicknames").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
-
-        }
+        MessageChannel channel = event.getChannel();
+        channel.sendMessage(
+                prefix + "host - starts game, no other mafia commands will work unless you have started a game, sets sender as host" +
+                        "\n" + prefix + "join (nickname) - adds you to current mafia game with name (nickname)" +
+                        "\n" + prefix + "settings - allows you to customize the experience" +
+                        "\n" + prefix + "quit - ends game, and resets everything" +
+                        "\n" + prefix + "vote - cast your vote on who u think the mafia is" +
+                        "\n" + prefix + "mvp - set the round's mvp" +
+                        "\n" + prefix + "start - starts the first round" +
+                        "\n" + prefix + "winner - sets the winning team" +
+                        "\n" + prefix + "rename (player's current name) (new nickname) - allows host to change participents nicknames").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
     }
 }

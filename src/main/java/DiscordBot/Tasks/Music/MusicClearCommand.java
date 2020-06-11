@@ -1,5 +1,6 @@
 package DiscordBot.Tasks.Music;
 
+import DiscordBot.Database.DatabaseManager;
 import DiscordBot.Tasks.Music.MusicUtils.GuildMusicManager;
 import DiscordBot.Tasks.Music.MusicUtils.PlayerManager;
 import DiscordBot.Tasks.SetPrefixCommand;
@@ -13,28 +14,22 @@ public class MusicClearCommand {
 
     public static void getCommand(MessageReceivedEvent event)
     {
-        if (event.getAuthor().isBot()) return;
-        // We don't want to respond to other bot accounts, including ourself
         Message message = event.getMessage();
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "clear"))
-        {
-            TextChannel channel = event.getTextChannel();
-            PlayerManager playerManager = PlayerManager.getInstance();
-            GuildMusicManager musicManager = playerManager.getGuildMusicManager(event.getGuild());
-            BlockingQueue<AudioTrack> queue = musicManager.scheduler.getQueue();
+        TextChannel channel = event.getTextChannel();
+        PlayerManager playerManager = PlayerManager.getInstance();
+        GuildMusicManager musicManager = playerManager.getGuildMusicManager(event.getGuild());
+        BlockingQueue<AudioTrack> queue = musicManager.scheduler.getQueue();
 
-            if (queue.isEmpty()) {
-                channel.sendMessage("The queue is already empty").queue();
+        if (queue.isEmpty()) {
+            channel.sendMessage("The queue is already empty").queue();
 
-                return;
-            }else{
-                queue.clear();
-                channel.sendMessage("The queue has been cleared").queue();
-            }
-
+            return;
+        }else{
+            queue.clear();
+            channel.sendMessage("The queue has been cleared").queue();
         }
     }
 }
