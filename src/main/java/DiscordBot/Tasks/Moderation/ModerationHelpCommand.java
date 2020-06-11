@@ -16,8 +16,7 @@ public class ModerationHelpCommand {
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
         MessageChannel channel = event.getChannel();
-        channel.sendMessage(prefix + "setadmin (mention role (role must be mentionable)) - no moderation commands will work without this having been used at least once" +
-                "\n" + prefix + "help - lists moderation commands" +
+        channel.sendMessage(prefix + "help - lists moderation commands" +
                 "\n" + prefix + "clear (specify amount) - deletes specified amount of messages from channel command is sent in" +
                 "\n" + prefix + "mute (member) (optional length) - if not specified, defaults to 5 minutes").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
 
