@@ -18,7 +18,7 @@ public class ModerationHelpCommand {
         if (content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "moderationhelp"))
         {
             MessageChannel channel = event.getChannel();
-            channel.sendMessage(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "setadmin (mention role) - no moderation commands will work without this having been used at least once" +
+            channel.sendMessage(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "setadmin (mention role (role must be mentionable)) - no moderation commands will work without this having been used at least once" +
                     "\n" + SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "moderationhelp - lists moderation commands" +
                     "\n" + SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "clearmessages (specify amount) - deletes specified amount of messages from channel command is sent in" +
                     "\n" + SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "mute (member) (optional length) - if not specified, defaults to 5 minutes").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)

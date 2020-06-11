@@ -32,4 +32,8 @@ public class SetPrefixCommand {
         prefixes.putIfAbsent(guildID, "$");
         return prefixes.get(guildID);
     }
+
+    public static String getDefaultPrefix(){
+        return "$";
+    }
 }

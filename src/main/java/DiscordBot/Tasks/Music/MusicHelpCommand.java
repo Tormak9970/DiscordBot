@@ -21,7 +21,7 @@ public class MusicHelpCommand {
         {
             MessageChannel channel = event.getChannel();
             channel.sendMessage(
-                    prefix + "play (url)- Im disappointed" +
+                    prefix + "play (url)- Im disappointed, use ur brain sometimes" +
                     "\n" + prefix + "join - bot joins your voice channel" +
                     "\n" + prefix + "leave - bot leaves the voice channel" +
                     "\n" + prefix + "stop - stops the music player and clears the queue" +
@@ -29,6 +29,7 @@ public class MusicHelpCommand {
                     "\n" + prefix + "pause - pauses and unpauses music/audio" +
                     "\n" + prefix + "skip - skips current track" +
                     "\n" + prefix + "clear - clears queue" +
+                    "\n" + prefix + "loop (queue) - loops song, if queue, loops queue" +
                     "\n" + prefix + "nowplaying - gets information on whats currently playing").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
 
         }
