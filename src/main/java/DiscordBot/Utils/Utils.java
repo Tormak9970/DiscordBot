@@ -1,8 +1,9 @@
 package DiscordBot.Utils;
 
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
@@ -11,6 +12,7 @@ import java.util.function.Consumer;
 
 public abstract class Utils{
 
+    //example of restAction
     public static void sendPrivateMessage(User user, String content)
     {
         // notice that we are not placing a semicolon (;) in the callback this time!
@@ -20,14 +22,6 @@ public abstract class Utils{
     public static void deleteHistory(int numMsg, TextChannel channel){
         Consumer<List<Message>> callback = channel::purgeMessages;
         channel.getHistory().retrievePast(numMsg).queue(callback);
-    }
-
-    public static void sendAndLog(MessageChannel channel, String message)
-    {
-        // Here we use a lambda expressions which names the callback parameter -response- and uses that as a reference
-        // in the callback body -System.out.printf("Sent Message %s\n", response)-
-        Consumer<Message> callback = (response) -> System.out.printf("Sent Message %s\n", response);
-        channel.sendMessage(message).queue(callback); // ^ calls that
     }
 
     public static String getUptime(){

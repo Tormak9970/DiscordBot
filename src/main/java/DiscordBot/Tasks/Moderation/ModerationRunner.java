@@ -3,7 +3,6 @@ package DiscordBot.Tasks.Moderation;
 import DiscordBot.Tasks.Listener;
 import DiscordBot.Tasks.SetPrefixCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class ModerationRunner extends Listener {
 
@@ -14,6 +13,8 @@ public class ModerationRunner extends Listener {
             ModerationClearMessagesCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "moderationhelp") == 0){
             ModerationHelpCommand.getCommand(event);
+        }else if(event.getMessage().getContentRaw().indexOf(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "mute") == 0){
+            MuteCommand.getCommand(event);
         }
     }
 }
