@@ -3,13 +3,14 @@ package DiscordBot.Tasks;
 import DiscordBot.Tasks.Moderation.ModerationRunner;
 import DiscordBot.Tasks.Music.MusicRunner;
 import DiscordBot.Tasks.RLMafia.RLMafiaRunner;
+import DiscordBot.Tasks.Roles.JoinRolesCommand;
 import DiscordBot.Tasks.Roles.ReactionRolesCommand;
 import DiscordBot.Utils.ReactionRoles;
 import DiscordBot.Utils.Utils;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -53,23 +54,38 @@ public class Listener extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildMemberJoin(@Nonnull GuildMemberJoinEvent event) {
+    public void onGuildMemberJoin(@Nonnull GuildMemberJoinEvent joinEvent) {
+        Map<Long, List<Long>> joinRoles = JoinRolesCommand.getListOfJoinRoles();
+        if (joinEvent.getUser().isBot()){
+            return;
+        }
+        Guild guild = joinEvent.getGuild();
+        long guildID = guild.getIdLong();
+
+
+            if(joinRoles.get(guildID).size() > 0){
+                for(int i = 0; i < joinRoles.get(guildID).size(); i++){
+                    guild.addRoleToMember(joinEvent.getMember(), guild.getRoleById(joinRoles.get(guildID).get(i))).queue();
+                }
+            }
+    }
+
+    @Override
+    public void onGuildMemberRoleAdd(@Nonnull GuildMemberRoleAddEvent event) {
         //
     }
 
-
-
     @Override
     public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent reaction) {
-        Map<Long, List<ReactionRoles>> listOfSetupRoles = ReactionRolesCommand.getListOfSetupRoles();
+        Map<Long, List<ReactionRoles>> reactionRoles = ReactionRolesCommand.getListOfReactionRoles();
         if (reaction.getUser().isBot()){
             return;
         }
 
         Guild guild = reaction.getGuild();
         boolean match;
-        if(listOfSetupRoles != null && listOfSetupRoles.get(guild.getIdLong()) != null){
-            for (ReactionRoles reactRole : listOfSetupRoles.get(guild.getIdLong())) {
+        if(reactionRoles != null && reactionRoles.get(guild.getIdLong()) != null){
+            for (ReactionRoles reactRole : reactionRoles.get(guild.getIdLong())) {
 
                 if(reactRole.isEmote()){
                     match = reactRole.getEmoteID() == reaction.getReactionEmote().getEmote().getIdLong();

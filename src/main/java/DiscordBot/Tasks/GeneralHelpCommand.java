@@ -20,8 +20,8 @@ public class GeneralHelpCommand {
                 "\nrlmafia" + prefix + "help - help with rlmafia commands" +
                 "\nm" + prefix + "help - help with music commands" +
                 "\n" + prefix + "reactionroles - lets you set up reaction roles(note that this only works when bot is online)" +
-                "\n" + prefix + "setnickwithrole - lets you set up a role that when a user receives it, changes their nickname(note that this only works when bot is online)" +
-                "\n" + prefix + "addroleonjoin - lets you set up a role to add to users when they join" +
+                "\n" + prefix + "nickroles - lets you set up a role that when a user receives it, changes their nickname(note that this only works when bot is online)" +
+                "\n" + prefix + "joinroles (mention a role) - lets you set up a role to add to users when they join" +
                 "\n" + prefix + "setprefix - allows you to change the bot's prefix for commands" +
                 "\n" + prefix + "meme - sends a meme" +
                 "\n" + prefix + "nick - use in format like *$nick blank* to add *blank* to beggining of nickname, owners cant use this due to perms" +

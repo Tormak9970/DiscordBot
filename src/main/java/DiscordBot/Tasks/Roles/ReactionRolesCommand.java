@@ -1,9 +1,7 @@
 package DiscordBot.Tasks.Roles;
 
-import DiscordBot.Database.DatabaseManager;
 import DiscordBot.Tasks.SetPrefixCommand;
 import DiscordBot.Utils.ReactionRoles;
-import DiscordBot.Utils.Utils;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -27,7 +25,7 @@ import static DiscordBot.Utils.Utils.deleteHistory;
 public class ReactionRolesCommand extends ListenerAdapter {
     private EventWaiter eventWaiter;
     private TextChannel setup;
-    private static Map<Long, List<ReactionRoles>> listOfSetupRoles = new HashMap<>();
+    private static Map<Long, List<ReactionRoles>> listOfReactionRoles = new HashMap<>();
     private int choice;
     private String emojiID = "";
     private long guildID;
@@ -40,8 +38,8 @@ public class ReactionRolesCommand extends ListenerAdapter {
         eventWaiter = waiter;
     }
 
-    public static Map<Long, List<ReactionRoles>> getListOfSetupRoles(){
-        return listOfSetupRoles;
+    public static Map<Long, List<ReactionRoles>> getListOfReactionRoles(){
+        return listOfReactionRoles;
     }
 
 
@@ -273,6 +271,8 @@ public class ReactionRolesCommand extends ListenerAdapter {
     }
 
     private void getRREmoteID(GuildMessageReactionAddEvent event, long channelID){
+
+        deleteHistory(2, setup);
         Guild guild = event.getGuild();
         boolean isEmoji = event.getReactionEmote().isEmoji();
         if(isEmoji){
@@ -296,7 +296,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
             );
 
             ReactionRoles reactRole = new ReactionRoles(messageID, msgChannelID, emojiID, roleID);
-            listOfSetupRoles.computeIfAbsent(guildID, s -> new ArrayList<>()).add(reactRole);
+            listOfReactionRoles.computeIfAbsent(guildID, s -> new ArrayList<>()).add(reactRole);
         } else {
             emoteID = event.getReactionEmote().getEmote().getIdLong();
 
@@ -319,7 +319,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
             );
 
             ReactionRoles reactRole = new ReactionRoles(messageID, msgChannelID, emoteID, roleID);
-            listOfSetupRoles.computeIfAbsent(guildID, s -> new ArrayList<>()).add(reactRole);
+            listOfReactionRoles.computeIfAbsent(guildID, s -> new ArrayList<>()).add(reactRole);
         }
     }
 }

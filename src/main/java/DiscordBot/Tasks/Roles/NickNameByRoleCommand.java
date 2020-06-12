@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class NickNameByRoleCommand {
 
+
     public static void getCommand(MessageReceivedEvent event)
     {
         if (event.getAuthor().isBot()) return;
