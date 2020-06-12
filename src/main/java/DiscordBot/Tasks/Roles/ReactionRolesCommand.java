@@ -22,10 +22,12 @@ import java.util.concurrent.TimeUnit;
 
 import static DiscordBot.Utils.Utils.deleteHistory;
 
+//Bugged, needs to be fixed
+
 public class ReactionRolesCommand extends ListenerAdapter {
     private EventWaiter eventWaiter;
     private TextChannel setup;
-    private Map<Long, List<ReactionRoles>> listOfSetupRoles = new HashMap<>();
+    private static Map<Long, List<ReactionRoles>> listOfSetupRoles = new HashMap<>();
     private int choice;
     private String emojiID = "";
     private long guildID;
@@ -38,6 +40,9 @@ public class ReactionRolesCommand extends ListenerAdapter {
         eventWaiter = waiter;
     }
 
+    public static Map<Long, List<ReactionRoles>> getListOfSetupRoles(){
+        return listOfSetupRoles;
+    }
 
 
     @Override
@@ -85,33 +90,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
         }
     }
 
-    @Override
-    public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent reaction) {
-        if (reaction.getUser().isBot()){
-            return;
-        }
 
-        Guild guild = reaction.getGuild();
-        boolean match;
-        if(listOfSetupRoles != null && listOfSetupRoles.get(guild.getIdLong()) != null){
-            for (ReactionRoles reactRole : listOfSetupRoles.get(guild.getIdLong())) {
-
-                if(reactRole.isEmote()){
-                    match = reactRole.getEmoteID() == reaction.getReactionEmote().getEmote().getIdLong();
-                }else{
-                    match = reactRole.getEmoji().equals(reaction.getReactionEmote().getEmoji());
-                }
-                if (reactRole.getChannelID() == reaction.getChannel().getIdLong()
-                        && reactRole.getMessageID() == reaction.getMessageIdLong()
-                        && match) {
-
-                    guild.addRoleToMember(reaction.getMember(), guild.getRoleById(reactRole.getRoleID())).queue();
-                    Utils.sendPrivateMessage(reaction.getUser(), "You have been given the role " + guild.getRoleById(reactRole.getRoleID()).getName() + " in the server " + guild.getName());
-                }
-            }
-        }
-
-    }
 
 
 
