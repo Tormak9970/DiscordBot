@@ -60,7 +60,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals(DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong()) + "reactionroles"))
+        if (content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "reactionroles"))
         {
             TextChannel channel = event.getTextChannel();
             Guild guild = event.getGuild();

@@ -10,7 +10,7 @@ public class ModerationHelpCommand {
 
     public static void getCommand(MessageReceivedEvent event)
     {
-        String prefix = "mod" + DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong());
+        String prefix = "mod" + SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
         Message message = event.getMessage();
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter

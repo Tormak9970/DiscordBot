@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class ModerationRunner extends Listener {
 
     public static void passEvent(MessageReceivedEvent event){
-        String prefix = "mod" + DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong());
+        String prefix = "mod" + SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
         String content = event.getMessage().getContentRaw();
         if(event.getAuthor().isBot()){
             return;

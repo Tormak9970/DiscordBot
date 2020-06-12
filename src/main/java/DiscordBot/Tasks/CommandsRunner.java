@@ -19,7 +19,7 @@ public class CommandsRunner extends Listener {
 
 
     public static void passEvent(MessageReceivedEvent event){
-        String prefix = DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong());
+        String prefix = SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
         if(event.getAuthor().isBot()){
             return;
         }else if(event.getMessage().getContentRaw().equals(prefix + "ping")){
@@ -28,12 +28,6 @@ public class CommandsRunner extends Listener {
             NickNameChangerCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals(prefix + "help")){
             GeneralHelpCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals("rlmafia" + prefix + "help")){
-            RLMafiaHelpCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals("rlmafia" + prefix + "host")) {
-            RlMafiaHostCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals("rlmafia" + prefix + "settings")){
-
         }else if(event.getMessage().getContentRaw().equals(prefix + "addroleonjoin")){
             JoiningAddsRoleCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals(prefix + "changenickwithrole")){

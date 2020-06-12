@@ -20,7 +20,7 @@ public class RLMafiaMVPCommand {
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
         ArrayList<Player> players = RLMafia.getCurrentPlayers();
         for(Player playerIndex : players){
-            if(playerIndex.getName().equals(content.substring(DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong()).length() + 4))){
+            if(playerIndex.getName().equals(content.substring(7 + SetPrefixCommand.getPrefix(event.getGuild().getIdLong()).length() + 4))){
                 RLMafia.setMVP(playerIndex);
                 RLMafia.setWinner(playerIndex.getTeam());
             }

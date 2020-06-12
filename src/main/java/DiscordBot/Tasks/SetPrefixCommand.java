@@ -22,14 +22,13 @@ public class SetPrefixCommand {
         long guildID = event.getGuild().getIdLong();
         MessageChannel channel = event.getChannel();
 
-        updatePrefix(guildID, event.getMessage().getContentRaw().substring(DatabaseManager.INSTANCE.getPrefix(guildID).length() + 10));
-        channel.sendMessage("prefix has been set to `" + DatabaseManager.INSTANCE.getPrefix(guildID) + "`").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
+        updatePrefix(guildID, event.getMessage().getContentRaw().substring(SetPrefixCommand.getPrefix(guildID).length() + 10));
+        channel.sendMessage("prefix has been set to `" + SetPrefixCommand.getPrefix(guildID) + "`").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
     }
 
 
     public static String getPrefix(long guildID){
-        prefixes.putIfAbsent(guildID, DatabaseManager.INSTANCE.getPrefix(guildID));
-        return prefixes.get(guildID);
+        return  prefixes.computeIfAbsent(guildID, DatabaseManager.INSTANCE::getPrefix);
     }
 
 

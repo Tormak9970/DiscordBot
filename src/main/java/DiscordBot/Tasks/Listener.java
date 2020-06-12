@@ -15,6 +15,7 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
+        String prefix = SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
         System.out.println("We received a message from " +
                 event.getAuthor().getName() + ": " +
                 event.getMessage().getContentDisplay()
@@ -22,11 +23,11 @@ public class Listener extends ListenerAdapter {
         if(event.getAuthor().isBot()){
             return;
         }
-        if(event.getMessage().getContentRaw().indexOf("m") == 0){
+        if(event.getMessage().getContentRaw().indexOf("m" + prefix) == 0){
             MusicRunner.passEvent(event);
-        }else if (event.getMessage().getContentRaw().indexOf("mod") == 0){
+        }else if (event.getMessage().getContentRaw().indexOf("mod" + prefix) == 0){
             ModerationRunner.passEvent(event);
-        }else if (event.getMessage().getContentRaw().indexOf("rlmafia") == 0){
+        }else if (event.getMessage().getContentRaw().indexOf("rlmafia" + prefix) == 0){
             RLMafiaRunner.passEvent(event);
         }else{
             CommandsRunner.passEvent(event);

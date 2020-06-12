@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 public class RLMafiaRunner extends Listener {
 
     public static void passEvent(MessageReceivedEvent event){
-        String prefix = "rlmafia" + DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong());
+        String prefix = "rlmafia" + SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
         if(RLMafia.getHost() != null){
             if(event.getAuthor().isBot()){
                 return;
@@ -27,6 +27,14 @@ public class RLMafiaRunner extends Listener {
                 }else if(event.getMessage().getContentRaw().equals(prefix + "start")){
                     RLMafiaStartCommand.getCommand(event);
                 }
+            }
+        }else{
+            if(event.getMessage().getContentRaw().equals(prefix + "help")){
+                RLMafiaHelpCommand.getCommand(event);
+            }else if(event.getMessage().getContentRaw().equals(prefix + "host")) {
+                RlMafiaHostCommand.getCommand(event);
+            }else if(event.getMessage().getContentRaw().equals(prefix + "settings")){
+
             }
         }
     }

@@ -18,7 +18,7 @@ public class RLMafiaJoinCommand extends RLMafia{
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
          // Important to call .queue() on the RestAction returned by sendMessage(...)
         User sender = event.getAuthor();
-        String nickname = content.substring(DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong()).length() + 5);
+        String nickname = content.substring(7 + SetPrefixCommand.getPrefix(event.getGuild().getIdLong()).length() + 5);
         Player p1 = new Player("none", "none", nickname, 0, sender);
         RLMafia.addPlayer(p1);
         MessageChannel channel = event.getChannel();

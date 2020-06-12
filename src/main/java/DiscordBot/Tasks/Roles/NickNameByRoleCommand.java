@@ -16,7 +16,7 @@ public class NickNameByRoleCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals(DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong()) + "changenickwithrole"))
+        if (content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "setnickwithrole"))
         {
             MessageChannel channel = event.getChannel();
             channel.sendMessage("").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)

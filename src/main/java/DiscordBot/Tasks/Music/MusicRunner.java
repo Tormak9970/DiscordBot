@@ -11,7 +11,7 @@ public class MusicRunner extends Listener {
 
 
     public static void passEvent(MessageReceivedEvent event){
-        String prefix = "m" + DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong());
+        String prefix = "m" + SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
         if(event.getAuthor().isBot()){
             return;
         }else if(event.getMessage().getContentRaw().equals(prefix + "help")){

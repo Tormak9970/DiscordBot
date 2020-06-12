@@ -48,7 +48,7 @@ public class MusicPlayCommand {
         youTube = temp;
 
         TextChannel channel = event.getTextChannel();
-        String input = content.substring(DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong()).length() + 5);
+        String input = content.substring(1 + SetPrefixCommand.getPrefix(event.getGuild().getIdLong()).length() + 5);
         PlayerManager manager = PlayerManager.getInstance();
 
         if(!isUrl(input)){

@@ -39,7 +39,7 @@ public class ModerationClearMessagesCommand {
         }
 
         int amount;
-        String arg = content.substring(DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong()).length() + 14);
+        String arg = content.substring(3 + SetPrefixCommand.getPrefix(event.getGuild().getIdLong()).length() + 6);
 
         try {
             amount = Integer.parseInt(arg);

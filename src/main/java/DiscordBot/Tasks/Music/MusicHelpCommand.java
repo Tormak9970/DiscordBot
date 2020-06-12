@@ -11,7 +11,7 @@ public class MusicHelpCommand {
 
     public static void getCommand(MessageReceivedEvent event)
     {
-        String prefix = "m" + DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong());
+        String prefix = "m" + SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
         Message message = event.getMessage();
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
