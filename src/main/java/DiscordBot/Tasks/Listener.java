@@ -37,5 +37,6 @@ public class Listener extends ListenerAdapter {
     @Override
     public void onReady(@NotNull ReadyEvent event){
         LOGGER.info("{} is ready", event.getJDA().getSelfUser().getAsTag());
+
     }
 }

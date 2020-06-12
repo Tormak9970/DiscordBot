@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.util.HashMap;
 
 public class SQLiteDataSource implements DatabaseManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(SQLiteDataSource.class);
@@ -53,9 +54,11 @@ public class SQLiteDataSource implements DatabaseManager {
         }
     }
 
+
     private Connection getConnection() throws SQLException {
         return ds.getConnection();
     }
+
 
     @Override
     public String getPrefix(long guildId) {
@@ -85,6 +88,7 @@ public class SQLiteDataSource implements DatabaseManager {
 
         return SetPrefixCommand.getDefaultPrefix();
     }
+
 
     @Override
     public void setPrefix(long guildId, String newPrefix) {
