@@ -11,17 +11,17 @@ public class NickNameByRoleCommand {
 
     public static void getCommand(MessageReceivedEvent event)
     {
-        if (event.getAuthor().isBot()) return;
-        // We don't want to respond to other bot accounts, including ourself
-        Message message = event.getMessage();
-        String content = message.getContentRaw();
-        // getContentRaw() is an atomic getter
-        // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        if (content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "setnickwithrole"))
-        {
-            MessageChannel channel = event.getChannel();
-            channel.sendMessage("").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
+        /*
+        get guildID, store it
+        get role by mention, store it's ID
+        ask weather its a prefix, suffix, or replacement
+        get nickname
+        send summary
+         */
 
-        }
+        MessageChannel channel = event.getChannel();
+        channel.sendMessage("").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
     }
+
+
 }
