@@ -4,10 +4,13 @@ import DiscordBot.Tasks.Moderation.ModerationRunner;
 import DiscordBot.Tasks.Music.MusicRunner;
 import DiscordBot.Tasks.RLMafia.RLMafiaRunner;
 import DiscordBot.Tasks.Roles.JoinRolesCommand;
+import DiscordBot.Tasks.Roles.NickNameByRoleCommand;
 import DiscordBot.Tasks.Roles.ReactionRolesCommand;
+import DiscordBot.Utils.NickNameRoles;
 import DiscordBot.Utils.ReactionRoles;
 import DiscordBot.Utils.Utils;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
@@ -55,13 +58,12 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberJoin(@Nonnull GuildMemberJoinEvent joinEvent) {
-        Map<Long, List<Long>> joinRoles = JoinRolesCommand.getListOfJoinRoles();
         if (joinEvent.getUser().isBot()){
             return;
         }
         Guild guild = joinEvent.getGuild();
         long guildID = guild.getIdLong();
-
+        Map<Long, List<Long>> joinRoles = JoinRolesCommand.getListOfJoinRoles();
 
             if(joinRoles.get(guildID).size() > 0){
                 for(int i = 0; i < joinRoles.get(guildID).size(); i++){
@@ -72,7 +74,67 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberRoleAdd(@Nonnull GuildMemberRoleAddEvent event) {
-        //
+        Guild guild = event.getGuild();
+        if(event.getUser().isBot()){
+            return;
+        }
+        Map<Long, List<NickNameRoles>> nickNameRoles = NickNameByRoleCommand.getListOfNickNameRoles();
+        long highestRoleID = event.getRoles().get(0).getIdLong();
+        long guildID = guild.getIdLong();
+        int size = nickNameRoles.get(guildID).size();
+        Member mem = event.getMember();
+
+
+        if(event.getRoles().size() > 1){
+            for(int i = 1; i < event.getRoles().size(); i++){
+                if (event.getRoles().get(i).canInteract(event.getRoles().get(i - 1))){
+                    highestRoleID = event.getRoles().get(i).getIdLong();
+                }
+            }
+        }
+
+        if(size > 0){
+            for(int i = 0; i < size; i++){
+                if(nickNameRoles.get(guildID).get(i).getRoleID() == highestRoleID){
+                    String newNick = "";
+                    if(mem.getRoles().size() > event.getRoles().size()){
+                        boolean isHigher = false;
+
+
+                        for(int j = 0; j < (mem.getRoles().size()); j++){
+                            if (mem.getRoles().get(j).canInteract(guild.getRoleById(highestRoleID)) && nickNameRoles.get(guildID).contains(mem.getRoles().get(j))){
+                                Utils.sendPrivateMessage(mem.getUser(), "Your nickname has been changed already by a higher role");
+                                isHigher = true;
+                                break;
+                            }
+                        }
+
+                        if(!isHigher){
+                            if(nickNameRoles.get(guildID).get(i).getType() == 1){
+                                newNick = nickNameRoles.get(guildID).get(i).getNickName() + mem.getEffectiveName();
+
+                            }else if(nickNameRoles.get(guildID).get(i).getType() == 2){
+                                newNick = nickNameRoles.get(guildID).get(i).getNickName();
+                            }else{
+                                newNick = mem.getEffectiveName() + nickNameRoles.get(guildID).get(i).getNickName();
+                            }
+                            mem.modifyNickname(newNick);
+                        }
+                    }else{
+                        if(nickNameRoles.get(guildID).get(i).getType() == 1){
+                            newNick = nickNameRoles.get(guildID).get(i).getNickName() + mem.getEffectiveName();
+
+                        }else if(nickNameRoles.get(guildID).get(i).getType() == 2){
+                            newNick = nickNameRoles.get(guildID).get(i).getNickName();
+                        }else{
+                            newNick = mem.getEffectiveName() + nickNameRoles.get(guildID).get(i).getNickName();
+                        }
+                        mem.modifyNickname(newNick);
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     @Override

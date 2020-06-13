@@ -20,14 +20,12 @@ public class CommandsRunner extends Listener {
             return;
         }else if(event.getMessage().getContentRaw().equals(prefix + "ping")){
             PingPongCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().indexOf(prefix + "nick") == 0 && !event.getMessage().getContentRaw().contains(prefix + "help")){
+        }else if(event.getMessage().getContentRaw().indexOf(prefix + "nickname") == 0 && !event.getMessage().getContentRaw().contains(prefix + "help")){
             NickNameChangerCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals(prefix + "help")){
             GeneralHelpCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals(prefix + "joinroles")){
             JoinRolesCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals(prefix + "nickroles")){
-            NickNameByRoleCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().indexOf(prefix + "serverinfo") == 0){
             ServerInfoCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals(prefix + "uptime")){

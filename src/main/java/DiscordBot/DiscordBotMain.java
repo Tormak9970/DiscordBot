@@ -2,6 +2,7 @@ package DiscordBot;
 
 import DiscordBot.Database.SQLiteDataSource;
 import DiscordBot.Tasks.Listener;
+import DiscordBot.Tasks.Roles.NickNameByRoleCommand;
 import DiscordBot.Tasks.Roles.ReactionRolesCommand;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.entities.Activity;
@@ -28,6 +29,7 @@ public class DiscordBotMain extends ListenerAdapter {
         DefaultShardManagerBuilder.createDefault(token)
                 .setActivity(Activity.playing("In Dev"))
                 .addEventListeners(waiter)
+                .addEventListeners(new NickNameByRoleCommand(waiter))
                 .addEventListeners(new ReactionRolesCommand(waiter))
                 .addEventListeners(new Listener())
                 .build();

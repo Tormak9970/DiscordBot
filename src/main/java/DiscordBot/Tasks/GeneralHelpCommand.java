@@ -24,7 +24,7 @@ public class GeneralHelpCommand {
                 "\n" + prefix + "joinroles (mention a role) - lets you set up a role to add to users when they join" +
                 "\n" + prefix + "setprefix - allows you to change the bot's prefix for commands" +
                 "\n" + prefix + "meme - sends a meme" +
-                "\n" + prefix + "nick - use in format like *$nick blank* to add *blank* to beggining of nickname, owners cant use this due to perms" +
+                "\n" + prefix + "nickname - use in format like *$nick blank* to add *blank* to beggining of nickname, owners cant use this due to perms" +
                 "\n" + prefix + "serverinfo - gets server info" +
                 "\n" + prefix + "userinfo - gets user info" +
                 "\n" + prefix + "botinfo - gets bot info" +
