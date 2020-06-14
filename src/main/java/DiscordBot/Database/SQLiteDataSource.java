@@ -52,6 +52,19 @@ public class SQLiteDataSource implements DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        try (final Statement statement = getConnection().createStatement()) {
+
+            // language=SQLite
+            statement.execute("CREATE TABLE IF NOT EXISTS guild_join_roles (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "guild_id VARCHAR(20) NOT NULL," +
+                    ");");
+
+            LOGGER.info("Table initialised");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 

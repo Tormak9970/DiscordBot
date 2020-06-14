@@ -74,6 +74,8 @@ public class NickNameByRoleCommand extends ListenerAdapter {
     }
 
     private void initWaiter(long channelID, ShardManager shardManager){
+
+
         eventWaiter.waitForEvent(
                 MessageReceivedEvent.class,
                 (event) -> {
