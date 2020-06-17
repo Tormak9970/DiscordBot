@@ -1,6 +1,7 @@
 package DiscordBot.Database;
 
 import DiscordBot.Utils.NickNameRoles;
+import DiscordBot.Utils.ReactionRoles;
 
 import java.util.List;
 import java.util.Map;
@@ -27,12 +28,37 @@ public class MongoDBDataSource implements DatabaseManager{
     }
 
     @Override
+    public void removeJoinRole(long guildId, long roleID) {
+
+    }
+
+    @Override
     public List<NickNameRoles> getNickRoles(long guildId) {
         return null;
     }
 
     @Override
     public void addNickRole(long guildId, NickNameRoles nickRole) {
+
+    }
+
+    @Override
+    public void removeNickRole(long guildId, NickNameRoles nickRole) {
+
+    }
+
+    @Override
+    public List<ReactionRoles> getReactionRoles(long guildId) {
+        return null;
+    }
+
+    @Override
+    public void addReactionRole(long guildId, ReactionRoles reactRole) {
+
+    }
+
+    @Override
+    public void removeReactionRole(long guildId, ReactionRoles reactRole) {
 
     }
 

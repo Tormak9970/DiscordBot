@@ -2,6 +2,7 @@ package DiscordBot.Database;
 
 import DiscordBot.Tasks.SetPrefixCommand;
 import DiscordBot.Utils.NickNameRoles;
+import DiscordBot.Utils.ReactionRoles;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
@@ -59,13 +60,16 @@ public class SQLiteDataSource implements DatabaseManager {
                     "guild_id BIGINT PRIMARY KEY," +
                     "nickname TEXT NOT NULL," +
                     "role_id BIGINT NOT NULL," +
-                    "type INT NOT NULL" +
+                    "type INTEGER NOT NULL" +
                     ");");
             statement.execute("CREATE TABLE IF NOT EXISTS reaction_roles(" +
                     "guild_id BIGINT PRIMARY KEY," +
                     "message_id BIGINT NOT NULL," +
                     "channel_id BIGINT NOT NULL," +
-                    "emote_id BIG")
+                    "emote_id BIGINT," +
+                    "emoji_id TEXT," +
+                    "role_id BIGINT NOT NULL" +
+                    ");");
 
             statement.close();
             LOGGER.info("Table initialised");
@@ -135,14 +139,11 @@ public class SQLiteDataSource implements DatabaseManager {
             preparedStatement.setLong(1, guildId);
 
             try (final ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    List<Long> toReturn = new ArrayList<>();
-                    for(int i = 0; i < resultSet.getFetchSize(); i++){
-                        toReturn.add(resultSet.getLong("role_id"));
-                    }
-
-                    return toReturn;
+                List<Long> toReturn = new ArrayList<>();
+                while (resultSet.next()) {
+                    toReturn.add(resultSet.getLong("role_id"));
                 }
+                return toReturn;
             }
 
         } catch (SQLException e) {
@@ -169,6 +170,21 @@ public class SQLiteDataSource implements DatabaseManager {
     }
 
     @Override
+    public void removeJoinRole(long guildId, long roleID) {
+        try (final PreparedStatement preparedStatement = getConnection()
+                // language=SQLite
+                .prepareStatement("DELETE FROM join_roles(guild_id, role_id) VALUES(?, ?)")) {
+
+            preparedStatement.setLong(1, guildId);
+            preparedStatement.setLong(2, roleID);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public List<NickNameRoles> getNickRoles(long guildId) {
         try (final PreparedStatement preparedStatement = getConnection()
                 // language=SQLite
@@ -179,21 +195,17 @@ public class SQLiteDataSource implements DatabaseManager {
             preparedStatement.setLong(1, guildId);
 
             try (final ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    List<NickNameRoles> toReturn = new ArrayList<>();
-                    for(int i = 0; i < resultSet.getFetchSize(); i++){
-                        toReturn.add(new NickNameRoles(resultSet.getString("nickname"), resultSet.getLong("role_id"), resultSet.getInt("type")));
-                    }
-
-                    return toReturn;
+                List<NickNameRoles> toReturn = new ArrayList<>();
+                while (resultSet.next()) {
+                    toReturn.add(new NickNameRoles(resultSet.getString("nickname"), resultSet.getLong("role_id"), resultSet.getInt("type")));
                 }
+                return toReturn;
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        List<NickNameRoles> toReturn = new ArrayList<>();
-        return toReturn;
+        return new ArrayList<>();
     }
 
     @Override
@@ -206,6 +218,99 @@ public class SQLiteDataSource implements DatabaseManager {
             preparedStatement.setString(2, nickRole.getNickName());
             preparedStatement.setLong(3, nickRole.getRoleID());
             preparedStatement.setInt(4, nickRole.getType());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void removeNickRole(long guildId, NickNameRoles nickRole) {
+        try (final PreparedStatement preparedStatement = getConnection()
+                // language=SQLite
+                .prepareStatement("DELETE FROM nickname_roles(guild_id, nickname, role_id, type) VALUES(?, ?, ?, ?)")) {
+
+            preparedStatement.setLong(1, guildId);
+            preparedStatement.setString(2, nickRole.getNickName());
+            preparedStatement.setLong(3, nickRole.getRoleID());
+            preparedStatement.setInt(4, nickRole.getType());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public List<ReactionRoles> getReactionRoles(long guildId) {
+        try (final PreparedStatement preparedStatement = getConnection()
+                // language=SQLite
+                .prepareStatement("SELECT message_id FROM reaction_roles WHERE guild_id = ? UNION" +
+                        "SELECT channel_id FROM reaction_roles WHERE guild_id = ? UNION" +
+                        "SELECT emote_id FROM reaction_roles WHERE guild_id = ? UNION" +
+                        "SELECT emoji_id FROM reaction_roles WHERE guild_id = ? UNION" +
+                        "SELECT role_id FROM nickname_roles WHERE guild_id = ?")) {
+
+            preparedStatement.setLong(1, guildId);
+
+            try (final ResultSet resultSet = preparedStatement.executeQuery()) {
+                List<ReactionRoles> toReturn = new ArrayList<>();
+                while(resultSet.next()){
+                    try{
+                        toReturn.add(new ReactionRoles(resultSet.getLong("message_id"), resultSet.getLong("channel_id"), resultSet.getLong("emote_id"), resultSet.getLong("role_id")));
+                    }catch(NullPointerException ignored){
+                        toReturn.add(new ReactionRoles(resultSet.getLong("message_id"), resultSet.getLong("channel_id"), resultSet.getString("emoji_id"), resultSet.getLong("role_id")));
+                    }
+                }
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public void addReactionRole(long guildId, ReactionRoles reactRole) {
+        try (final PreparedStatement preparedStatement = getConnection()
+                // language=SQLite
+                .prepareStatement("INSERT INTO reaction_roles(guild_id, message_id, channel_id, emote_id, emoji_id, role_id) VALUES(?, ?, ?, ?, ?, ?)")) {
+
+            preparedStatement.setLong(1, guildId);
+            preparedStatement.setLong(2, reactRole.getMessageID());
+            preparedStatement.setLong(3, reactRole.getChannelID());
+            if(reactRole.isEmote()){
+                preparedStatement.setLong(4, reactRole.getEmoteID());
+            } else{
+                preparedStatement.setString(5, reactRole.getEmoji());
+            }
+            preparedStatement.setLong(2, reactRole.getRoleID());
+
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void removeReactionRole(long guildId, ReactionRoles reactRole) {
+        try (final PreparedStatement preparedStatement = getConnection()
+                // language=SQLite
+                .prepareStatement("DELETE FROM reaction_roles(guild_id, message_id, channel_id, emote_id, emoji_id, role_id) VALUES(?, ?, ?, ?, ?, ?)")) {
+
+            preparedStatement.setLong(1, guildId);
+            preparedStatement.setLong(2, reactRole.getMessageID());
+            preparedStatement.setLong(3, reactRole.getChannelID());
+            if(reactRole.isEmote()){
+                preparedStatement.setLong(4, reactRole.getEmoteID());
+            } else{
+                preparedStatement.setString(5, reactRole.getEmoji());
+            }
+            preparedStatement.setLong(2, reactRole.getRoleID());
+
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
