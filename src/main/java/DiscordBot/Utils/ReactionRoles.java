@@ -1,5 +1,7 @@
 package DiscordBot.Utils;
 
+import java.io.Serializable;
+
 public class ReactionRoles {
 
     private long messageID;

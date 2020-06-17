@@ -63,11 +63,11 @@ public class Listener extends ListenerAdapter {
         }
         Guild guild = joinEvent.getGuild();
         long guildID = guild.getIdLong();
-        Map<Long, List<Long>> joinRoles = JoinRolesCommand.getListOfJoinRoles();
+        List<Long> joinRoles = JoinRolesCommand.getListOfJoinRoles(guildID);
 
-            if(joinRoles.get(guildID).size() > 0){
-                for(int i = 0; i < joinRoles.get(guildID).size(); i++){
-                    guild.addRoleToMember(joinEvent.getMember(), guild.getRoleById(joinRoles.get(guildID).get(i))).queue();
+            if(joinRoles.size() > 0){
+                for(int i = 0; i < joinRoles.size(); i++){
+                    guild.addRoleToMember(joinEvent.getMember(), guild.getRoleById(joinRoles.get(i))).queue();
                 }
             }
     }
@@ -111,23 +111,23 @@ public class Listener extends ListenerAdapter {
 
                         if(!isHigher){
                             if(nickNameRoles.get(guildID).get(i).getType() == 1){
-                                newNick = nickNameRoles.get(guildID).get(i).getNickName() + mem.getEffectiveName();
+                                newNick = nickNameRoles.get(guildID).get(i).getNickName() + " " + mem.getEffectiveName();
 
                             }else if(nickNameRoles.get(guildID).get(i).getType() == 2){
                                 newNick = nickNameRoles.get(guildID).get(i).getNickName();
                             }else{
-                                newNick = mem.getEffectiveName() + nickNameRoles.get(guildID).get(i).getNickName();
+                                newNick = mem.getEffectiveName() + " " + nickNameRoles.get(guildID).get(i).getNickName();
                             }
                             mem.modifyNickname(newNick);
                         }
                     }else{
                         if(nickNameRoles.get(guildID).get(i).getType() == 1){
-                            newNick = nickNameRoles.get(guildID).get(i).getNickName() + mem.getEffectiveName();
+                            newNick = nickNameRoles.get(guildID).get(i).getNickName() + " " + mem.getEffectiveName();
 
                         }else if(nickNameRoles.get(guildID).get(i).getType() == 2){
                             newNick = nickNameRoles.get(guildID).get(i).getNickName();
                         }else{
-                            newNick = mem.getEffectiveName() + nickNameRoles.get(guildID).get(i).getNickName();
+                            newNick = mem.getEffectiveName() + " " + nickNameRoles.get(guildID).get(i).getNickName();
                         }
                         mem.modifyNickname(newNick);
                     }

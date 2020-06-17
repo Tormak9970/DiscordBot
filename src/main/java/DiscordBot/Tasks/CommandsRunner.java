@@ -24,7 +24,7 @@ public class CommandsRunner extends Listener {
             NickNameChangerCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals(prefix + "help")){
             GeneralHelpCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals(prefix + "joinroles")){
+        }else if(event.getMessage().getContentRaw().indexOf(prefix + "joinroles") == 0){
             JoinRolesCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().indexOf(prefix + "serverinfo") == 0){
             ServerInfoCommand.getCommand(event);

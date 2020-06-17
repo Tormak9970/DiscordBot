@@ -204,7 +204,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                         "\n`1:` adding reaction only gives role" +
                         "\n`2:` adding reaction only removes role" +
                         "\n`3:` adding/removing reaction adds/removes role", false)
-                .setFooter("Quarantine Bot Reaction Roles")
+                .setFooter("inDev Reaction Roles")
                 ;
         event.getChannel().sendMessage(embed.build()).queue();
         // Important to call .queue() on the RestAction returned by sendMessage(...)
@@ -245,7 +245,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                 .setThumbnail(botUser.getAvatarUrl())
                 .addField("**Step 5**: ", "Please react to" +
                         "\nthis message with your desired emote.", false)
-                .setFooter("Quarantine Bot Reaction Roles")
+                .setFooter("inDev Reaction Roles")
                 ;
         event.getChannel().sendMessage(embed.build()).queue(
                 (message) -> {
@@ -272,11 +272,11 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
     private void getRREmoteID(GuildMessageReactionAddEvent event, long channelID){
 
-        deleteHistory(2, setup);
         Guild guild = event.getGuild();
         boolean isEmoji = event.getReactionEmote().isEmoji();
         if(isEmoji){
             emojiID = event.getReactionEmote().getEmoji();
+            deleteHistory(2, setup);
             guild.getTextChannelById(channelID).retrieveMessageById(messageID).queue(
                     (message) -> {
                         message.addReaction(emojiID).queue();
@@ -289,7 +289,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                                 .addField("**Message ID**: ", "" + messageID, false)
                                 .addField("**Channel**: ", "" + event.getGuild().getTextChannelById(channelID).getAsMention(), true)
                                 .addField("**Role**: ", "" + event.getGuild().getRoleById(roleID).getAsMention(), true)
-                                .setFooter("Quarantine Bot Reaction Roles")
+                                .setFooter("inDev Reaction Roles")
                                 ;
                         event.getChannel().sendMessage(embed.build()).queue();
                     }
@@ -299,7 +299,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
             listOfReactionRoles.computeIfAbsent(guildID, s -> new ArrayList<>()).add(reactRole);
         } else {
             emoteID = event.getReactionEmote().getEmote().getIdLong();
-
+            deleteHistory(2, setup);
             guild.getTextChannelById(channelID).retrieveMessageById(messageID).queue(
                     (message) -> {
                         message.addReaction(guild.getEmoteById(emoteID)).queue();
@@ -312,7 +312,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                                 .addField("**Message ID**: ", "" + messageID, false)
                                 .addField("**Channel**: ", "" + event.getGuild().getTextChannelById(channelID).getAsMention(), true)
                                 .addField("**Role**: ", "" + event.getGuild().getRoleById(roleID).getAsMention(), true)
-                                .setFooter("Quarantine Bot Reaction Roles")
+                                .setFooter("inDev Reaction Roles")
                                 ;
                         event.getChannel().sendMessage(embed.build()).queue();
                     }

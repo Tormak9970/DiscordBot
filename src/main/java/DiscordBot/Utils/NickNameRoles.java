@@ -1,6 +1,6 @@
 package DiscordBot.Utils;
 
-public class NickNameRoles {
+public class NickNameRoles{
 
     private String nickName;
     private long roleID;

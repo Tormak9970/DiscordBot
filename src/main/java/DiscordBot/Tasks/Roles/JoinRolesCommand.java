@@ -1,16 +1,12 @@
 package DiscordBot.Tasks.Roles;
 
 import DiscordBot.Database.DatabaseManager;
-import DiscordBot.Tasks.SetPrefixCommand;
-import DiscordBot.Utils.ReactionRoles;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.awt.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -22,8 +18,9 @@ public class JoinRolesCommand {
     private static long roleID;
     private static Map<Long, List<Long>> listOfJoinRoles = new HashMap<>();
 
-    public static Map<Long, List<Long>> getListOfJoinRoles(){
-        return listOfJoinRoles;
+    public static List<Long> getListOfJoinRoles(long guildId){
+
+        return listOfJoinRoles.computeIfAbsent(guildId, DatabaseManager.INSTANCE::getJoinRoles);
     }
 
     public static void getCommand(MessageReceivedEvent event)
@@ -44,11 +41,15 @@ public class JoinRolesCommand {
                     ;
             MessageChannel channel = event.getChannel();
             listOfJoinRoles.computeIfAbsent(event.getGuild().getIdLong(), s -> new ArrayList<>()).add(roleID);
+            addRoles(event.getGuild().getIdLong(), roleID);
             channel.sendMessage(embed.build()).queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
         }else{
             event.getChannel().sendMessage("Please mention a role in your command call.").queue();
         }
     }
 
-    //public void
+
+    public static void addRoles(long guildId, long newID){
+        DatabaseManager.INSTANCE.addJoinRole(guildId, newID);
+    }
 }

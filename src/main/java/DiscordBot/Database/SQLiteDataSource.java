@@ -1,6 +1,7 @@
 package DiscordBot.Database;
 
 import DiscordBot.Tasks.SetPrefixCommand;
+import DiscordBot.Utils.NickNameRoles;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
@@ -9,7 +10,11 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SQLiteDataSource implements DatabaseManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(SQLiteDataSource.class);
@@ -42,29 +47,32 @@ public class SQLiteDataSource implements DatabaseManager {
             final String defaultPrefix = SetPrefixCommand.getDefaultPrefix();
 
             // language=SQLite
-            statement.execute("CREATE TABLE IF NOT EXISTS guild_settings (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "guild_id VARCHAR(20) NOT NULL," +
+            statement.execute("CREATE TABLE IF NOT EXISTS guild_settings(" +
+                    "guild_id BIGINT PRIMARY KEY," +
                     "prefix VARCHAR(255) NOT NULL DEFAULT '" + defaultPrefix + "'" +
                     ");");
-
-            LOGGER.info("Table initialised");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        try (final Statement statement = getConnection().createStatement()) {
-
-            // language=SQLite
-            statement.execute("CREATE TABLE IF NOT EXISTS guild_join_roles (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "guild_id VARCHAR(20) NOT NULL," +
+            statement.execute("CREATE TABLE IF NOT EXISTS join_roles(" +
+                    "guild_id BIGINT PRIMARY KEY," +
+                    "role_id BIGINT NOT NULL" +
                     ");");
+            statement.execute("CREATE TABLE IF NOT EXISTS nickname_roles(" +
+                    "guild_id BIGINT PRIMARY KEY," +
+                    "nickname TEXT NOT NULL," +
+                    "role_id BIGINT NOT NULL," +
+                    "type INT NOT NULL" +
+                    ");");
+            statement.execute("CREATE TABLE IF NOT EXISTS reaction_roles(" +
+                    "guild_id BIGINT PRIMARY KEY," +
+                    "message_id BIGINT NOT NULL," +
+                    "channel_id BIGINT NOT NULL," +
+                    "emote_id BIG")
 
+            statement.close();
             LOGGER.info("Table initialised");
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 
 
@@ -110,7 +118,94 @@ public class SQLiteDataSource implements DatabaseManager {
                 .prepareStatement("UPDATE guild_settings SET prefix = ? WHERE guild_id = ?")) {
 
             preparedStatement.setString(1, newPrefix);
-            preparedStatement.setString(2, String.valueOf(guildId));
+            preparedStatement.setLong(2, guildId);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public List<Long> getJoinRoles(long guildId) {
+        try (final PreparedStatement preparedStatement = getConnection()
+                // language=SQLite
+                .prepareStatement("SELECT role_id FROM join_roles WHERE guild_id = ?")) {
+
+            preparedStatement.setLong(1, guildId);
+
+            try (final ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    List<Long> toReturn = new ArrayList<>();
+                    for(int i = 0; i < resultSet.getFetchSize(); i++){
+                        toReturn.add(resultSet.getLong("role_id"));
+                    }
+
+                    return toReturn;
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        List<Long> toReturn = new ArrayList<>();
+        return toReturn;
+    }
+
+    @Override
+    public void addJoinRole(long guildId, long roleID) {
+
+        try (final PreparedStatement preparedStatement = getConnection()
+                // language=SQLite
+                .prepareStatement("INSERT INTO join_roles(guild_id, role_id) VALUES(?, ?)")) {
+
+            preparedStatement.setLong(1, guildId);
+            preparedStatement.setLong(2, roleID);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public List<NickNameRoles> getNickRoles(long guildId) {
+        try (final PreparedStatement preparedStatement = getConnection()
+                // language=SQLite
+                .prepareStatement("SELECT nickname FROM nickname_roles WHERE guild_id = ? UNION" +
+                        "SELECT role_id FROM nickname_roles WHERE guild_id = ? UNION" +
+                        "SELECT type FROM nickname_roles WHERE guild_id = ?")) {
+
+            preparedStatement.setLong(1, guildId);
+
+            try (final ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    List<NickNameRoles> toReturn = new ArrayList<>();
+                    for(int i = 0; i < resultSet.getFetchSize(); i++){
+                        toReturn.add(new NickNameRoles(resultSet.getString("nickname"), resultSet.getLong("role_id"), resultSet.getInt("type")));
+                    }
+
+                    return toReturn;
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        List<NickNameRoles> toReturn = new ArrayList<>();
+        return toReturn;
+    }
+
+    @Override
+    public void addNickRole(long guildId, NickNameRoles nickRole) {
+        try (final PreparedStatement preparedStatement = getConnection()
+                // language=SQLite
+                .prepareStatement("INSERT INTO nickname_roles(guild_id, nickname, role_id, type) VALUES(?, ?, ?, ?)")) {
+
+            preparedStatement.setLong(1, guildId);
+            preparedStatement.setString(2, nickRole.getNickName());
+            preparedStatement.setLong(3, nickRole.getRoleID());
+            preparedStatement.setInt(4, nickRole.getType());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

@@ -15,8 +15,6 @@ public class SetPrefixCommand {
 
     public static void getCommand(MessageReceivedEvent event){
 
-        Message message = event.getMessage();
-        String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
         long guildID = event.getGuild().getIdLong();
