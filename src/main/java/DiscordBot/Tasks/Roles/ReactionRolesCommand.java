@@ -80,7 +80,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                             "\nthat the reaction role will be in." +
                             "\n(you need to enable developer mode)" +
                             "\nSettings -> Appearance -> Advanced", false)
-                    .setFooter("Quarantine Bot Reaction Roles")
+                    .setFooter("inDev Reaction Roles")
                     ;
             channel.sendMessage(embed.build()).queue();
             // Important to call .queue() on the RestAction returned by sendMessage(...)
@@ -129,7 +129,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                 .setThumbnail(botUser.getAvatarUrl())
                 .addField("**Step 2**: ", "please send the message id " +
                         "\nthat the reaction role will be on.", false)
-                .setFooter("Quarantine Bot Reaction Roles")
+                .setFooter("inDev Reaction Roles")
                 ;
         textChannel.sendMessage(embed.build()).queue();
 
