@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Map;
 
 public class Listener extends ListenerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(Listener.class);
@@ -78,10 +77,10 @@ public class Listener extends ListenerAdapter {
         if(event.getUser().isBot()){
             return;
         }
-        Map<Long, List<NickNameRoles>> nickNameRoles = NickNameByRoleCommand.getListOfNickNameRoles();
+        List<NickNameRoles> nickNameRoles = NickNameByRoleCommand.getListOfNickNameRoles(guild.getIdLong());
         long highestRoleID = event.getRoles().get(0).getIdLong();
         long guildID = guild.getIdLong();
-        int size = nickNameRoles.get(guildID).size();
+        int size = nickNameRoles.size();
         Member mem = event.getMember();
 
 
@@ -95,14 +94,14 @@ public class Listener extends ListenerAdapter {
 
         if(size > 0){
             for(int i = 0; i < size; i++){
-                if(nickNameRoles.get(guildID).get(i).getRoleID() == highestRoleID){
+                if(nickNameRoles.get(i).getRoleID() == highestRoleID){
                     String newNick = "";
                     if(mem.getRoles().size() > event.getRoles().size()){
                         boolean isHigher = false;
 
 
                         for(int j = 0; j < (mem.getRoles().size()); j++){
-                            if (mem.getRoles().get(j).canInteract(guild.getRoleById(highestRoleID)) && nickNameRoles.get(guildID).contains(mem.getRoles().get(j))){
+                            if (mem.getRoles().get(0).canInteract(guild.getRoleById(highestRoleID)) && nickNameRoles.get(j).getRoleID() == mem.getRoles().get(0).getIdLong()){
                                 Utils.sendPrivateMessage(mem.getUser(), "Your nickname has been changed already by a higher role");
                                 isHigher = true;
                                 break;
@@ -110,26 +109,26 @@ public class Listener extends ListenerAdapter {
                         }
 
                         if(!isHigher){
-                            if(nickNameRoles.get(guildID).get(i).getType() == 1){
-                                newNick = nickNameRoles.get(guildID).get(i).getNickName() + " " + mem.getEffectiveName();
+                            if(nickNameRoles.get(i).getType() == 1){
+                                newNick = nickNameRoles.get(i).getNickName() + " " + mem.getEffectiveName();
 
-                            }else if(nickNameRoles.get(guildID).get(i).getType() == 2){
-                                newNick = nickNameRoles.get(guildID).get(i).getNickName();
+                            }else if(nickNameRoles.get(i).getType() == 2){
+                                newNick = nickNameRoles.get(i).getNickName();
                             }else{
-                                newNick = mem.getEffectiveName() + " " + nickNameRoles.get(guildID).get(i).getNickName();
+                                newNick = mem.getEffectiveName() + " " + nickNameRoles.get(i).getNickName();
                             }
-                            mem.modifyNickname(newNick);
+                            mem.modifyNickname(newNick).queue();
                         }
                     }else{
-                        if(nickNameRoles.get(guildID).get(i).getType() == 1){
-                            newNick = nickNameRoles.get(guildID).get(i).getNickName() + " " + mem.getEffectiveName();
+                        if(nickNameRoles.get(i).getType() == 1){
+                            newNick = nickNameRoles.get(i).getNickName() + " " + mem.getEffectiveName();
 
-                        }else if(nickNameRoles.get(guildID).get(i).getType() == 2){
-                            newNick = nickNameRoles.get(guildID).get(i).getNickName();
+                        }else if(nickNameRoles.get(i).getType() == 2){
+                            newNick = nickNameRoles.get(i).getNickName();
                         }else{
-                            newNick = mem.getEffectiveName() + " " + nickNameRoles.get(guildID).get(i).getNickName();
+                            newNick = mem.getEffectiveName() + " " + nickNameRoles.get(i).getNickName();
                         }
-                        mem.modifyNickname(newNick);
+                        mem.modifyNickname(newNick).queue();
                     }
                     break;
                 }
@@ -139,15 +138,15 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent reaction) {
-        Map<Long, List<ReactionRoles>> reactionRoles = ReactionRolesCommand.getListOfReactionRoles();
+        List<ReactionRoles> reactionRoles = ReactionRolesCommand.getListOfReactionRoles(reaction.getGuild().getIdLong());
         if (reaction.getUser().isBot()){
             return;
         }
 
         Guild guild = reaction.getGuild();
         boolean match;
-        if(reactionRoles != null && reactionRoles.get(guild.getIdLong()) != null){
-            for (ReactionRoles reactRole : reactionRoles.get(guild.getIdLong())) {
+        if(reactionRoles != null && reactionRoles.size() > 0){
+            for (ReactionRoles reactRole : reactionRoles) {
 
                 if(reactRole.isEmote()){
                     match = reactRole.getEmoteID() == reaction.getReactionEmote().getEmote().getIdLong();
@@ -157,7 +156,7 @@ public class Listener extends ListenerAdapter {
                 if (reactRole.getChannelID() == reaction.getChannel().getIdLong()
                         && reactRole.getMessageID() == reaction.getMessageIdLong()
                         && match) {
-
+                    System.out.println("listener works");
                     guild.addRoleToMember(reaction.getMember(), guild.getRoleById(reactRole.getRoleID())).queue();
                     Utils.sendPrivateMessage(reaction.getUser(), "You have been given the role " + guild.getRoleById(reactRole.getRoleID()).getName() + " in the server " + guild.getName());
                 }

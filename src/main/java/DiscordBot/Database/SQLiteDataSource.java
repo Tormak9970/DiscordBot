@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static jdk.nashorn.internal.runtime.regexp.joni.Syntax.Java;
+
 public class SQLiteDataSource implements DatabaseManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(SQLiteDataSource.class);
     private final HikariDataSource ds;
@@ -53,17 +55,20 @@ public class SQLiteDataSource implements DatabaseManager {
                     "prefix VARCHAR(255) NOT NULL DEFAULT '" + defaultPrefix + "'" +
                     ");");
             statement.execute("CREATE TABLE IF NOT EXISTS join_roles(" +
-                    "guild_id BIGINT PRIMARY KEY," +
+                    "id INTEGER PRIMARY KEY," +
+                    "guild_id BIGINT NOT NULL," +
                     "role_id BIGINT NOT NULL" +
                     ");");
             statement.execute("CREATE TABLE IF NOT EXISTS nickname_roles(" +
-                    "guild_id BIGINT PRIMARY KEY," +
+                    "id INTEGER PRIMARY KEY," +
+                    "guild_id BIGINT NOT NULL," +
                     "nickname TEXT NOT NULL," +
                     "role_id BIGINT NOT NULL," +
                     "type INTEGER NOT NULL" +
                     ");");
             statement.execute("CREATE TABLE IF NOT EXISTS reaction_roles(" +
-                    "guild_id BIGINT PRIMARY KEY," +
+                    "id INTEGER PRIMARY KEY," +
+                    "guild_id BIGINT NOT NULL," +
                     "message_id BIGINT NOT NULL," +
                     "channel_id BIGINT NOT NULL," +
                     "emote_id BIGINT," +
@@ -163,7 +168,7 @@ public class SQLiteDataSource implements DatabaseManager {
             preparedStatement.setLong(1, guildId);
             preparedStatement.setLong(2, roleID);
 
-            preparedStatement.executeUpdate();
+            preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -178,7 +183,7 @@ public class SQLiteDataSource implements DatabaseManager {
             preparedStatement.setLong(1, guildId);
             preparedStatement.setLong(2, roleID);
 
-            preparedStatement.executeUpdate();
+            preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -188,9 +193,7 @@ public class SQLiteDataSource implements DatabaseManager {
     public List<NickNameRoles> getNickRoles(long guildId) {
         try (final PreparedStatement preparedStatement = getConnection()
                 // language=SQLite
-                .prepareStatement("SELECT nickname FROM nickname_roles WHERE guild_id = ? UNION" +
-                        "SELECT role_id FROM nickname_roles WHERE guild_id = ? UNION" +
-                        "SELECT type FROM nickname_roles WHERE guild_id = ?")) {
+                .prepareStatement("SELECT nickname, role_id, type FROM nickname_roles WHERE guild_id = ?")) {
 
             preparedStatement.setLong(1, guildId);
 
@@ -219,7 +222,7 @@ public class SQLiteDataSource implements DatabaseManager {
             preparedStatement.setLong(3, nickRole.getRoleID());
             preparedStatement.setInt(4, nickRole.getType());
 
-            preparedStatement.executeUpdate();
+            preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -236,7 +239,7 @@ public class SQLiteDataSource implements DatabaseManager {
             preparedStatement.setLong(3, nickRole.getRoleID());
             preparedStatement.setInt(4, nickRole.getType());
 
-            preparedStatement.executeUpdate();
+            preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -246,24 +249,22 @@ public class SQLiteDataSource implements DatabaseManager {
     public List<ReactionRoles> getReactionRoles(long guildId) {
         try (final PreparedStatement preparedStatement = getConnection()
                 // language=SQLite
-                .prepareStatement("SELECT message_id FROM reaction_roles WHERE guild_id = ? UNION" +
-                        "SELECT channel_id FROM reaction_roles WHERE guild_id = ? UNION" +
-                        "SELECT emote_id FROM reaction_roles WHERE guild_id = ? UNION" +
-                        "SELECT emoji_id FROM reaction_roles WHERE guild_id = ? UNION" +
-                        "SELECT role_id FROM nickname_roles WHERE guild_id = ?")) {
+                .prepareStatement("SELECT message_id, channel_id, emote_id, emoji_id, role_id FROM reaction_roles WHERE guild_id = ?")){
 
             preparedStatement.setLong(1, guildId);
 
             try (final ResultSet resultSet = preparedStatement.executeQuery()) {
                 List<ReactionRoles> toReturn = new ArrayList<>();
                 while(resultSet.next()){
-                    try{
+                    if(resultSet.getLong("emote_id") != 0L){
                         toReturn.add(new ReactionRoles(resultSet.getLong("message_id"), resultSet.getLong("channel_id"), resultSet.getLong("emote_id"), resultSet.getLong("role_id")));
-                    }catch(NullPointerException ignored){
+                    }else{
                         toReturn.add(new ReactionRoles(resultSet.getLong("message_id"), resultSet.getLong("channel_id"), resultSet.getString("emoji_id"), resultSet.getLong("role_id")));
+                        System.out.println("getter works");
                     }
-                }
 
+                }
+                return toReturn;
             }
 
         } catch (SQLException e) {
@@ -277,19 +278,19 @@ public class SQLiteDataSource implements DatabaseManager {
         try (final PreparedStatement preparedStatement = getConnection()
                 // language=SQLite
                 .prepareStatement("INSERT INTO reaction_roles(guild_id, message_id, channel_id, emote_id, emoji_id, role_id) VALUES(?, ?, ?, ?, ?, ?)")) {
-
             preparedStatement.setLong(1, guildId);
             preparedStatement.setLong(2, reactRole.getMessageID());
             preparedStatement.setLong(3, reactRole.getChannelID());
             if(reactRole.isEmote()){
                 preparedStatement.setLong(4, reactRole.getEmoteID());
+                preparedStatement.setString(5, null);
             } else{
+                preparedStatement.setNull(4, Types.BIGINT);
                 preparedStatement.setString(5, reactRole.getEmoji());
+                System.out.println("adder works");
             }
-            preparedStatement.setLong(2, reactRole.getRoleID());
-
-
-            preparedStatement.executeUpdate();
+            preparedStatement.setLong(6, reactRole.getRoleID());
+            preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -300,19 +301,19 @@ public class SQLiteDataSource implements DatabaseManager {
         try (final PreparedStatement preparedStatement = getConnection()
                 // language=SQLite
                 .prepareStatement("DELETE FROM reaction_roles(guild_id, message_id, channel_id, emote_id, emoji_id, role_id) VALUES(?, ?, ?, ?, ?, ?)")) {
-
             preparedStatement.setLong(1, guildId);
             preparedStatement.setLong(2, reactRole.getMessageID());
             preparedStatement.setLong(3, reactRole.getChannelID());
             if(reactRole.isEmote()){
                 preparedStatement.setLong(4, reactRole.getEmoteID());
+                preparedStatement.setString(5, null);
             } else{
+                preparedStatement.setNull(4, Types.BIGINT);
                 preparedStatement.setString(5, reactRole.getEmoji());
             }
             preparedStatement.setLong(2, reactRole.getRoleID());
+            preparedStatement.execute();
 
-
-            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }

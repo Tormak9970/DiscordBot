@@ -36,8 +36,8 @@ public class NickNameByRoleCommand extends ListenerAdapter {
         eventWaiter = waiter;
     }
 
-    public static Map<Long, List<NickNameRoles>> getListOfNickNameRoles(){
-        return listOfNickNameRoles;
+    public static List<NickNameRoles> getListOfNickNameRoles(long guildId){
+        return listOfNickNameRoles.computeIfAbsent(guildId, DatabaseManager.INSTANCE::getNickRoles);
     }
 
     @Override
@@ -151,7 +151,7 @@ public class NickNameByRoleCommand extends ListenerAdapter {
                 .setThumbnail(botUser.getAvatarUrl())
                 .addField("**Step 3**: ", "Please send" +
                         "\nthe nickname you want this role to give (no space after)", false)
-                .setFooter("inDev Reaction Roles")
+                .setFooter("inDev Nickname Roles")
                 ;
         event.getChannel().sendMessage(embed.build()).queue(
                 (message) -> {

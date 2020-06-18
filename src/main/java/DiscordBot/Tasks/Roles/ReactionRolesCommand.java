@@ -1,5 +1,6 @@
 package DiscordBot.Tasks.Roles;
 
+import DiscordBot.Database.DatabaseManager;
 import DiscordBot.Tasks.SetPrefixCommand;
 import DiscordBot.Utils.ReactionRoles;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
@@ -38,8 +39,8 @@ public class ReactionRolesCommand extends ListenerAdapter {
         eventWaiter = waiter;
     }
 
-    public static Map<Long, List<ReactionRoles>> getListOfReactionRoles(){
-        return listOfReactionRoles;
+    public static List<ReactionRoles> getListOfReactionRoles(long guildId){
+        return listOfReactionRoles.computeIfAbsent(guildId, DatabaseManager.INSTANCE::getReactionRoles);
     }
 
 
@@ -166,7 +167,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                             .addField("**Step 3**: ", "please @mention the role " +
                                     "\nthat will be given, you may have to enable pinging of" +
                                     "\nit, but u can turn it off later.", false)
-                            .setFooter("Quarantine Bot Reaction Roles")
+                            .setFooter("inDev Reaction Roles")
                             ;
                     event.getChannel().sendMessage(embed2.build()).queue();
                     // Important to call .queue() on the RestAction returned by sendMessage(...)
@@ -297,6 +298,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
             ReactionRoles reactRole = new ReactionRoles(messageID, msgChannelID, emojiID, roleID);
             listOfReactionRoles.computeIfAbsent(guildID, s -> new ArrayList<>()).add(reactRole);
+            addReactionRole(guildID, reactRole);
         } else {
             emoteID = event.getReactionEmote().getEmote().getIdLong();
             deleteHistory(2, setup);
@@ -320,6 +322,11 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
             ReactionRoles reactRole = new ReactionRoles(messageID, msgChannelID, emoteID, roleID);
             listOfReactionRoles.computeIfAbsent(guildID, s -> new ArrayList<>()).add(reactRole);
+            addReactionRole(guildID, reactRole);
         }
+    }
+
+    private void addReactionRole(long guildID, ReactionRoles reactRole){
+        DatabaseManager.INSTANCE.addReactionRole(guildID, reactRole);
     }
 }
