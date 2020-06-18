@@ -260,7 +260,6 @@ public class SQLiteDataSource implements DatabaseManager {
                         toReturn.add(new ReactionRoles(resultSet.getLong("message_id"), resultSet.getLong("channel_id"), resultSet.getLong("emote_id"), resultSet.getLong("role_id")));
                     }else{
                         toReturn.add(new ReactionRoles(resultSet.getLong("message_id"), resultSet.getLong("channel_id"), resultSet.getString("emoji_id"), resultSet.getLong("role_id")));
-                        System.out.println("getter works");
                     }
 
                 }

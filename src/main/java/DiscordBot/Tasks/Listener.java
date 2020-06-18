@@ -29,22 +29,26 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        String prefix = SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
-        System.out.println("We received a message from " +
-                event.getAuthor().getName() + ": " +
-                event.getMessage().getContentDisplay()
-        );
-        if(event.getAuthor().isBot()){
-            return;
-        }
-        if(event.getMessage().getContentRaw().indexOf("m" + prefix) == 0){
-            MusicRunner.passEvent(event);
-        }else if (event.getMessage().getContentRaw().indexOf("mod" + prefix) == 0){
-            ModerationRunner.passEvent(event);
-        }else if (event.getMessage().getContentRaw().indexOf("rlmafia" + prefix) == 0){
-            RLMafiaRunner.passEvent(event);
-        }else{
-            CommandsRunner.passEvent(event);
+        try{
+            String prefix = SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
+            System.out.println("We received a message from " +
+                    event.getAuthor().getName() + ": " +
+                    event.getMessage().getContentDisplay()
+            );
+            if(event.getAuthor().isBot()){
+                return;
+            }
+            if(event.getMessage().getContentRaw().indexOf("m" + prefix) == 0){
+                MusicRunner.passEvent(event);
+            }else if (event.getMessage().getContentRaw().indexOf("mod" + prefix) == 0){
+                ModerationRunner.passEvent(event);
+            }else if (event.getMessage().getContentRaw().indexOf("rlmafia" + prefix) == 0){
+                RLMafiaRunner.passEvent(event);
+            }else{
+                CommandsRunner.passEvent(event);
+            }
+        }catch(IllegalStateException ignored){
+            System.out.println("Message was a DM");
         }
 
     }
@@ -79,7 +83,6 @@ public class Listener extends ListenerAdapter {
         }
         List<NickNameRoles> nickNameRoles = NickNameByRoleCommand.getListOfNickNameRoles(guild.getIdLong());
         long highestRoleID = event.getRoles().get(0).getIdLong();
-        long guildID = guild.getIdLong();
         int size = nickNameRoles.size();
         Member mem = event.getMember();
 
@@ -156,7 +159,6 @@ public class Listener extends ListenerAdapter {
                 if (reactRole.getChannelID() == reaction.getChannel().getIdLong()
                         && reactRole.getMessageID() == reaction.getMessageIdLong()
                         && match) {
-                    System.out.println("listener works");
                     guild.addRoleToMember(reaction.getMember(), guild.getRoleById(reactRole.getRoleID())).queue();
                     Utils.sendPrivateMessage(reaction.getUser(), "You have been given the role " + guild.getRoleById(reactRole.getRoleID()).getName() + " in the server " + guild.getName());
                 }
