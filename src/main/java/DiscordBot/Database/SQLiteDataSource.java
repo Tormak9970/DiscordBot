@@ -77,7 +77,7 @@ public class SQLiteDataSource implements DatabaseManager {
                     ");");
 
             statement.close();
-            LOGGER.info("Table initialised");
+            LOGGER.info("Tables initialised");
         } catch (SQLException e) {
             e.printStackTrace();
         }
