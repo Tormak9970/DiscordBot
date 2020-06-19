@@ -86,7 +86,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
             channel.sendMessage(embed.build()).queue();
             // Important to call .queue() on the RestAction returned by sendMessage(...)
 
-            initWaiter(event.getChannel().getIdLong(), event.getJDA().getShardManager());
+            initWaiter(event.getJDA().getShardManager());
         }
     }
 
@@ -94,19 +94,19 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
 
 
-    private void initWaiter(long channelID, ShardManager shardManager){
+    private void initWaiter(ShardManager shardManager){
         eventWaiter.waitForEvent(
                 GuildMessageReceivedEvent.class,
                 (event) -> {
                     User user = event.getAuthor();
                     boolean channelMentioned = event.getMessage().getMentionedChannels().size() != 0;
 
-                    return !user.isBot() && channelMentioned && event.getChannel().getIdLong() == channelID && event.getGuild().getIdLong() == guildID;
+                    return !user.isBot() && channelMentioned && event.getChannel().getIdLong() == setup.getIdLong() && event.getGuild().getIdLong() == guildID;
                 },
-                (event) -> getRRChannelID(event, shardManager, channelID),
+                (event) -> getRRChannelID(event, shardManager),
                 30, TimeUnit.SECONDS,
                 () -> {
-                    TextChannel textChannel = shardManager.getTextChannelById(channelID);
+                    TextChannel textChannel = shardManager.getTextChannelById(setup.getIdLong());
                     textChannel.sendMessage("Your reaction role has timed out due to un responsiveness. please restart.").queue();
                 }
         );
@@ -115,8 +115,8 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
 
     //possibly bugged
-    private void getRRChannelID(GuildMessageReceivedEvent event, ShardManager shardManager, long channelID){
-        TextChannel textChannel = shardManager.getTextChannelById(channelID);
+    private void getRRChannelID(GuildMessageReceivedEvent event, ShardManager shardManager){
+        TextChannel textChannel = shardManager.getTextChannelById(setup.getIdLong());
         Guild guild = event.getGuild();
         User botUser = guild.getJDA().getSelfUser();
 
@@ -140,12 +140,12 @@ public class ReactionRolesCommand extends ListenerAdapter {
                 GuildMessageReceivedEvent.class,
                 (event1) -> {
                     User user = event1.getAuthor();
-                    return !user.isBot() && event1.getChannel().getIdLong() == channelID && event1.getGuild().getIdLong() == guildID;
+                    return !user.isBot() && event1.getChannel().getIdLong() == setup.getIdLong() && event1.getGuild().getIdLong() == guildID;
                 },
-                (event1) -> getRRMessageID(event1, shardManager, botUser, channelID),
+                (event1) -> getRRMessageID(event1, shardManager, botUser),
                 30, TimeUnit.SECONDS,
                 () -> {
-                    TextChannel textChannel1 = shardManager.getTextChannelById(channelID);
+                    TextChannel textChannel1 = shardManager.getTextChannelById(setup.getIdLong());
                     textChannel1.sendMessage("Your reaction role has timed out due to un responsiveness. please restart.").queue();
                 }
         );
@@ -154,8 +154,8 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
 
     //may be bugged
-    private void getRRMessageID(GuildMessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
-        event.getChannel().retrieveMessageById(event.getMessage().getContentRaw()).queue(
+    private void getRRMessageID(GuildMessageReceivedEvent event, ShardManager shardManager, User botUser){
+        event.getGuild().getTextChannelById(msgChannelID).retrieveMessageById(event.getMessage().getContentRaw()).queue(
                 message -> {
                     messageID = message.getIdLong();
 
@@ -178,12 +178,12 @@ public class ReactionRolesCommand extends ListenerAdapter {
                             (event1) -> {
                                 User user = event1.getAuthor();
                                 boolean hasRole = event1.getMessage().getMentionedRoles().size() != 0;
-                                return !user.isBot() && event1.getChannel().getIdLong() == channelID && event1.getGuild().getIdLong() == guildID && hasRole;
+                                return !user.isBot() && event1.getChannel().getIdLong() == setup.getIdLong() && event1.getGuild().getIdLong() == guildID && hasRole;
                             },
-                            (event1) -> getRRRoleID(event1, shardManager, botUser, channelID),
+                            (event1) -> getRRRoleID(event1, shardManager, botUser),
                             30, TimeUnit.SECONDS,
                             () -> {
-                                TextChannel textChannel1 = shardManager.getTextChannelById(channelID);
+                                TextChannel textChannel1 = shardManager.getTextChannelById(setup.getIdLong());
                                 textChannel1.sendMessage("Your reaction role has timed out due to un responsiveness. please restart.").queue();
                             }
                     );
@@ -193,7 +193,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
         );
     }
 
-    private void getRRRoleID(GuildMessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
+    private void getRRRoleID(GuildMessageReceivedEvent event, ShardManager shardManager, User botUser){
         roleID = event.getMessage().getMentionedRoles().get(0).getIdLong();
 
         deleteHistory(2, setup);
@@ -225,19 +225,19 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
                         }
 
-                    return !user.isBot() && event1.getChannel().getIdLong() == channelID && event1.getGuild().getIdLong() == guildID && isChoice;
+                    return !user.isBot() && event1.getChannel().getIdLong() == setup.getIdLong() && event1.getGuild().getIdLong() == guildID && isChoice;
                 },
-                (event1) -> getRRType(event1, shardManager, botUser, channelID),
+                (event1) -> getRRType(event1, shardManager, botUser),
                 30, TimeUnit.SECONDS,
                 () -> {
-                    TextChannel textChannel1 = shardManager.getTextChannelById(channelID);
+                    TextChannel textChannel1 = shardManager.getTextChannelById(setup.getIdLong());
                     assert textChannel1 != null;
                     textChannel1.sendMessage("Your reaction role has timed out due to un responsiveness. please restart.").queue();
                 }
         );
     }
 
-    private void getRRType(GuildMessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
+    private void getRRType(GuildMessageReceivedEvent event, ShardManager shardManager, User botUser){
         choice = Integer.parseInt(event.getMessage().getContentRaw());
 
         deleteHistory(2, setup);
@@ -257,12 +257,12 @@ public class ReactionRolesCommand extends ListenerAdapter {
                                     (event1) -> {
                                         User user = event1.getUser();
                                         boolean isEmbed = embedID == event1.getMessageIdLong();
-                                        return !user.isBot() && event1.getChannel().getIdLong() == channelID && event1.getGuild().getIdLong() == guildID && isEmbed;
+                                        return !user.isBot() && event1.getChannel().getIdLong() == setup.getIdLong() && event1.getGuild().getIdLong() == guildID && isEmbed;
                                     },
-                                    (event1) -> getRREmoteID(event1, channelID),
+                                    (event1) -> getRREmoteID(event1),
                                     30, TimeUnit.SECONDS,
                                     () -> {
-                                        TextChannel textChannel1 = shardManager.getTextChannelById(channelID);
+                                        TextChannel textChannel1 = shardManager.getTextChannelById(setup.getIdLong());
                                         assert textChannel1 != null;
                                         textChannel1.sendMessage("Your reaction role has timed out due to un responsiveness. please restart.").queue();
                                     }
@@ -272,14 +272,14 @@ public class ReactionRolesCommand extends ListenerAdapter {
         );
     }
 
-    private void getRREmoteID(GuildMessageReactionAddEvent event, long channelID){
+    private void getRREmoteID(GuildMessageReactionAddEvent event){
 
         Guild guild = event.getGuild();
         boolean isEmoji = event.getReactionEmote().isEmoji();
         if(isEmoji){
             emojiID = event.getReactionEmote().getEmoji();
             deleteHistory(2, setup);
-            guild.getTextChannelById(channelID).retrieveMessageById(messageID).queue(
+            guild.getTextChannelById(msgChannelID).retrieveMessageById(messageID).queue(
                     (message) -> {
                         message.addReaction(emojiID).queue();
                         EmbedBuilder embed = EmbedUtils.defaultEmbed()
@@ -289,7 +289,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                                 .addField("**Emoji**: ", "" + emojiID, true)
                                 .addField("**Type**: ", "" + choice, true)
                                 .addField("**Message ID**: ", "" + messageID, false)
-                                .addField("**Channel**: ", "" + event.getGuild().getTextChannelById(channelID).getAsMention(), true)
+                                .addField("**Channel**: ", "" + event.getGuild().getTextChannelById(msgChannelID).getAsMention(), true)
                                 .addField("**Role**: ", "" + event.getGuild().getRoleById(roleID).getAsMention(), true)
                                 .setFooter("inDev Reaction Roles")
                                 ;
@@ -303,7 +303,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
         } else {
             emoteID = event.getReactionEmote().getEmote().getIdLong();
             deleteHistory(2, setup);
-            guild.getTextChannelById(channelID).retrieveMessageById(messageID).queue(
+            guild.getTextChannelById(msgChannelID).retrieveMessageById(messageID).queue(
                     (message) -> {
                         message.addReaction(guild.getEmoteById(emoteID)).queue();
                         EmbedBuilder embed = EmbedUtils.defaultEmbed()
@@ -313,7 +313,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                                 .addField("**Emoji**: ", "" + event.getGuild().getEmoteById(emoteID), true)
                                 .addField("**Type**: ", "" + choice, true)
                                 .addField("**Message ID**: ", "" + messageID, false)
-                                .addField("**Channel**: ", "" + event.getGuild().getTextChannelById(channelID).getAsMention(), true)
+                                .addField("**Channel**: ", "" + event.getGuild().getTextChannelById(msgChannelID).getAsMention(), true)
                                 .addField("**Role**: ", "" + event.getGuild().getRoleById(roleID).getAsMention(), true)
                                 .setFooter("inDev Reaction Roles")
                                 ;

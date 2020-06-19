@@ -286,7 +286,6 @@ public class SQLiteDataSource implements DatabaseManager {
             } else{
                 preparedStatement.setNull(4, Types.BIGINT);
                 preparedStatement.setString(5, reactRole.getEmoji());
-                System.out.println("adder works");
             }
             preparedStatement.setLong(6, reactRole.getRoleID());
             preparedStatement.execute();
