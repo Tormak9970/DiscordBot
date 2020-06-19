@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.Objects;
 
 public class BotInfoCommand {
 
-    public static void getCommand(MessageReceivedEvent event)
+    public static void getCommand(GuildMessageReceivedEvent event)
     {
         Message message = event.getMessage();
         String content = message.getContentRaw();
@@ -69,7 +70,7 @@ public class BotInfoCommand {
                 .addField("**Need help? Join**: ", helpServerUrl, false)
                 .addField("**Want to invite this bot?**", inviteUrl, false)
                 .setColor(Color.RED)
-                .setFooter("Tormak9970, 2020")
+                .setFooter("inDev info")
                 ;
 
         event.getChannel().sendMessage(embed.build()).queue();

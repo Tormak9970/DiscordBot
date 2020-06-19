@@ -8,6 +8,7 @@ import me.duncte123.botcommons.messaging.EmbedUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.sharding.ShardManager;
@@ -45,7 +46,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent event)
+    public void onGuildMessageReceived(GuildMessageReceivedEvent event)
     {
         /*check if command sent
     prompt user for a channel mention of the message's channel
@@ -66,10 +67,10 @@ public class ReactionRolesCommand extends ListenerAdapter {
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
         if (content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "reactionroles"))
         {
-            TextChannel channel = event.getTextChannel();
+            TextChannel channel = event.getChannel();
             Guild guild = event.getGuild();
             User user = guild.getJDA().getSelfUser();
-            setup = event.getTextChannel();
+            setup = event.getChannel();
             guildID = guild.getIdLong();
 
                     EmbedBuilder embed = EmbedUtils.defaultEmbed()
@@ -95,7 +96,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
     private void initWaiter(long channelID, ShardManager shardManager){
         eventWaiter.waitForEvent(
-                MessageReceivedEvent.class,
+                GuildMessageReceivedEvent.class,
                 (event) -> {
                     User user = event.getAuthor();
                     boolean channelMentioned = event.getMessage().getMentionedChannels().size() != 0;
@@ -114,7 +115,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
 
     //possibly bugged
-    private void getRRChannelID(MessageReceivedEvent event, ShardManager shardManager, long channelID){
+    private void getRRChannelID(GuildMessageReceivedEvent event, ShardManager shardManager, long channelID){
         TextChannel textChannel = shardManager.getTextChannelById(channelID);
         Guild guild = event.getGuild();
         User botUser = guild.getJDA().getSelfUser();
@@ -136,7 +137,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
         //new event waiter
         eventWaiter.waitForEvent(
-                MessageReceivedEvent.class,
+                GuildMessageReceivedEvent.class,
                 (event1) -> {
                     User user = event1.getAuthor();
                     return !user.isBot() && event1.getChannel().getIdLong() == channelID && event1.getGuild().getIdLong() == guildID;
@@ -153,7 +154,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
 
 
     //may be bugged
-    private void getRRMessageID(MessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
+    private void getRRMessageID(GuildMessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
         event.getChannel().retrieveMessageById(event.getMessage().getContentRaw()).queue(
                 message -> {
                     messageID = message.getIdLong();
@@ -173,7 +174,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
                     // Important to call .queue() on the RestAction returned by sendMessage(...)
 
                     eventWaiter.waitForEvent(
-                            MessageReceivedEvent.class,
+                            GuildMessageReceivedEvent.class,
                             (event1) -> {
                                 User user = event1.getAuthor();
                                 boolean hasRole = event1.getMessage().getMentionedRoles().size() != 0;
@@ -192,7 +193,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
         );
     }
 
-    private void getRRRoleID(MessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
+    private void getRRRoleID(GuildMessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
         roleID = event.getMessage().getMentionedRoles().get(0).getIdLong();
 
         deleteHistory(2, setup);
@@ -211,7 +212,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
         // Important to call .queue() on the RestAction returned by sendMessage(...)
 
         eventWaiter.waitForEvent(
-                MessageReceivedEvent.class,
+                GuildMessageReceivedEvent.class,
                 (event1) -> {
                     User user = event1.getAuthor();
                         boolean isChoice = false;
@@ -236,7 +237,7 @@ public class ReactionRolesCommand extends ListenerAdapter {
         );
     }
 
-    private void getRRType(MessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
+    private void getRRType(GuildMessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
         choice = Integer.parseInt(event.getMessage().getContentRaw());
 
         deleteHistory(2, setup);

@@ -6,10 +6,11 @@ import DiscordBot.Tasks.Music.MusicUtils.PlayerManager;
 import DiscordBot.Tasks.SetPrefixCommand;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class MusicStopCommand {
 
-    public static void getCommand(MessageReceivedEvent event)
+    public static void getCommand(GuildMessageReceivedEvent event)
     {
         Message message = event.getMessage();
         String content = message.getContentRaw();

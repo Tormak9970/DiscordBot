@@ -3,6 +3,7 @@ package DiscordBot.Tasks.RLMafia.RLMafiaUtils;
 import DiscordBot.Tasks.RLMafia.RLMafia;
 import DiscordBot.Utils.Utils;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.print.DocFlavor;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.Comparator;
 
 public abstract class RLMafiaUtils {
 
-    public static void generateTeams(ArrayList<Player> players, MessageReceivedEvent event){
+    public static void generateTeams(ArrayList<Player> players, GuildMessageReceivedEvent event){
         StringBuilder blueTeam = new StringBuilder("");
         StringBuilder orangeTeam = new StringBuilder("");
         Collections.shuffle(players);
@@ -30,7 +31,7 @@ public abstract class RLMafiaUtils {
         event.getMessage().getChannel().sendMessage("Blue Team: " + blueTeam + " || Orange Team: " + orangeTeam).queue();
     }
 
-    public static void generateRoles(ArrayList<Player> players, MessageReceivedEvent event){
+    public static void generateRoles(ArrayList<Player> players, GuildMessageReceivedEvent event){
         int mafiaIndex = players.size() - 2;
         int jesterIndex = 1;
         double randNum = Math.random() * 10;

@@ -7,6 +7,7 @@ import DiscordBot.Tasks.SetPrefixCommand;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ import static java.util.function.Predicate.isEqual;
 
 public class RLMafiaVoteCommand {
 
-    public static void getCommand(MessageReceivedEvent event)
+    public static void getCommand(GuildMessageReceivedEvent event)
     {
         Message message = event.getMessage();
         String content = message.getContentRaw();

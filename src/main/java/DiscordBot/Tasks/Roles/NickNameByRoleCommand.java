@@ -41,7 +41,7 @@ public class NickNameByRoleCommand extends ListenerAdapter {
     }
 
     @Override
-    public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
+    public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
         /*
         get guildID, store it
         get role by mention, store it's ID
@@ -56,10 +56,10 @@ public class NickNameByRoleCommand extends ListenerAdapter {
         Message message = event.getMessage();
         String content = message.getContentRaw();
         if(content.equals(SetPrefixCommand.getPrefix(event.getGuild().getIdLong()) + "nickroles")){
-            TextChannel channel = event.getTextChannel();
+            TextChannel channel = event.getChannel();
             Guild guild = event.getGuild();
             User botUser = guild.getJDA().getSelfUser();
-            setup = event.getTextChannel();
+            setup = event.getChannel();
             guildID = guild.getIdLong();
 
             EmbedBuilder embed = EmbedUtils.defaultEmbed()
@@ -81,7 +81,7 @@ public class NickNameByRoleCommand extends ListenerAdapter {
     private void initWaiter(long channelID, ShardManager shardManager, User botUser){
 
         eventWaiter.waitForEvent(
-                MessageReceivedEvent.class,
+                GuildMessageReceivedEvent.class,
                 (event) -> {
                     User user = event.getAuthor();
                     boolean roleMentioned = event.getMessage().getMentionedRoles().size() != 0;
@@ -97,7 +97,7 @@ public class NickNameByRoleCommand extends ListenerAdapter {
         );
     }
 
-    public void getType(MessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
+    public void getType(GuildMessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
         roleID = event.getMessage().getMentionedRoles().get(0).getIdLong();
 
         deleteHistory(2, setup);
@@ -116,7 +116,7 @@ public class NickNameByRoleCommand extends ListenerAdapter {
         // Important to call .queue() on the RestAction returned by sendMessage(...)
 
         eventWaiter.waitForEvent(
-                MessageReceivedEvent.class,
+                GuildMessageReceivedEvent.class,
                 (event1) -> {
                     User user = event1.getAuthor();
                     boolean isChoice = false;
@@ -141,7 +141,7 @@ public class NickNameByRoleCommand extends ListenerAdapter {
         );
     }
 
-    public void getNickName(MessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
+    public void getNickName(GuildMessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
         choice = Integer.parseInt(event.getMessage().getContentRaw());
 
         deleteHistory(2, setup);
@@ -156,7 +156,7 @@ public class NickNameByRoleCommand extends ListenerAdapter {
         event.getChannel().sendMessage(embed.build()).queue(
                 (message) -> {
                     eventWaiter.waitForEvent(
-                            MessageReceivedEvent.class,
+                            GuildMessageReceivedEvent.class,
                             (event1) -> {
                                 User user = event1.getAuthor();
                                 return !user.isBot() && event1.getChannel().getIdLong() == channelID && event1.getGuild().getIdLong() == guildID;
@@ -174,7 +174,7 @@ public class NickNameByRoleCommand extends ListenerAdapter {
         );
     }
 
-    private void getSummary(MessageReceivedEvent event, long channelID){
+    private void getSummary(GuildMessageReceivedEvent event, long channelID){
         nickName = event.getMessage().getContentRaw();
         deleteHistory(2, setup);
         EmbedBuilder embed = EmbedUtils.defaultEmbed()

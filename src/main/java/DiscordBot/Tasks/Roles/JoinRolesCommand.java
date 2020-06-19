@@ -5,6 +5,7 @@ import me.duncte123.botcommons.messaging.EmbedUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
 import java.time.LocalDateTime;
@@ -23,7 +24,7 @@ public class JoinRolesCommand {
         return listOfJoinRoles.computeIfAbsent(guildId, DatabaseManager.INSTANCE::getJoinRoles);
     }
 
-    public static void getCommand(MessageReceivedEvent event)
+    public static void getCommand(GuildMessageReceivedEvent event)
     {
         if(event.getMessage().getMentionedRoles().size() > 0){
             roleID = event.getMessage().getMentionedRoles().get(0).getIdLong();

@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
@@ -16,12 +17,12 @@ import java.util.stream.Collectors;
 
 public class ModerationClearMessagesCommand {
 
-    public static void getCommand(MessageReceivedEvent event)
+    public static void getCommand(GuildMessageReceivedEvent event)
     {
         String content = event.getMessage().getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        TextChannel channel = event.getTextChannel();
+        TextChannel channel = event.getChannel();
         Member member = event.getMember();
         Member selfMember = event.getGuild().getSelfMember();
 

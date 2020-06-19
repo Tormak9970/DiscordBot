@@ -9,12 +9,13 @@ import DiscordBot.Tasks.Memes.MemeCommand;
 import DiscordBot.Tasks.Roles.JoinRolesCommand;
 import DiscordBot.Tasks.Roles.NickNameByRoleCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandsRunner extends Listener {
 
 
 
-    public static void passEvent(MessageReceivedEvent event){
+    public static void passEvent(GuildMessageReceivedEvent event){
         String prefix = SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
         if(event.getAuthor().isBot()){
             return;

@@ -9,12 +9,13 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.time.format.DateTimeFormatter;
 
 public class ServerInfoCommand {
 
-    public static void getCommand(MessageReceivedEvent event)
+    public static void getCommand(GuildMessageReceivedEvent event)
     {
         Message message = event.getMessage();
         String content = message.getContentRaw();
@@ -44,6 +45,7 @@ public class ServerInfoCommand {
                 .setThumbnail(guild.getIconUrl())
                 .addField("General Info", generalInfo, false)
                 .addField("Role And Member Counts", memberInfo, false)
+                .setFooter("inDev serverInfo")
                 ;
 
         event.getChannel().sendMessage(embed.build()).queue();

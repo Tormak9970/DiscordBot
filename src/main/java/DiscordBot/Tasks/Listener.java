@@ -15,7 +15,9 @@ import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -28,27 +30,33 @@ public class Listener extends ListenerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(Listener.class);
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
-        try{
-            String prefix = SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
-            System.out.println("We received a message from " +
-                    event.getAuthor().getName() + ": " +
-                    event.getMessage().getContentDisplay()
-            );
-            if(event.getAuthor().isBot()){
-                return;
-            }
-            if(event.getMessage().getContentRaw().indexOf("m" + prefix) == 0){
-                MusicRunner.passEvent(event);
-            }else if (event.getMessage().getContentRaw().indexOf("mod" + prefix) == 0){
-                ModerationRunner.passEvent(event);
-            }else if (event.getMessage().getContentRaw().indexOf("rlmafia" + prefix) == 0){
-                RLMafiaRunner.passEvent(event);
-            }else{
-                CommandsRunner.passEvent(event);
-            }
-        }catch(IllegalStateException ignored){
-            System.out.println("Message was a DM");
+    public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+        String prefix = SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
+        System.out.println("We received a message from " +
+                event.getAuthor().getName() + ": " +
+                event.getMessage().getContentDisplay()
+        );
+        if (event.getAuthor().isBot()) {
+            return;
+        }
+        if (event.getMessage().getContentRaw().indexOf("m" + prefix) == 0) {
+            MusicRunner.passEvent(event);
+        } else if (event.getMessage().getContentRaw().indexOf("mod" + prefix) == 0) {
+            ModerationRunner.passEvent(event);
+        } else if (event.getMessage().getContentRaw().indexOf("rlmafia" + prefix) == 0) {
+            RLMafiaRunner.passEvent(event);
+        } else {
+            CommandsRunner.passEvent(event);
+        }
+    }
+
+    @Override
+    public void onPrivateMessageReceived(@Nonnull PrivateMessageReceivedEvent event) {
+        String content = event.getMessage().getContentRaw();
+        if(event.getAuthor().isBot()){
+            return;
+        }else{
+            event.getChannel().sendMessage("Why are you messaging me?").queue();
         }
 
     }
@@ -69,8 +77,8 @@ public class Listener extends ListenerAdapter {
         List<Long> joinRoles = JoinRolesCommand.getListOfJoinRoles(guildID);
 
             if(joinRoles.size() > 0){
-                for(int i = 0; i < joinRoles.size(); i++){
-                    guild.addRoleToMember(joinEvent.getMember(), guild.getRoleById(joinRoles.get(i))).queue();
+                for (Long roleId : joinRoles) {
+                    guild.addRoleToMember(joinEvent.getMember(), guild.getRoleById(roleId)).queue();
                 }
             }
     }

@@ -10,16 +10,17 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class MemeCommand {
 
-    public static void getCommand(MessageReceivedEvent event)
+    public static void getCommand(GuildMessageReceivedEvent event)
     {
         Message message = event.getMessage();
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        TextChannel channel = event.getTextChannel();
+        TextChannel channel = event.getChannel();
         WebUtils.ins.getJSONObject("https://apis.duncte123.me/meme").async((json) -> {
             if (!json.get("success").asBoolean()) {
                 channel.sendMessage("Something went wrong, try again later").queue();

@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
@@ -25,7 +26,7 @@ import java.util.List;
 public class MusicPlayCommand {
     private static YouTube youTube;
 
-    public static void getCommand(MessageReceivedEvent event) throws IOException {
+    public static void getCommand(GuildMessageReceivedEvent event) throws IOException {
 
         Message message = event.getMessage();
         String content = message.getContentRaw();
@@ -47,7 +48,7 @@ public class MusicPlayCommand {
 
         youTube = temp;
 
-        TextChannel channel = event.getTextChannel();
+        TextChannel channel = event.getChannel();
         String input = content.substring(1 + SetPrefixCommand.getPrefix(event.getGuild().getIdLong()).length() + 5);
         PlayerManager manager = PlayerManager.getInstance();
 
@@ -64,7 +65,7 @@ public class MusicPlayCommand {
             input = ytSearched;
         }
 
-        manager.loadAndPlay(event.getTextChannel(), input);
+        manager.loadAndPlay(event.getChannel(), input);
     }
 
     @Nullable

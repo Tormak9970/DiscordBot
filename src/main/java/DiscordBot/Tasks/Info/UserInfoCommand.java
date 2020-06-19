@@ -7,12 +7,13 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.time.format.DateTimeFormatter;
 
 public class UserInfoCommand {
 
-    public static void getCommand(MessageReceivedEvent event)
+    public static void getCommand(GuildMessageReceivedEvent event)
     {
         Message message = event.getMessage();
         String content = message.getContentRaw();
@@ -63,6 +64,7 @@ public class UserInfoCommand {
                 .setThumbnail(toGetInfo.getAvatarUrl())
                 .addField("General Info", generalInfo, false)
                 .addField("Server Related", memberInfo, false)
+                .setFooter("inDev serverInfo")
                 ;
 
         event.getChannel().sendMessage(embed.build()).queue();
