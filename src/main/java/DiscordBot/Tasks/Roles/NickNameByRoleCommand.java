@@ -28,7 +28,7 @@ public class NickNameByRoleCommand extends ListenerAdapter {
     private EventWaiter eventWaiter;
     private long guildID;
     private long roleID;
-    private TextChannel setup;
+    private long setup;
     private String nickName;
     private int choice;
 
@@ -59,7 +59,7 @@ public class NickNameByRoleCommand extends ListenerAdapter {
             TextChannel channel = event.getChannel();
             Guild guild = event.getGuild();
             User botUser = guild.getJDA().getSelfUser();
-            setup = event.getChannel();
+            setup = event.getChannel().getIdLong();
             guildID = guild.getIdLong();
 
             EmbedBuilder embed = EmbedUtils.defaultEmbed()
@@ -100,7 +100,7 @@ public class NickNameByRoleCommand extends ListenerAdapter {
     public void getType(GuildMessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
         roleID = event.getMessage().getMentionedRoles().get(0).getIdLong();
 
-        deleteHistory(2, setup);
+        deleteHistory(2, event.getGuild().getTextChannelById(setup));
 
         EmbedBuilder embed = EmbedUtils.defaultEmbed()
                 .setTitle("Nickname Roles")
@@ -144,7 +144,7 @@ public class NickNameByRoleCommand extends ListenerAdapter {
     public void getNickName(GuildMessageReceivedEvent event, ShardManager shardManager, User botUser, long channelID){
         choice = Integer.parseInt(event.getMessage().getContentRaw());
 
-        deleteHistory(2, setup);
+        deleteHistory(2, event.getGuild().getTextChannelById(setup));
         EmbedBuilder embed = EmbedUtils.defaultEmbed()
                 .setTitle("Reaction Roles")
                 .setColor(Color.RED)
@@ -176,7 +176,7 @@ public class NickNameByRoleCommand extends ListenerAdapter {
 
     private void getSummary(GuildMessageReceivedEvent event, long channelID){
         nickName = event.getMessage().getContentRaw();
-        deleteHistory(2, setup);
+        deleteHistory(2, event.getGuild().getTextChannelById(setup));
         EmbedBuilder embed = EmbedUtils.defaultEmbed()
                 .setTitle("Nickname Roles - Summary")
                 .addField("**Role**:", event.getGuild().getRoleById(roleID).getAsMention(), true)

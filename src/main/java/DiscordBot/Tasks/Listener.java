@@ -15,7 +15,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
@@ -28,7 +27,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public class Listener extends ListenerAdapter {
-    private EventWaiter waiter;
+    private final EventWaiter waiter;
 
     public Listener(EventWaiter waiter){
         this.waiter = waiter;
