@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.io.IOException;
 
-public class MusicRunner extends Listener {
+public class MusicRunner{
 
 
     public static void passEvent(GuildMessageReceivedEvent event){

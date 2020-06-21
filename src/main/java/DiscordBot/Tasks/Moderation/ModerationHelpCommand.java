@@ -19,7 +19,9 @@ public class ModerationHelpCommand {
         MessageChannel channel = event.getChannel();
         channel.sendMessage(prefix + "help - lists moderation commands" +
                 "\n" + prefix + "clear (specify amount) - deletes specified amount of messages from channel command is sent in" +
-                "\n" + prefix + "mute (member) (optional length) - if not specified, defaults to 5 minutes").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
+                "\n" + prefix + "mute (member) (optional length) - if not specified, defaults to 5 minutes" +
+                "\n" + prefix + "kicks (member) (reason) - asks for confirmation, and if so, kicks member specified" +
+                "\n" + prefix + "ban (member) (delete messages from last **X** days would be **X**) (reason)- asks for confirmation, and if so, bans member specified").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
 
     }
 }

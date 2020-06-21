@@ -31,7 +31,7 @@ public class DiscordBotMain extends ListenerAdapter {
                 .addEventListeners(waiter)
                 .addEventListeners(new NickNameByRoleCommand(waiter))
                 .addEventListeners(new ReactionRolesCommand(waiter))
-                .addEventListeners(new Listener())
+                .addEventListeners(new Listener(waiter))
                 .build();
 
 

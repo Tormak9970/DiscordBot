@@ -11,7 +11,7 @@ import DiscordBot.Tasks.Roles.NickNameByRoleCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-public class CommandsRunner extends Listener {
+public class CommandsRunner{
 
 
 

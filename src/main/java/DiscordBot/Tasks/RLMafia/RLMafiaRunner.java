@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-public class RLMafiaRunner extends Listener {
+public class RLMafiaRunner{
 
     public static void passEvent(GuildMessageReceivedEvent event){
         String prefix = "rlmafia" + SetPrefixCommand.getPrefix(event.getGuild().getIdLong());

@@ -9,6 +9,7 @@ import DiscordBot.Tasks.Roles.ReactionRolesCommand;
 import DiscordBot.Utils.NickNameRoles;
 import DiscordBot.Utils.ReactionRoles;
 import DiscordBot.Utils.Utils;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -27,6 +28,12 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public class Listener extends ListenerAdapter {
+    private EventWaiter waiter;
+
+    public Listener(EventWaiter waiter){
+        this.waiter = waiter;
+    }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Listener.class);
 
     @Override
@@ -42,7 +49,7 @@ public class Listener extends ListenerAdapter {
         if (event.getMessage().getContentRaw().indexOf("m" + prefix) == 0) {
             MusicRunner.passEvent(event);
         } else if (event.getMessage().getContentRaw().indexOf("mod" + prefix) == 0) {
-            ModerationRunner.passEvent(event);
+            ModerationRunner.passEvent(event, waiter);
         } else if (event.getMessage().getContentRaw().indexOf("rlmafia" + prefix) == 0) {
             RLMafiaRunner.passEvent(event);
         } else {
