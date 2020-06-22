@@ -38,6 +38,8 @@ public class CommandsRunner{
             MemeCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals(prefix + "userinfo")){
             UserInfoCommand.getCommand(event);
+        }else if(event.getMessage().getContentRaw().equals("$emergencybypass")){
+            EmergencyBypassCommand.getCommand(event);
         }else if(event.getMessage().getMentionedUsers().size() != 0 && event.getMessage().getMentionedUsers().get(0).equals(event.getJDA().getSelfUser())){
             event.getChannel().sendMessage("https://tenor.com/view/ping-who-pinged-me-disturbed-gif-14162073").queue();
         }

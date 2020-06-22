@@ -36,7 +36,7 @@ public class SetPrefixCommand {
         return defaultPrefix;
     }
 
-    private static void updatePrefix(long guildId, String newPrefix) {
+    public static void updatePrefix(long guildId, String newPrefix) {
         prefixes.replace(guildId, newPrefix);
         DatabaseManager.INSTANCE.setPrefix(guildId, newPrefix);
     }
