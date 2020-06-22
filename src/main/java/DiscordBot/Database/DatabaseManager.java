@@ -23,4 +23,8 @@ public interface DatabaseManager {
     List<ReactionRoles> getReactionRoles(long guildId);
     void addReactionRole(long guildId, ReactionRoles reactRole);
     void removeReactionRole(long guildId, ReactionRoles reactRole);
+
+    List<String> getBannedWords(long guildId);
+    void addBannedWord(long guildId, String newWord);
+    void removeBannedWord(long guildId, String toRemove);
 }

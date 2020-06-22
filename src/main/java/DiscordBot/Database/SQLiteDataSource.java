@@ -75,6 +75,11 @@ public class SQLiteDataSource implements DatabaseManager {
                     "emoji_id TEXT," +
                     "role_id BIGINT NOT NULL" +
                     ");");
+            statement.execute("CREATE TABLE IF NOT EXISTS banned_words(" +
+                    "id INTEGER PRIMARY KEY," +
+                    "guild_id BIGINT NOT NULL," +
+                    "word TEXT NOT NULL" +
+                    ");");
 
             statement.close();
             LOGGER.info("Tables initialised");
@@ -312,6 +317,54 @@ public class SQLiteDataSource implements DatabaseManager {
             preparedStatement.setLong(2, reactRole.getRoleID());
             preparedStatement.execute();
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public List<String> getBannedWords(long guildId) {
+        try (final PreparedStatement preparedStatement = getConnection()
+                // language=SQLite
+                .prepareStatement("SELECT word FROM banned_words WHERE guild_id = ?")){
+
+            preparedStatement.setLong(1, guildId);
+
+            try (final ResultSet resultSet = preparedStatement.executeQuery()) {
+                List<String> toReturn = new ArrayList<>();
+                while(resultSet.next()){
+                    toReturn.add(resultSet.getString("word"));
+                }
+                return toReturn;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public void addBannedWord(long guildId, String newWord) {
+        try (final PreparedStatement preparedStatement = getConnection()
+                // language=SQLite
+                .prepareStatement("INSERT INTO banned_words VALUES(?, ?)")) {
+            preparedStatement.setLong(1, guildId);
+            preparedStatement.setString(2, newWord);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void removeBannedWord(long guildId, String toRemove) {
+        try (final PreparedStatement preparedStatement = getConnection()
+                // language=SQLite
+                .prepareStatement("DELETE FROM banned_words VALUES(?, ?)")) {
+            preparedStatement.setLong(1, guildId);
+            preparedStatement.setString(2, toRemove);
+            preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -25,6 +25,12 @@ public class ModerationRunner{
             KickCommand.getCommand(event, waiter);
         }else if(content.indexOf(prefix + "ban") == 0 && event.getMember().hasPermission(Permission.BAN_MEMBERS)){
             BanCommand.getCommand(event, waiter);
+        }else if(content.indexOf(prefix + "banword") == 0 && event.getMember().hasPermission(Permission.MANAGE_SERVER)){
+            BannedWordCommand.getCommand(event);
+        }else if(content.indexOf(prefix + "getbannedwords") == 0 && event.getMember().hasPermission(Permission.MANAGE_SERVER)){
+            getBannedWordsCommand.getCommand(event);
+        }else if(content.indexOf(prefix + "removebannedword") == 0 && event.getMember().hasPermission(Permission.MANAGE_SERVER)){
+            RemoveBannedWordCommand.getCommand(event);
         }
     }
 }

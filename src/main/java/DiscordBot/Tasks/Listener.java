@@ -1,6 +1,7 @@
 package DiscordBot.Tasks;
 
 import DiscordBot.Tasks.Moderation.ModerationRunner;
+import DiscordBot.Tasks.Moderation.getBannedWordsCommand;
 import DiscordBot.Tasks.Music.MusicRunner;
 import DiscordBot.Tasks.RLMafia.RLMafiaRunner;
 import DiscordBot.Tasks.Roles.JoinRolesCommand;
@@ -38,12 +39,26 @@ public class Listener extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         String prefix = SetPrefixCommand.getPrefix(event.getGuild().getIdLong());
+        List<String> badWords = getBannedWordsCommand.getListOfBannedWords(event.getGuild().getIdLong());
         System.out.println("We received a message from " +
                 event.getAuthor().getName() + ": " +
                 event.getMessage().getContentDisplay()
         );
+
         if (event.getAuthor().isBot()) {
             return;
+        }
+        if(badWords.size() > 0){
+            boolean isNotAloud = false;
+            for(String word:badWords){
+                if(event.getMessage().getContentRaw().indexOf(" " + word + " ") > 0){
+                    isNotAloud = true;
+                }
+            }
+            if(isNotAloud){
+                Utils.deleteHistory(1, event.getChannel());
+                event.getChannel().sendMessage("That word is not aloud in this server").queue();
+            }
         }
         if (event.getMessage().getContentRaw().indexOf("m" + prefix) == 0) {
             MusicRunner.passEvent(event);

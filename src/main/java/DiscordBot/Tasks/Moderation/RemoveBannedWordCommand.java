@@ -2,14 +2,10 @@ package DiscordBot.Tasks.Moderation;
 
 import DiscordBot.Database.DatabaseManager;
 import DiscordBot.Tasks.SetPrefixCommand;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.util.concurrent.TimeUnit;
-
-public class BannedWordCommand {
+public class RemoveBannedWordCommand {
 
     public static void getCommand(GuildMessageReceivedEvent event)
     {
@@ -18,6 +14,6 @@ public class BannedWordCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        DatabaseManager.INSTANCE.addBannedWord(event.getGuild().getIdLong(), content.substring(prefix.length() + 8));
+        DatabaseManager.INSTANCE.removeBannedWord(event.getGuild().getIdLong(), content.substring(prefix.length() + 8));
     }
 }

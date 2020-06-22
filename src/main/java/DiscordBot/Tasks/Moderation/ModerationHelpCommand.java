@@ -21,7 +21,10 @@ public class ModerationHelpCommand {
                 "\n" + prefix + "clear (specify amount) - deletes specified amount of messages from channel command is sent in" +
                 "\n" + prefix + "mute (member) (optional length) - if not specified, defaults to 5 minutes" +
                 "\n" + prefix + "kicks (member) (reason) - asks for confirmation, and if so, kicks member specified" +
-                "\n" + prefix + "ban (member) (delete messages from last **X** days would be **X**) (reason)- asks for confirmation, and if so, bans member specified").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
+                "\n" + prefix + "ban (member) (delete messages from last **X** days would be **X**) (reason)- asks for confirmation, and if so, bans member specified" +
+                "\n" + prefix + "banword (word) - adds that word to the banned words list" +
+                "\n" + prefix + "getbannedwords - returns a list of all banned words for current server" +
+                "\n" + prefix + "removebannedword (word) - removes word from ban list").queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
 
     }
 }
