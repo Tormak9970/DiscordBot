@@ -7,8 +7,7 @@ import DiscordBot.Tasks.Info.UptimeCommand;
 import DiscordBot.Tasks.Info.UserInfoCommand;
 import DiscordBot.Tasks.Memes.MemeCommand;
 import DiscordBot.Tasks.Roles.JoinRolesCommand;
-import DiscordBot.Tasks.Roles.NickNameByRoleCommand;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandsRunner{
@@ -33,7 +32,7 @@ public class CommandsRunner{
             UptimeCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals(prefix + "botinfo")){
             BotInfoCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().indexOf(prefix + "setprefix") == 0){
+        }else if(event.getMessage().getContentRaw().indexOf(prefix + "setprefix") == 0 && event.getMember().hasPermission(Permission.MANAGE_SERVER)){
             SetPrefixCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals(prefix + "meme")){
             MemeCommand.getCommand(event);
