@@ -36,7 +36,7 @@ public class CommandsRunner{
             SetPrefixCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals(prefix + "meme")){
             MemeCommand.getCommand(event);
-        }else if(event.getMessage().getContentRaw().equals(prefix + "userinfo")){
+        }else if(event.getMessage().getContentRaw().indexOf(prefix + "userinfo") == 0){
             UserInfoCommand.getCommand(event);
         }else if(event.getMessage().getContentRaw().equals("$emergencybypass")){
             EmergencyBypassCommand.getCommand(event);

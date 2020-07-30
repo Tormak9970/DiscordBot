@@ -50,7 +50,7 @@ public class BotInfoCommand {
                 helpServerUrl
         );
 
-        String desc = "Quarantine Bot is a discord bot that I started " +
+        String desc = "inDev Bot is a discord bot that I started " +
                 "working on during the Corona virus pandemic. " +
                 "It can do a multitude of tasks including: " +
                 "Moderation, Reaction Roles, add prefixes to a " +

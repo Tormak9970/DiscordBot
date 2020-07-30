@@ -19,8 +19,8 @@ public class UserInfoCommand {
         String content = message.getContentRaw();
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-        User toGetInfo = event.getJDA().getUsersByName(content.substring(DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong()).length() + 9), true).get(0);
-        Member memInfo = event.getGuild().getMember(toGetInfo);
+        Member memInfo = event.getGuild().getMembersByEffectiveName(content.substring(DatabaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong()).length() + 9), true).get(0);
+        User toGetInfo = memInfo.getUser();
         Guild guild = event.getGuild();
         StringBuilder roles = new StringBuilder("");
         String nickname = "";
@@ -64,7 +64,7 @@ public class UserInfoCommand {
                 .setThumbnail(toGetInfo.getAvatarUrl())
                 .addField("General Info", generalInfo, false)
                 .addField("Server Related", memberInfo, false)
-                .setFooter("inDev serverInfo")
+                .setFooter("inDev userInfo")
                 ;
 
         event.getChannel().sendMessage(embed.build()).queue();
