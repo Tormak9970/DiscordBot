@@ -44,7 +44,7 @@ public class BotInfoCommand {
 
         String helpServerUrl = "https://discord.gg/dKAQDCe";
         String memberInfo = String.format(
-                "**Uptime**: %s\n**Code Type**: Open Source(GitHub)\n**Developers**: Tormak9970\n**Member since**: %s\n**Roles**: " + roles + "\n**Goal in Life**: overthrow the humans\n**Next Update**: " + update ,
+                "**Uptime**: %s\n**Code-Type**: Open Source(GitHub)\n**Developers**: Tormak9970\n**Member since**: %s\n**Roles**: " + roles + "\n**Goal in Life**: overthrow the humans\n**Next Update**: " + update ,
                 Utils.getUptime(),
                 guild.getMember(user).getTimeJoined().getMonth() + " " + guild.getMember(user).getTimeJoined().getDayOfMonth() + ", " + guild.getMember(user).getTimeJoined().getYear(),
                 helpServerUrl
